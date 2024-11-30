@@ -26,7 +26,13 @@ export default function AboutModal() {
   const appVersion = getAppVersion()
 
   return (
-    <Modal dismissible show={isOpen} onClose={handleClose} theme={modalTheme} size="sm">
+    <Modal
+      className="backdrop-blur-xs"
+      dismissible
+      show={isOpen}
+      onClose={handleClose}
+      theme={modalTheme}
+      size="sm">
       <Modal.Body>
         <div className="flex justify-center">
           <img src={ImgAppLogoSmall} alt="logo" className="w-16" />

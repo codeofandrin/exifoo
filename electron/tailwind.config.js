@@ -13,6 +13,9 @@ module.exports = {
             },
             borderWidth: {
                 1: "1px"
+            },
+            backdropBlur: {
+                xs: "2px"
             }
         },
         screens: {
