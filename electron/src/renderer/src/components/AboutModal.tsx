@@ -61,7 +61,7 @@ export default function AboutModal() {
         <div className="mt-8 text-center text-xs text-neutral-700">
           {/* TODO: Add real status */}
           <div className="flex items-center justify-center">
-            <p className="font-medium">You have the latest version installed</p>
+            <p className="font-medium">Latest version installed</p>
             <SVGCheck className="ml-1 w-4 stroke-[3px] text-green-500"></SVGCheck>
           </div>
           <p className="mt-1">Last checked: just now</p>
