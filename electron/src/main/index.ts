@@ -14,10 +14,11 @@ log.transports.file.resolvePathFn = (vars) =>
 function createWindow(): void {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 1100,
+        width: 1100 + 24, // drag bar is 24px in height
         height: 724,
         show: false,
         autoHideMenuBar: true,
+        titleBarStyle: "hiddenInset",
         webPreferences: {
             preload: join(__dirname, "../preload/index.js"),
             sandbox: false
