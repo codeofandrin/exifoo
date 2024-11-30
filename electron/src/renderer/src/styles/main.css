@@ -1,11 +1,30 @@
-@import url("https://fonts.googleapis.com/css?family=Poppins:regular,bold,italic,black,medium,semibold,extrabold,thin,light");
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+    font-family: "Poppins";
+    src: url("./fonts/Poppins-Regular.ttf");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./fonts/Poppins-Medium.ttf");
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "Poppins";
+    src: url("./fonts/Poppins-SemiBold.ttf");
+    font-weight: 600;
+    font-style: normal;
+}
+
 :root {
-    @apply bg-white;
+    @apply bg-white px-6;
     font-family: Poppins;
 }
 
