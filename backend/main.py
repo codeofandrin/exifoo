@@ -1,6 +1,6 @@
 import uvicorn
 
-from imgmeta.api import app
+from exifoo.api import app
 
 
 if __name__ == "__main__":

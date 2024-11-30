@@ -9,15 +9,13 @@ import { getMenu } from "./menu"
 
 log.transports.file.level = "info"
 log.transports.file.resolvePathFn = (vars) =>
-    join(vars.libraryDefaultDir, "../com.electron.imgmeta/electron.log")
+    join(vars.libraryDefaultDir, "../com.electron.exifoo/electron.log")
 
 function createWindow(): void {
     // Create the browser window.
     const mainWindow = new BrowserWindow({
-        width: 900,
-        height: 670,
-        minWidth: 400,
-        minHeight: 670,
+        width: 1100,
+        height: 724,
         show: false,
         autoHideMenuBar: true,
         webPreferences: {
@@ -51,7 +49,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     // Set app user model id for windows
-    electronApp.setAppUserModelId("com.electron.imgmeta")
+    electronApp.setAppUserModelId("com.electron.exifoo")
 
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.

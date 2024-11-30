@@ -2,7 +2,7 @@
 line-length = 110
 
 [tool.pyright]
-include = ["main.py", "imgmeta"]
+include = ["main.py", "exifoo"]
 exclude = [
     "**/__pycache__",
     "build",

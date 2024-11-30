@@ -1,5 +1,5 @@
-appId: com.electron.imgmeta
-productName: imgmeta
+appId: com.electron.exifoo
+productName: exifoo
 directories:
   buildResources: build
 files:
@@ -14,7 +14,7 @@ extraResources:
 asarUnpack:
   - resources/**
 win:
-  executableName: imgmeta
+  executableName: exifoo
 nsis:
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
