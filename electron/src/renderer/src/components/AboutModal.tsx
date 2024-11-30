@@ -65,7 +65,7 @@ export default function AboutModal() {
             <SVGCheck className="ml-1 w-4 stroke-[3px] text-green-500"></SVGCheck>
           </div>
           <p className="mt-1">Last checked: just now</p>
-          <div className="mt-2 flex justify-center">
+          <div className="mt-4 flex justify-center">
             <Button color="accent" size="xs">
               Check for Updates
             </Button>
