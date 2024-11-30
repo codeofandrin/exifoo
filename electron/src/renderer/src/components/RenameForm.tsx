@@ -45,7 +45,7 @@ export default function RenameForm() {
       <div className="flex flex-col items-center">
         <h1 className="mt-4 text-xs font-medium text-neutral-700">Example Output</h1>
         {/* TODO: Add dynamic example output */}
-        <p className="mt-0.5 text-xxs text-neutral-600">241005_131538_myPhoto.png</p>
+        <p className="mt-1 text-xs text-neutral-600">241005_131538_myPhoto.png</p>
       </div>
     </div>
   )
