@@ -22,7 +22,7 @@ export default function RenameForm() {
         <p className="mt-1 text-sm text-neutral-700">You can add photos in png, jpeg, and jpg format</p>
       </div>
       {/* Form */}
-      <div className="w-[35rem] mt-8">
+      <div className="mt-8 w-[35rem]">
         <FileDropZone innerRef={fileInputRef} />
         <div className="flex justify-center rounded-b-lg bg-neutral-100 pt-3">
           <div className="flex flex-col items-center">

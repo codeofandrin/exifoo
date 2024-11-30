@@ -33,6 +33,10 @@
     font-family: Poppins;
 }
 
+#root {
+    @apply flex h-screen flex-col;
+}
+
 button {
     @apply ring-0 !important;
 }

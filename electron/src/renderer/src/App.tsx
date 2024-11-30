@@ -3,6 +3,7 @@ import AboutModalProvider from "./providers/AboutModalProvider"
 import Header from "./components/Header"
 import AboutModal from "./components/AboutModal"
 import RenameForm from "./components/RenameForm"
+import Footer from "./components/Footer"
 
 export default function App() {
   return (
@@ -10,9 +11,10 @@ export default function App() {
       <>
         <AboutModal />
         <Header />
-        <div className="mt-5 flex justify-center">
+        <div className="mb-auto mt-5 flex justify-center">
           <RenameForm />
         </div>
+        <Footer />
       </>
     </ProviderComposer>
   )
