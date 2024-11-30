@@ -10,7 +10,7 @@ export default function Header() {
   }
 
   return (
-    <div className="flex h-20 items-center justify-between">
+    <div className="flex h-fit items-center justify-between py-6">
       {/* App Logo */}
       <div>
         <a>
