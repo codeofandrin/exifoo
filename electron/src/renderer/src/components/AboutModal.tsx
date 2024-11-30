@@ -1,4 +1,5 @@
 import { Modal, CustomFlowbiteTheme } from "flowbite-react"
+import { useEffect } from "react"
 
 import useAboutModal from "../contexts/AboutModalContext"
 import { getAppVersion } from "../utils/app-info"
@@ -17,7 +18,15 @@ const modalTheme: CustomFlowbiteTheme["modal"] = {
 }
 
 export default function AboutModal() {
-  const { isOpen, closeModal } = useAboutModal()
+  const { isOpen, openModal, closeModal } = useAboutModal()
+
+  useEffect(() => {
+    window.electronAPI.menuAbout(isOpen)
+  }, [isOpen])
+
+  window.electronAPI.onShowAbout(() => {
+    openModal()
+  })
 
   function handleClose() {
     closeModal()
