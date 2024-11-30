@@ -39,7 +39,7 @@ export default function ExternalLink({
           <SVGExternalLink className="ml-0.5 w-3" />
         </div>
       ) : (
-        <p>{children}</p>
+        <>{children}</>
       )}
     </a>
   )
