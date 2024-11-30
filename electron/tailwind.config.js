@@ -10,6 +10,9 @@ module.exports = {
             colors: exifooTheme.colors,
             fontSize: {
                 xxs: "0.625rem"
+            },
+            borderWidth: {
+                1: "1px"
             }
         },
         screens: {
