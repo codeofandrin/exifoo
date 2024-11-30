@@ -7,19 +7,23 @@ export default function Footer() {
   return (
     <footer className="my-6 text-neutral-500">
       {/* Feedback */}
-      <ExternalLink href={`mailto:${EMail.feedback}`} color="silent">
-        <div className="flex items-center">
-          <SVGMessages className="w-4 stroke-2" />
-          <p className="ml-2 text-xxs">Feedback</p>
-        </div>
-      </ExternalLink>
+      <div className="w-fit">
+        <ExternalLink href={`mailto:${EMail.feedback}`} color="silent">
+          <div className="flex items-center">
+            <SVGMessages className="w-4 stroke-2" />
+            <p className="ml-2 w-fit text-xxs">Feedback</p>
+          </div>
+        </ExternalLink>
+      </div>
       {/* Help */}
-      <ExternalLink href={`mailto:${EMail.help}`} color="silent">
-        <div className="mt-1 flex items-center">
-          <SVGHelpCircle className="w-4 stroke-2" />
-          <p className="ml-2 text-xxs">Help</p>
-        </div>
-      </ExternalLink>
+      <div className="w-fit">
+        <ExternalLink href={`mailto:${EMail.help}`} color="silent">
+          <div className="mt-1 flex items-center">
+            <SVGHelpCircle className="w-4 stroke-2" />
+            <p className="ml-2 text-xxs">Help</p>
+          </div>
+        </ExternalLink>
+      </div>
     </footer>
   )
 }
