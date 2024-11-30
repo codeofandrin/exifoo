@@ -2,7 +2,7 @@ export class Server {
     static apiBaseURL = "http://localhost:8000"
 }
 
-export class Website {
+export class WebsiteLinks {
     static home = "https://exifoo.com"
-    static terms = `${Website.home}/terms`
+    static terms = `${WebsiteLinks.home}/terms`
 }

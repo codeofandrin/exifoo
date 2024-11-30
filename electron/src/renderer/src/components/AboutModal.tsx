@@ -4,7 +4,7 @@ import useAboutModal from "../contexts/AboutModalContext"
 import { getAppVersion } from "../utils/app-info"
 import ExternalLink from "./ExternalLink"
 import Button from "./Button"
-import { Website } from "../utils/constants"
+import { WebsiteLinks } from "../utils/constants"
 import ImgAppLogoSmall from "../assets/images/exifoo_logo_small.png"
 import SVGCheck from "../assets/icons/Check.svg?react"
 
@@ -43,7 +43,7 @@ export default function AboutModal() {
           </h1>
           <p className="mt-1 text-xxs text-neutral-500">Version {appVersion}</p>
           <div className="flex justify-center">
-            <ExternalLink href={Website.terms} className="text-xxs" displayIcon>
+            <ExternalLink href={WebsiteLinks.terms} className="text-xxs" displayIcon>
               Terms and Conditions
             </ExternalLink>
           </div>
