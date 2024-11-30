@@ -39,3 +39,7 @@ export interface AboutModalContextType {
     openModal: Function
     closeModal: Function
 }
+
+export interface DefaultProviderPropsType {
+    children: React.ReactElement
+}

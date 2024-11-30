@@ -21,7 +21,7 @@ export default function Header() {
       <div>
         {/* About */}
         <button onClick={handleAboutClick}>
-          <SVGInfo className="h-6 w-6 text-neutral-800" />
+          <SVGInfo className="h-6 w-6 text-neutral-800 transition-colors duration-200 hover:text-neutral-500" />
         </button>
       </div>
     </div>

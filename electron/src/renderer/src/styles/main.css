@@ -23,6 +23,11 @@
     font-style: normal;
 }
 
+@font-face {
+    font-family: "Space Grotesk";
+    src: url("../fonts/SpaceGrotesk-VariableFont_wght.ttf") format("truetype");
+}
+
 :root {
     @apply bg-white px-6;
     font-family: Poppins;
