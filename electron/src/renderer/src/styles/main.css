@@ -1,12 +1,12 @@
-@import url("https://fonts.googleapis.com/css?family=Inter:regular,bold,italic,black,medium,semibold,extrabold,thin,light");
+@import url("https://fonts.googleapis.com/css?family=Poppins:regular,bold,italic,black,medium,semibold,extrabold,thin,light");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-    @apply bg-slate-900 text-white;
-    font-family: Inter;
+    @apply bg-white;
+    font-family: Poppins;
 }
 
 button {
