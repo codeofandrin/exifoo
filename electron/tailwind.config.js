@@ -11,9 +11,6 @@ module.exports = {
             fontSize: {
                 xxs: "0.625rem"
             },
-            borderWidth: {
-                1: "1px"
-            },
             backdropBlur: {
                 xs: "2px"
             }

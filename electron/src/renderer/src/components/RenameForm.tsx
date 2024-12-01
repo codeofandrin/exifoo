@@ -112,7 +112,7 @@ export default function RenameForm() {
           <Label
             id="dropzone-label"
             htmlFor="dropzone-file"
-            className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border-1 border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}
+            className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}
             onDragOver={handleFileDragOver}
             onDrop={handleFileDrop}>
             {fileInput.imageFiles ? (
