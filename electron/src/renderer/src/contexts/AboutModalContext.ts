@@ -8,6 +8,6 @@ export const AboutModalContext = createContext<AboutModalContextType>({
     closeModal: () => {}
 })
 
-export default function useAboutModal(): AboutModalContextType {
+export default function useAboutModalContext(): AboutModalContextType {
     return useContext(AboutModalContext)
 }

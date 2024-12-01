@@ -1,9 +1,9 @@
-import useAboutModal from "../contexts/AboutModalContext"
+import useAboutModalContext from "../contexts/AboutModalContext"
 import ImgAppLogoLarge from "../assets/images/exifoo_logo_large.png"
 import SVGInfo from "../assets/icons/Info.svg?react"
 
 export default function Header() {
-  const { openModal } = useAboutModal()
+  const { openModal } = useAboutModalContext()
 
   function handleAboutClick() {
     openModal()
