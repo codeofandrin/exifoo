@@ -1,3 +1,5 @@
+import { RefObject } from "react"
+
 import { FileInputStatusBasicType, ErrorType } from "./enums"
 
 export interface YearOptionContextType {
@@ -42,4 +44,10 @@ export interface AboutModalContextType {
 
 export interface DefaultProviderPropsType {
     children: React.ReactElement
+}
+
+export interface ImageFilesInputType {
+    ref: RefObject<HTMLInputElement>
+    imageFiles: FileList | null
+    renamedAmount: number
 }

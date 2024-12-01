@@ -1,18 +1,52 @@
-import { useRef } from "react"
+import { useRef, useState, useEffect } from "react"
+import { FileInput, Label } from "flowbite-react"
 
-import FileDropZone from "./FileDropZone"
+import { EmptyDropZone, FilesListDropZone } from "./DropZone"
+import { ImageFilesInputType } from "../utils/types"
 import Button from "./Button"
 import SVGUpload from "../assets/icons/Upload.svg?react"
 
 export default function RenameForm() {
-  const fileInputRef = useRef<HTMLInputElement>()
+  const [fileInput, setFileInput] = useState<ImageFilesInputType>({
+    ref: useRef<HTMLInputElement>(null),
+    imageFiles: null,
+    renamedAmount: 0
+  })
+  const [isLastFileRemoved, setIsLastFileRemoved] = useState<boolean>(false)
+
+  useEffect(() => {
+    if (isLastFileRemoved) {
+      setTimeout(() => {
+        setIsLastFileRemoved(false)
+      }, 0)
+    }
+  }, [isLastFileRemoved])
 
   function handleBrowse() {
-    const fileInput = fileInputRef.current
-    if (fileInput) {
-      fileInput.click()
+    const fileInputElem = fileInput.ref.current
+    if (fileInputElem) {
+      if (fileInputElem.disabled) {
+        // if files already in file list, the input is disabled
+        // therefore enable it temporary
+        fileInputElem.disabled = false
+        fileInputElem.click()
+        fileInputElem.disabled = true
+      } else {
+        fileInputElem.click()
+      }
     }
   }
+
+  function handleFilesChange() {
+    const imageFiles = fileInput.ref.current?.files as FileList
+    if (imageFiles.length > 0) {
+      setFileInput({ ...fileInput, imageFiles })
+    } else {
+      setFileInput({ ...fileInput, imageFiles: null })
+    }
+  }
+
+  const isFileInputEmpty = !Boolean(fileInput.imageFiles)
 
   return (
     <div>
@@ -23,7 +57,32 @@ export default function RenameForm() {
       </div>
       {/* Form */}
       <div className="mt-8 w-[35rem]">
-        <FileDropZone innerRef={fileInputRef} />
+        {/* File Drop Zone */}
+        <div className="flex w-full items-center justify-center">
+          <Label
+            id="dropzone-label"
+            htmlFor="dropzone-file"
+            className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border-1 border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}>
+            {fileInput.imageFiles ? (
+              <FilesListDropZone
+                fileInput={fileInput}
+                setFileInput={setFileInput}
+                setIsLastFileRemoved={setIsLastFileRemoved}
+              />
+            ) : (
+              <EmptyDropZone />
+            )}
+            <FileInput
+              ref={fileInput.ref}
+              onChange={handleFilesChange}
+              id="dropzone-file"
+              className="hidden"
+              accept="image/png, image/jpeg"
+              disabled={!isFileInputEmpty || isLastFileRemoved}
+              multiple
+            />
+          </Label>
+        </div>
         <div className="flex justify-center rounded-b-lg bg-neutral-100 pt-3">
           <div className="flex flex-col items-center">
             {/* Browse button */}
