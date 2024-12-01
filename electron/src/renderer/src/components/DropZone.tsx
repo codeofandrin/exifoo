@@ -1,5 +1,5 @@
 import { ImageFilesInputType } from "../utils/types"
-import { getTruncatedText } from "../utils/helpers"
+import { getTruncatedText, countInArray } from "../utils/helpers"
 import SVGImage from "../assets/icons/Image.svg?react"
 import SVGXCircle from "../assets/icons/XCircle.svg?react"
 
@@ -28,6 +28,21 @@ function removeFileFromFileList(fileInputElem: HTMLInputElement, files: FileList
   fileInputElem.files = dataTransfer.files
 
   return items
+}
+
+function getParentFolder(filePath) {
+  const parentFolder = filePath.substring(0, filePath.lastIndexOf("/"))
+  const lastFolder = parentFolder.substring(parentFolder.lastIndexOf("/") + 1)
+  return `.../${lastFolder}`
+}
+
+function isFileNameDuplicate(files: FileList, file: File) {
+  let fileNames: string[] = []
+  for (let i = 0; i < files.length; i++) {
+    fileNames.push(files[i].name)
+  }
+
+  return countInArray(fileNames, file.name) > 1 ? true : false
 }
 
 interface FilesListDropZonePropsType {
@@ -61,14 +76,26 @@ export function FilesListDropZone({
   const files = fileInput.imageFiles as FileList
   let fileElements: React.ReactElement[] = []
   for (let i = 0; i < files.length; i++) {
-    const file = files[i]
+    const file = files[i] as File
+    // @ts-ignore: 'path' exists here
+    const filePath = file.path
+    const isNameDuplicate = isFileNameDuplicate(files, file)
+    const fileNameMaxLen = isNameDuplicate ? 38 : 45
+
     const elem = (
       <div
         key={i}
         className={`flex items-center justify-between rounded-lg bg-primary-50 px-3 py-1 transition-colors duration-300 hover:bg-primary-50/60 ${i > 0 && "mt-2"}`}>
         <div className="flex items-center">
           <SVGImage className="w-5 text-primary-600" />
-          <p className="ml-2 text-sm font-medium">{getTruncatedText(file.name, 45)}</p>
+          <div className="flex items-end">
+            <p className="ml-2 text-sm font-medium">{getTruncatedText(file.name, fileNameMaxLen)}</p>
+            {isNameDuplicate && (
+              <p className="ml-2 text-xxs font-normal leading-3">
+                {getTruncatedText(getParentFolder(filePath), 25)}
+              </p>
+            )}
+          </div>
         </div>
         <div>
           <button

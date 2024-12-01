@@ -4,3 +4,7 @@ export function getTruncatedText(text: string, maxLen: number): string {
     }
     return text
 }
+
+export function countInArray(arr: any[], element: any): number {
+    return arr.filter((x) => x == element).length
+}
