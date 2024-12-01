@@ -37,6 +37,7 @@
     @apply flex h-screen flex-col;
 }
 
-button {
+button,
+select {
     @apply ring-0 !important;
 }
