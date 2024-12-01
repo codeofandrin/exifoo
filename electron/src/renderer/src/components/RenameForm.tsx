@@ -7,6 +7,7 @@ import Button from "./Button"
 import SVGUpload from "../assets/icons/Upload.svg?react"
 
 export default function RenameForm() {
+  // Hooks
   const [fileInput, setFileInput] = useState<ImageFilesInputType>({
     ref: useRef<HTMLInputElement>(null),
     imageFiles: null,
@@ -22,6 +23,11 @@ export default function RenameForm() {
     }
   }, [isLastFileRemoved])
 
+  // Variables
+  const FILE_TYPES = ["image/png", "image/jpeg"]
+  const isFileInputEmpty = !Boolean(fileInput.imageFiles)
+
+  // Event handlers
   function handleBrowse() {
     const fileInputElem = fileInput.ref.current
     if (fileInputElem) {
@@ -75,7 +81,22 @@ export default function RenameForm() {
     }
   }
 
-  const isFileInputEmpty = !Boolean(fileInput.imageFiles)
+  function handleFileDrop(e) {
+    const fileInputElem = fileInput.ref.current as HTMLInputElement
+    const fileList = e.dataTransfer.files
+    const file: File = fileList[0]
+
+    if (FILE_TYPES.includes(file.type)) {
+      fileInputElem.files = fileList
+      handleFilesChange()
+    }
+
+    e.preventDefault()
+  }
+
+  function handleFileDragOver(e) {
+    e.preventDefault()
+  }
 
   return (
     <div>
@@ -91,7 +112,9 @@ export default function RenameForm() {
           <Label
             id="dropzone-label"
             htmlFor="dropzone-file"
-            className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border-1 border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}>
+            className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border-1 border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}
+            onDragOver={handleFileDragOver}
+            onDrop={handleFileDrop}>
             {fileInput.imageFiles ? (
               <FilesListDropZone
                 fileInput={fileInput}
@@ -106,7 +129,7 @@ export default function RenameForm() {
               onChange={handleFilesChange}
               id="dropzone-file"
               className="hidden"
-              accept="image/png, image/jpeg"
+              accept={FILE_TYPES.join(",")}
               disabled={!isFileInputEmpty || isLastFileRemoved}
               multiple
             />
