@@ -41,7 +41,7 @@ export function FilesListDropZone({
   setFileInput,
   setIsLastFileRemoved
 }: FilesListDropZonePropsType) {
-  function handleRemove(event, key: number) {
+  function handleRemove(key: number) {
     const newImageList = removeFileFromFileList(
       fileInput.ref.current as HTMLInputElement,
       fileInput.imageFiles as FileList,
@@ -65,14 +65,16 @@ export function FilesListDropZone({
     const elem = (
       <div
         key={i}
-        className={`flex items-center justify-between rounded-lg bg-primary-50 hover:bg-primary-50/60 transition-colors duration-300 px-3 py-1 ${i > 0 && "mt-2"}`}>
+        className={`flex items-center justify-between rounded-lg bg-primary-50 px-3 py-1 transition-colors duration-300 hover:bg-primary-50/60 ${i > 0 && "mt-2"}`}>
         <div className="flex items-center">
           <SVGImage className="w-5 text-primary-600" />
           <p className="ml-2 text-sm font-medium">{getTruncatedText(file.name, 45)}</p>
         </div>
         <div>
-          <button className="group rounded-lg bg-white/50 hover:bg-red-500 transition-colors duration-150 p-1.5" onClick={(event) => handleRemove(event, i)}>
-            <SVGXCircle className="w-5 text-red-500 group-hover:text-white transition-colors duration-150" />
+          <button
+            className="group rounded-lg bg-white/50 p-1.5 transition-colors duration-150 hover:bg-red-500"
+            onClick={() => handleRemove(i)}>
+            <SVGXCircle className="w-5 text-red-500 transition-colors duration-150 group-hover:text-white" />
           </button>
         </div>
       </div>
