@@ -38,9 +38,38 @@ export default function RenameForm() {
   }
 
   function handleFilesChange() {
-    const imageFiles = fileInput.ref.current?.files as FileList
-    if (imageFiles.length > 0) {
-      setFileInput({ ...fileInput, imageFiles })
+    const fileInputElem = fileInput.ref.current as HTMLInputElement
+    const newImageFiles = fileInputElem.files as FileList
+    const storedImageFiles = fileInput.imageFiles
+
+    let updatedImageFiles = newImageFiles
+    if (storedImageFiles !== null) {
+      // if files already stored we must create a new merged file list
+      // to prevent replacing old with new file list
+      const dataTransfer = new DataTransfer()
+
+      let storedImageFilePaths: File[] = []
+      for (let i = 0; i < storedImageFiles.length; i++) {
+        const file = storedImageFiles[i]
+        dataTransfer.items.add(file)
+        // @ts-ignore: 'path' exists here
+        storedImageFilePaths.push(file.path)
+      }
+      for (let i = 0; i < newImageFiles.length; i++) {
+        const file = newImageFiles[i]
+        // @ts-ignore: 'path' exists here
+        if (!storedImageFilePaths.includes(file.path)) {
+          dataTransfer.items.add(newImageFiles[i])
+        }
+      }
+
+      // update files on element
+      fileInputElem.files = dataTransfer.files
+      updatedImageFiles = dataTransfer.files
+    }
+
+    if (updatedImageFiles.length > 0) {
+      setFileInput({ ...fileInput, imageFiles: updatedImageFiles })
     } else {
       setFileInput({ ...fileInput, imageFiles: null })
     }
