@@ -42,7 +42,6 @@ export function FilesListDropZone({
   setIsLastFileRemoved
 }: FilesListDropZonePropsType) {
   function handleRemove(event, key: number) {
-    event.stopPropagation()
     const newImageList = removeFileFromFileList(
       fileInput.ref.current as HTMLInputElement,
       fileInput.imageFiles as FileList,
