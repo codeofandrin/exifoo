@@ -47,12 +47,12 @@ function OptionSection({ children }: OptionSectionPropsType) {
   return <div className="mt-3 flex justify-between">{children}</div>
 }
 
-interface OptionContainerPropsType {
+interface OptionsContainerPropsType {
   children: React.ReactElement | React.ReactElement[]
   first?: boolean
 }
 
-function OptionContainer({ children, first = false }: OptionContainerPropsType) {
+function OptionsContainer({ children, first = false }: OptionsContainerPropsType) {
   return <div className={`flex flex-col ${!first && "mt-7"}`}>{children}</div>
 }
 
@@ -60,7 +60,7 @@ function DateOptions() {
   const { setYearFormat, setMonthFormat, setDayFormat, setDateSeparator } = useDateOptionsContext()
 
   return (
-    <OptionContainer first>
+    <OptionsContainer first>
       <OptionsHeader>Date Options</OptionsHeader>
       <OptionSection>
         {/* Year Format */}
@@ -112,7 +112,7 @@ function DateOptions() {
           />
         </Option>
       </OptionSection>
-    </OptionContainer>
+    </OptionsContainer>
   )
 }
 
@@ -144,7 +144,7 @@ function TimeOptions() {
   }
 
   return (
-    <OptionContainer>
+    <OptionsContainer>
       <OptionsHeader>Time Options</OptionsHeader>
       {/* Time options toggle */}
       <div className="mt-3">
@@ -207,7 +207,7 @@ function TimeOptions() {
           </>
         )}
       </>
-    </OptionContainer>
+    </OptionsContainer>
   )
 }
 
@@ -242,7 +242,7 @@ function OtherOptions() {
   }
 
   return (
-    <OptionContainer>
+    <OptionsContainer>
       <OptionsHeader>Other Options</OptionsHeader>
       {/* Custom text toggle */}
       <div className="mt-3">
@@ -270,7 +270,7 @@ function OtherOptions() {
           </OptionSection>
         )}
       </>
-    </OptionContainer>
+    </OptionsContainer>
   )
 }
 
