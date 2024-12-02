@@ -80,7 +80,7 @@ function DateOptions() {
             id={"month-format"}
             options={[
               { id: "MM", value: "MM" },
-              { id: "M", value: "M" }
+              { id: "(M)M", value: "(M)M" }
             ]}
             setValue={setMonthFormat}
           />
@@ -91,7 +91,7 @@ function DateOptions() {
             id={"day-format"}
             options={[
               { id: "DD", value: "DD" },
-              { id: "D", value: "D" }
+              { id: "(D)D", value: "(D)D" }
             ]}
             setValue={setDayFormat}
           />
@@ -145,7 +145,7 @@ function TimeOptions() {
                   id={"hours-format"}
                   options={[
                     { id: "HH", value: "HH" },
-                    { id: "H", value: "H" }
+                    { id: "(H)H", value: "(H)H" }
                   ]}
                   setValue={setHoursFormat}
                 />
@@ -156,7 +156,7 @@ function TimeOptions() {
                   id={"minutes-format"}
                   options={[
                     { id: "MM", value: "MM" },
-                    { id: "M", value: "M" }
+                    { id: "(M)M", value: "(M)M" }
                   ]}
                   setValue={setMinutesFormat}
                 />
@@ -167,7 +167,7 @@ function TimeOptions() {
                   id={"seconds-format"}
                   options={[
                     { id: "SS", value: "SS" },
-                    { id: "S", value: "S" }
+                    { id: "(S)S", value: "(S)S" }
                   ]}
                   setValue={setSecondsFormat}
                 />
