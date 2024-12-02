@@ -53,7 +53,7 @@ interface OptionsContainerPropsType {
 }
 
 function OptionsContainer({ children, first = false }: OptionsContainerPropsType) {
-  return <div className={`flex flex-col ${!first && "mt-7"}`}>{children}</div>
+  return <div className={`flex flex-col ${!first && "mt-8"}`}>{children}</div>
 }
 
 function DateOptions() {
