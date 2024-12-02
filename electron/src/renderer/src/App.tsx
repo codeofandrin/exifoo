@@ -5,21 +5,14 @@ import Options from "./components/Options"
 import Footer from "./components/Footer"
 import ProviderComposer from "./providers/ProviderComposer"
 import AboutModalProvider from "./providers/AboutModalProvider"
-import DateFormatsProvider from "./providers/DateFormatsProvider"
-import TimeFormatsProvider from "./providers/TimeFormatsProvider"
-import SeparatorProvider from "./providers/SeparatorProvider"
+import DateOptionsProvider from "./providers/DateOptionsProvider"
+import TimeOptionsProvider from "./providers/TimeOptionsProvider"
 import CustomTextProvider from "./providers/CustomTextProvider"
 
 export default function App() {
   return (
     <ProviderComposer
-      components={[
-        AboutModalProvider,
-        DateFormatsProvider,
-        TimeFormatsProvider,
-        SeparatorProvider,
-        CustomTextProvider
-      ]}>
+      components={[AboutModalProvider, DateOptionsProvider, TimeOptionsProvider, CustomTextProvider]}>
       <>
         <AboutModal />
         <Header />

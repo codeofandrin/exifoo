@@ -33,22 +33,28 @@ export interface ImageFilesInputType {
     renamedAmount: number
 }
 
-export interface DateFormatsContextType {
+export interface DateOptionsContextType {
     yearFormat: string
     monthFormat: string
     dayFormat: string
+    dateSeparator: string
     setYearFormat: Function
     setMonthFormat: Function
     setDayFormat: Function
+    setDateSeparator: Function
 }
 
-export interface TimeFormatsContextType {
+export interface TimeOptionsContextType {
+    isAddTime: boolean
     hoursFormat: string
     minutesFormat: string
     secondsFormat: string
+    timeSeparator: string
+    setIsAddTime: Function
     setHoursFormat: Function
     setMinutesFormat: Function
     setSecondsFormat: Function
+    setTimeSeparator: Function
 }
 
 export interface SeparatorContextType {
@@ -59,8 +65,10 @@ export interface SeparatorContextType {
 }
 
 export interface CustomTextContextType {
+    isAddCustomText: boolean
     customText: string
     isValid: boolean
+    setIsAddCustomText: Function
     setCustomText: Function
     setIsValid: Function
 }

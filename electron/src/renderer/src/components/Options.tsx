@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 
 import Dropdown from "./Dropdown"
 import ToggleSwitch from "./ToggleSwitch"
 import TextInput from "./TextInput"
-import useDateFormatsContext from "../contexts/DateFormatsContext"
-import useTimeFormatsContext from "../contexts/TimeFormatsContext"
-import useSeparatorContext from "../contexts/SeparatorContext"
+import useDateOptionsContext from "../contexts/DateOptionsContext"
+import useTimeOptionsContext from "../contexts/TimeOptionsContext"
 import useCustomTextContext from "../contexts/CustomTextContext"
 
 interface OptionsHeaderPropsType {
@@ -58,8 +57,7 @@ function OptionContainer({ children, first = false }: OptionContainerPropsType) 
 }
 
 function DateOptions() {
-  const { setYearFormat, setMonthFormat, setDayFormat } = useDateFormatsContext()
-  const { setDateSeparator } = useSeparatorContext()
+  const { setYearFormat, setMonthFormat, setDayFormat, setDateSeparator } = useDateOptionsContext()
 
   return (
     <OptionContainer first>
@@ -119,21 +117,27 @@ function DateOptions() {
 }
 
 function TimeOptions() {
-  const [showTime, setShowTime] = useState(false)
-  const { setHoursFormat, setMinutesFormat, setSecondsFormat } = useTimeFormatsContext()
-  const { setTimeSeparator } = useSeparatorContext()
+  // prettier-ignore
+  const {
+    isAddTime,
+    setIsAddTime,
+    setHoursFormat,
+    setMinutesFormat,
+    setSecondsFormat,
+    setTimeSeparator
+  } = useTimeOptionsContext()
 
   return (
     <OptionContainer>
       <OptionsHeader>Time Options</OptionsHeader>
       {/* Time options toggle */}
       <div className="mt-3">
-        <ToggleSwitch size="xs" setChecked={setShowTime}>
+        <ToggleSwitch size="xs" setChecked={setIsAddTime}>
           <span className="ms-3 text-xs font-normal text-neutral-600">Add Time</span>
         </ToggleSwitch>
       </div>
       <>
-        {showTime && (
+        {isAddTime && (
           <>
             <OptionSection>
               <Option title="Hours Format" first>
@@ -197,8 +201,15 @@ export function isValidCustomText(value: string): boolean {
 }
 
 function OtherOptions() {
-  const [showCustomText, setShowCustomText] = useState(false)
-  const { customText, setCustomText, isValid, setIsValid } = useCustomTextContext()
+  // prettier-ignore
+  const {
+    isAddCustomText,
+    setIsAddCustomText,
+    customText,
+    setCustomText,
+    isValid,
+    setIsValid
+  } = useCustomTextContext()
 
   useEffect(() => {
     setIsValid(isValidCustomText(customText))
@@ -209,12 +220,12 @@ function OtherOptions() {
       <OptionsHeader>Other Options</OptionsHeader>
       {/* Custom text toggle */}
       <div className="mt-3">
-        <ToggleSwitch size="xs" setChecked={setShowCustomText}>
+        <ToggleSwitch size="xs" setChecked={setIsAddCustomText}>
           <span className="ms-3 text-xs font-normal text-neutral-600">Add custom text</span>
         </ToggleSwitch>
       </div>
       <>
-        {showCustomText && (
+        {isAddCustomText && (
           <OptionSection>
             {/* Custom Text */}
             <Option title="Custom Text" first>
