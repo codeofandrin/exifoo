@@ -180,6 +180,7 @@ function TimeOptions() {
                   id={"time-separator"}
                   options={[
                     { id: "", value: "None" },
+                    { id: "-", value: "Dash (-)" },
                     { id: ".", value: "Period (.)" },
                     { id: ",", value: "Comma (,)" }
                   ]}
