@@ -55,13 +55,10 @@ export interface TimeOptionsContextType {
     setMinutesFormat: Function
     setSecondsFormat: Function
     setTimeSeparator: Function
-}
-
-export interface SeparatorContextType {
-    dateSeparator: string
-    timeSeparator: string
-    setDateSeparator: Function
-    setTimeSeparator: Function
+    resetHoursFormat: Function
+    resetMinutesFormat: Function
+    resetSecondsFormat: Function
+    resetTimeSeparator: Function
 }
 
 export interface CustomTextContextType {
@@ -71,4 +68,5 @@ export interface CustomTextContextType {
     setIsAddCustomText: Function
     setCustomText: Function
     setIsValid: Function
+    resetCustomText: Function
 }

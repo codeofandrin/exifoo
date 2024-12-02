@@ -124,15 +124,31 @@ function TimeOptions() {
     setHoursFormat,
     setMinutesFormat,
     setSecondsFormat,
-    setTimeSeparator
+    setTimeSeparator,
+    resetHoursFormat,
+    resetMinutesFormat,
+    resetSecondsFormat,
+    resetTimeSeparator
   } = useTimeOptionsContext()
+
+  function handleAddTimeToggle(e) {
+    const isChecked = e.target.checked
+    setIsAddTime(isChecked)
+
+    if (isChecked) {
+      resetHoursFormat()
+      resetMinutesFormat()
+      resetSecondsFormat()
+      resetTimeSeparator()
+    }
+  }
 
   return (
     <OptionContainer>
       <OptionsHeader>Time Options</OptionsHeader>
       {/* Time options toggle */}
       <div className="mt-3">
-        <ToggleSwitch size="xs" setChecked={setIsAddTime}>
+        <ToggleSwitch size="xs" handleToggle={handleAddTimeToggle}>
           <span className="ms-3 text-xs font-normal text-neutral-600">Add Time</span>
         </ToggleSwitch>
       </div>
@@ -208,19 +224,29 @@ function OtherOptions() {
     customText,
     setCustomText,
     isValid,
-    setIsValid
+    setIsValid,
+    resetCustomText
   } = useCustomTextContext()
 
   useEffect(() => {
     setIsValid(isValidCustomText(customText))
   }, [customText])
 
+  function handleAddCustomTextToggle(e) {
+    const isChecked = e.target.checked
+    setIsAddCustomText(isChecked)
+
+    if (isChecked) {
+      resetCustomText()
+    }
+  }
+
   return (
     <OptionContainer>
       <OptionsHeader>Other Options</OptionsHeader>
       {/* Custom text toggle */}
       <div className="mt-3">
-        <ToggleSwitch size="xs" setChecked={setIsAddCustomText}>
+        <ToggleSwitch size="xs" handleToggle={handleAddCustomTextToggle}>
           <span className="ms-3 text-xs font-normal text-neutral-600">Add custom text</span>
         </ToggleSwitch>
       </div>

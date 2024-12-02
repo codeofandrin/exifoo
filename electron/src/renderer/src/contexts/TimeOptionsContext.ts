@@ -12,7 +12,11 @@ export const TimeOptionsContext = createContext<TimeOptionsContextType>({
     setHoursFormat: () => {},
     setMinutesFormat: () => {},
     setSecondsFormat: () => {},
-    setTimeSeparator: () => {}
+    setTimeSeparator: () => {},
+    resetHoursFormat: () => {},
+    resetMinutesFormat: () => {},
+    resetSecondsFormat: () => {},
+    resetTimeSeparator: () => {}
 })
 
 export default function useTimeOptionsContext(): TimeOptionsContextType {

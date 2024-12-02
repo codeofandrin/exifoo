@@ -1,18 +1,14 @@
 interface ToggleSwitchPropsType {
   children?: React.ReactElement | null
   size?: string
-  setChecked: Function
+  handleToggle: React.ChangeEventHandler<HTMLInputElement>
 }
 
 export default function ToggleSwitch({
   children = null,
   size = "default",
-  setChecked
+  handleToggle
 }: ToggleSwitchPropsType) {
-  function handleShowTimeToggle(e) {
-    setChecked(e.target.checked)
-  }
-
   let inputClasses = ""
   switch (size) {
     case "lg":
@@ -36,7 +32,7 @@ export default function ToggleSwitch({
 
   return (
     <label className="inline-flex cursor-pointer items-center">
-      <input type="checkbox" value="" className="peer sr-only" onChange={handleShowTimeToggle} />
+      <input type="checkbox" value="" className="peer sr-only" onChange={handleToggle} />
       <div className={inputClasses}></div>
       {children}
     </label>

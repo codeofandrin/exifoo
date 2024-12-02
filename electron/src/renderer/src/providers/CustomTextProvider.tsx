@@ -3,10 +3,16 @@ import { useState } from "react"
 import { CustomTextContext } from "../contexts/CustomTextContext"
 import { DefaultProviderPropsType } from "../utils/types"
 
+const CUSTOM_TEXT_DEFAULT = ""
+
 export default function CustomTextProvider({ children }: DefaultProviderPropsType) {
   const [isAddCustomText, setIsAddCustomText] = useState<boolean>(false)
-  const [customText, setCustomText] = useState<string>("")
+  const [customText, setCustomText] = useState<string>(CUSTOM_TEXT_DEFAULT)
   const [isValid, setIsValid] = useState<boolean>(true)
+
+  function resetCustomText() {
+    setCustomText(CUSTOM_TEXT_DEFAULT)
+  }
 
   const contextValue = {
     isAddCustomText,
@@ -14,7 +20,8 @@ export default function CustomTextProvider({ children }: DefaultProviderPropsTyp
     isValid,
     setIsAddCustomText,
     setCustomText,
-    setIsValid
+    setIsValid,
+    resetCustomText
   }
 
   return <CustomTextContext.Provider value={contextValue}>{children}</CustomTextContext.Provider>
