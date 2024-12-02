@@ -22,7 +22,7 @@ export default function TextInput({
         type="text"
         maxLength={maxLength}
         placeholder={placeholder}
-        className={`block w-full rounded-lg border ${isValid ? "border-accent-500 focus:border-accent-500 focus:bg-accent-50" : "border-red-500 focus:border-red-500 focus:bg-red-50"} bg-white p-2 text-xs text-neutral-600 placeholder:text-neutral-400 focus:ring-0`}
+        className={`block w-full rounded-lg border ${isValid ? "border-accent-500 focus:border-accent-500 focus:bg-accent-50" : "border-red-500 focus:border-red-500 focus:bg-red-50"} bg-white p-2 text-xs text-neutral-600 transition-colors duration-200 placeholder:text-neutral-400 focus:ring-0`}
         onChange={handleTextChange}
       />
     </div>

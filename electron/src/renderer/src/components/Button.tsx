@@ -3,8 +3,9 @@ import { Button as FlowBiteButton } from "flowbite-react"
 
 const theme: CustomFlowbiteTheme["button"] = {
   color: {
-    primary: "bg-primary-500 text-white hover:bg-primary-600 font-medium",
-    accent: "bg-white hover:bg-accent-50 border border-accent-500 text-neutral-600 font-medium"
+    primary: "bg-primary-500 text-white hover:bg-primary-600 font-medium transition-colors duration-200",
+    accent:
+      "bg-white hover:bg-accent-50 border border-accent-500 text-neutral-600 font-medium transition-colors duration-200"
   }
 }
 

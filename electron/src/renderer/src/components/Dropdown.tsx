@@ -12,7 +12,7 @@ export default function Dropdown({ id, options, setValue }: DropdownPropsType) {
   return (
     <select
       id={id}
-      className="block w-full rounded-lg border border-accent-500 bg-white px-2.5 py-2 text-xs font-medium text-neutral-600 hover:cursor-pointer hover:bg-accent-50 focus:border-accent-500"
+      className="block w-full rounded-lg border border-accent-500 bg-white px-2.5 py-2 text-xs font-medium text-neutral-600 transition-colors duration-200 hover:cursor-pointer hover:bg-accent-50 focus:border-accent-500"
       defaultValue={options[0].value}
       onChange={handleSelect}>
       {options.map(({ id, value }, i) => {
