@@ -85,7 +85,7 @@ export function FilesListDropZone({
     const elem = (
       <div
         key={i}
-        className={`flex items-center justify-between rounded-lg bg-primary-50 px-3 py-1 transition-colors duration-300 hover:bg-primary-50/60 ${i > 0 && "mt-2"}`}>
+        className={`flex items-center justify-between rounded-lg bg-primary-50 px-3 py-1 transition-colors duration-300 hover:bg-primary-100/70 ${i > 0 && "mt-2"}`}>
         <div className="flex items-center">
           <SVGImage className="w-5 text-primary-600" />
           <div className="flex items-end">
