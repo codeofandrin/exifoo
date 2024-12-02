@@ -4,9 +4,9 @@ import { DateOptionsContext } from "../contexts/DateOptionsContext"
 import { DefaultProviderPropsType } from "../utils/types"
 
 export default function DateOptionsProvider({ children }: DefaultProviderPropsType) {
-  const [yearFormat, setYearFormat] = useState<string>("")
-  const [monthFormat, setMonthFormat] = useState<string>("")
-  const [dayFormat, setDayFormat] = useState<string>("")
+  const [yearFormat, setYearFormat] = useState<string>("YYYY")
+  const [monthFormat, setMonthFormat] = useState<string>("MM")
+  const [dayFormat, setDayFormat] = useState<string>("DD")
   const [dateSeparator, setDateSeparator] = useState<string>("")
 
   const contextValue = {

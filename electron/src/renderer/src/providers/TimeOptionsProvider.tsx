@@ -5,9 +5,9 @@ import { DefaultProviderPropsType } from "../utils/types"
 
 export default function TimeOptionsProvider({ children }: DefaultProviderPropsType) {
   const [isAddTime, setIsAddTime] = useState<boolean>(false)
-  const [hoursFormat, setHoursFormat] = useState<string>("")
-  const [minutesFormat, setMinutesFormat] = useState<string>("")
-  const [secondsFormat, setSecondsFormat] = useState<string>("")
+  const [hoursFormat, setHoursFormat] = useState<string>("HH")
+  const [minutesFormat, setMinutesFormat] = useState<string>("MM")
+  const [secondsFormat, setSecondsFormat] = useState<string>("SS")
   const [timeSeparator, setTimeSeparator] = useState<string>("")
 
   const contextValue = {
