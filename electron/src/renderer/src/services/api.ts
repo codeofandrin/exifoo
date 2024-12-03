@@ -38,16 +38,30 @@ async function request(
     return { isError, errorData }
 }
 
+interface DateOptionsType {
+    year_format: string
+    month_format: string
+    day_format: string
+    separator: string
+}
+
+interface TimeOptionsType {
+    hours_format: string
+    minutes_format: string
+    seconds_format: string
+    separator: string
+}
+
 export async function sendImgPaths(
     paths: string[],
-    yearOption: string,
-    timeOption: boolean,
+    dateOptions: DateOptionsType,
+    timeOptions: TimeOptionsType | null,
     customText: string
 ): Promise<APIRequestResponseType> {
     const payload = {
         paths: paths,
-        year_option: yearOption,
-        time_option: timeOption,
+        date_options: dateOptions,
+        time_options: timeOptions,
         custom_text: customText
     }
     const headers = { "Content-Type": "application/json" }

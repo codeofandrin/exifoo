@@ -6,6 +6,10 @@ import { ImageFilesInputType } from "../../utils/types"
 import Button from "../common/Button"
 import ExampleOutput from "./ExampleOutput"
 import SVGUpload from "../../assets/icons/Upload.svg?react"
+import { sendImgPaths } from "../../services/api"
+import useDateOptionsContext from "../../contexts/DateOptionsContext"
+import useTimeOptionsContext from "../../contexts/TimeOptionsContext"
+import useCustomTextContext from "../../contexts/CustomTextContext"
 
 export default function RenameForm() {
   // Hooks
@@ -15,6 +19,9 @@ export default function RenameForm() {
     renamedAmount: 0
   })
   const [isLastFileRemoved, setIsLastFileRemoved] = useState<boolean>(false)
+  const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsContext()
+  const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
+  const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -27,6 +34,7 @@ export default function RenameForm() {
   // Variables
   const FILE_TYPES = ["image/png", "image/jpeg"]
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
+  const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid
 
   // Event handlers
   function handleBrowse() {
@@ -99,6 +107,35 @@ export default function RenameForm() {
     e.preventDefault()
   }
 
+  async function handleRenameRequest() {
+    let filePaths: string[] = []
+    const imageFiles = fileInput.imageFiles
+    if (imageFiles) {
+      for (let i = 0; i < imageFiles.length; i++) {
+        // @ts-ignore: 'path' exists here
+        filePaths.push(imageFiles[i].path)
+      }
+    }
+
+    const yearOptions = {
+      year_format: yearFormat,
+      month_format: monthFormat,
+      day_format: dayFormat,
+      separator: dateSeparator
+    }
+    let timeOptions: any | null = null
+    if (isAddTime) {
+      timeOptions = {
+        hours_format: hoursFormat,
+        minutes_format: minutesFormat,
+        seconds_format: secondsFormat,
+        separator: timeSeparator
+      }
+    }
+
+    await sendImgPaths(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "")
+  }
+
   return (
     <div>
       {/* Heading */}
@@ -149,7 +186,11 @@ export default function RenameForm() {
           </div>
         </div>
         {/* Rename button */}
-        <Button className="mt-5 w-full font-semibold" color="primary">
+        <Button
+          className="mt-5 w-full font-semibold disabled:hover:bg-primary-500"
+          color="primary"
+          onClick={handleRenameRequest}
+          disabled={renameBtnDisabled}>
           Rename
         </Button>
       </div>
