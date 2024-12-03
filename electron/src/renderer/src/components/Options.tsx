@@ -3,9 +3,12 @@ import { useEffect } from "react"
 import Dropdown from "./Dropdown"
 import ToggleSwitch from "./ToggleSwitch"
 import TextInput from "./TextInput"
+import InfoTooltip from "./InfoTooltip"
 import useDateOptionsContext from "../contexts/DateOptionsContext"
 import useTimeOptionsContext from "../contexts/TimeOptionsContext"
 import useCustomTextContext from "../contexts/CustomTextContext"
+
+const CUSTOM_TEXT_MAX_LEN = 30
 
 interface OptionsHeaderPropsType {
   children: string
@@ -24,16 +27,25 @@ function OptionTitle({ children }: OptionTitlePropsType) {
 }
 
 interface OptionPropsType {
-  children: React.ReactElement
+  children: React.ReactElement | React.ReactElement[]
   title: string
   first?: boolean
   className?: string
+  infoText?: string | null
 }
 
-function Option({ children, title, first = false, className = "" }: OptionPropsType) {
+function Option({ children, title, first = false, className = "", infoText = null }: OptionPropsType) {
   return (
     <div className={`${className} flex flex-col ${!first && "ml-5"}`}>
-      <OptionTitle>{title}</OptionTitle>
+      <div className="flex items-center">
+        <OptionTitle>{title}</OptionTitle>
+        {infoText !== null && (
+          <InfoTooltip
+            text={`The text that is placed after date and time, before the actual filename. 
+              Cannot contain slashes ('/') and is limited to ${CUSTOM_TEXT_MAX_LEN} characters.`}
+          />
+        )}
+      </div>
       <div className="mt-1">{children}</div>
     </div>
   )
@@ -212,7 +224,7 @@ function TimeOptions() {
 }
 
 export function isValidCustomText(value: string): boolean {
-  const macOSFileNameRegex = /^[^/]{0,30}$/
+  const macOSFileNameRegex = new RegExp(String.raw`^[^/]{0,${CUSTOM_TEXT_MAX_LEN}}$`, "g")
   return macOSFileNameRegex.test(value)
 }
 
@@ -254,17 +266,18 @@ function OtherOptions() {
         {isAddCustomText && (
           <OptionSection>
             {/* Custom Text */}
-            <Option title="Custom Text" first>
-              <div>
-                <TextInput
-                  placeholder="Enter Text"
-                  setValue={setCustomText}
-                  isValid={isValid}
-                  maxLength={30}
-                />
-                <div className="mt-1">
-                  <p className={`text-xs text-red-500 ${isValid && "invisible"}`}>Invalid text input</p>
-                </div>
+            <Option
+              title="Custom Text"
+              first
+              infoText={`The text that is placed after date and time, before the actual filename. Cannot contain slashes ('/') and is limited to ${CUSTOM_TEXT_MAX_LEN} char`}>
+              <TextInput
+                placeholder="Enter Text"
+                setValue={setCustomText}
+                isValid={isValid}
+                maxLength={CUSTOM_TEXT_MAX_LEN}
+              />
+              <div className="mt-1">
+                <p className={`text-xs text-red-500 ${isValid && "invisible"}`}>Invalid text input</p>
               </div>
             </Option>
           </OptionSection>
