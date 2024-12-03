@@ -5,7 +5,7 @@ import { DefaultProviderPropsType } from "../utils/types"
 
 const HOURS_DEFAULT = "HH"
 const MINUTES_DEFAULT = "MM"
-const SECONDS_DEFAULT = "MM"
+const SECONDS_DEFAULT = "SS"
 const SEPARATOR_DEFAULT = ""
 
 export default function TimeOptionsProvider({ children }: DefaultProviderPropsType) {
