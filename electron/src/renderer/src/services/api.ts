@@ -52,5 +52,5 @@ export async function sendImgPaths(
     }
     const headers = { "Content-Type": "application/json" }
 
-    return await request("POST", "/photos", payload, headers)
+    return await request("POST", "/rename", payload, headers)
 }

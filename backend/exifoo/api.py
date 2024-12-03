@@ -41,8 +41,8 @@ class ImagesPayload(BaseModel):
     custom_text: str
 
 
-@app.post("/photos")
-async def images(payload: ImagesPayload):
+@app.post("/rename")
+async def rename(payload: ImagesPayload):
     rename_images(
         paths=payload.paths,
         year_option=payload.year_option,
