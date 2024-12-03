@@ -1,72 +1,14 @@
 import { useEffect } from "react"
 
+import { OptionsContainer, OptionSection, OptionsHeader, Option } from "./Option"
 import Dropdown from "../common/Dropdown"
 import ToggleSwitch from "../common/ToggleSwitch"
 import TextInput from "../common/TextInput"
-import InfoTooltip from "../common/InfoTooltip"
 import useDateOptionsContext from "../../contexts/DateOptionsContext"
 import useTimeOptionsContext from "../../contexts/TimeOptionsContext"
 import useCustomTextContext from "../../contexts/CustomTextContext"
 
 const CUSTOM_TEXT_MAX_LEN = 30
-
-interface OptionsHeaderPropsType {
-  children: string
-}
-
-function OptionsHeader({ children }: OptionsHeaderPropsType) {
-  return <h2 className="text-sm font-medium text-neutral-700">{children}</h2>
-}
-
-interface OptionTitlePropsType {
-  children: string
-}
-
-function OptionTitle({ children }: OptionTitlePropsType) {
-  return <h3 className="text-xs font-medium text-neutral-500">{children}</h3>
-}
-
-interface OptionPropsType {
-  children: React.ReactElement | React.ReactElement[]
-  title: string
-  first?: boolean
-  className?: string
-  infoText?: string | null
-}
-
-function Option({ children, title, first = false, className = "", infoText = null }: OptionPropsType) {
-  return (
-    <div className={`${className} flex flex-col ${!first && "ml-5"}`}>
-      <div className="flex items-center">
-        <OptionTitle>{title}</OptionTitle>
-        {infoText !== null && (
-          <InfoTooltip
-            text={`The text that is placed after date and time, before the actual filename. 
-              Cannot contain slashes ('/') and is limited to ${CUSTOM_TEXT_MAX_LEN} characters.`}
-          />
-        )}
-      </div>
-      <div className="mt-1">{children}</div>
-    </div>
-  )
-}
-
-interface OptionSectionPropsType {
-  children: React.ReactElement | React.ReactElement[]
-}
-
-function OptionSection({ children }: OptionSectionPropsType) {
-  return <div className="mt-3 flex justify-between">{children}</div>
-}
-
-interface OptionsContainerPropsType {
-  children: React.ReactElement | React.ReactElement[]
-  first?: boolean
-}
-
-function OptionsContainer({ children, first = false }: OptionsContainerPropsType) {
-  return <div className={`flex flex-col ${!first && "mt-8"}`}>{children}</div>
-}
 
 function DateOptions() {
   const { setYearFormat, setMonthFormat, setDayFormat, setDateSeparator } = useDateOptionsContext()
@@ -269,7 +211,8 @@ function OtherOptions() {
             <Option
               title="Custom Text"
               first
-              infoText={`The text that is placed after date and time, before the actual filename. Cannot contain slashes ('/') and is limited to ${CUSTOM_TEXT_MAX_LEN} char`}>
+              infoText={`The text that is placed after date and time, before the actual filename. 
+                         Cannot contain slashes ('/') and is limited to ${CUSTOM_TEXT_MAX_LEN} characters.`}>
               <TextInput
                 placeholder="Enter Text"
                 setValue={setCustomText}
