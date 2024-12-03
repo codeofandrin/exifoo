@@ -1,5 +1,5 @@
 import { Tooltip as FlowbiteTooltip } from "flowbite-react"
-import SVGInfo from "../assets/icons/Info2.svg?react"
+import SVGInfo from "../../assets/icons/Info2.svg?react"
 
 const toolTipTheme = {
   style: {

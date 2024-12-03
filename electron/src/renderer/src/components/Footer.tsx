@@ -1,5 +1,5 @@
 import { EMail } from "../utils/constants"
-import ExternalLink from "./ExternalLink"
+import ExternalLink from "./common/ExternalLink"
 import SVGMessages from "../assets/icons/Messages.svg?react"
 import SVGHelpCircle from "../assets/icons/HelpCircle.svg?react"
 

@@ -2,10 +2,10 @@ import { useRef, useState, useEffect } from "react"
 import { FileInput, Label } from "flowbite-react"
 
 import { EmptyDropZone, FilesListDropZone } from "./DropZone"
-import { ImageFilesInputType } from "../utils/types"
-import Button from "./Button"
+import { ImageFilesInputType } from "../../utils/types"
+import Button from "../common/Button"
 import ExampleOutput from "./ExampleOutput"
-import SVGUpload from "../assets/icons/Upload.svg?react"
+import SVGUpload from "../../assets/icons/Upload.svg?react"
 
 export default function RenameForm() {
   // Hooks

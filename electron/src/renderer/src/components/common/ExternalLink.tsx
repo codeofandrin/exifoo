@@ -1,4 +1,4 @@
-import SVGExternalLink from "../assets/icons/ExternalLink.svg?react"
+import SVGExternalLink from "../../assets/icons/ExternalLink.svg?react"
 
 interface ExternalLinkPropsType {
   children?: any

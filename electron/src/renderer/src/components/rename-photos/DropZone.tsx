@@ -1,7 +1,7 @@
-import { ImageFilesInputType } from "../utils/types"
-import { getTruncatedText, countInArray } from "../utils/helpers"
-import SVGImage from "../assets/icons/Image.svg?react"
-import SVGXCircle from "../assets/icons/XCircle.svg?react"
+import { ImageFilesInputType } from "../../utils/types"
+import { getTruncatedText, countInArray } from "../../utils/helpers"
+import SVGImage from "../../assets/icons/Image.svg?react"
+import SVGXCircle from "../../assets/icons/XCircle.svg?react"
 
 export function EmptyDropZone() {
   return (

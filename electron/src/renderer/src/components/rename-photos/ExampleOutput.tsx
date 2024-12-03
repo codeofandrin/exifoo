@@ -1,6 +1,6 @@
-import useDateOptionsContext from "../contexts/DateOptionsContext"
-import useTimeOptionsContext from "../contexts/TimeOptionsContext"
-import useCustomTextContext from "../contexts/CustomTextContext"
+import useDateOptionsContext from "../../contexts/DateOptionsContext"
+import useTimeOptionsContext from "../../contexts/TimeOptionsContext"
+import useCustomTextContext from "../../contexts/CustomTextContext"
 import {
   getYearStr,
   getMonthStr,
@@ -8,7 +8,7 @@ import {
   getHoursStr,
   getMinutesStr,
   getSecondsStr
-} from "../utils/helpers"
+} from "../../utils/helpers"
 
 export default function ExampleOutput() {
   const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsContext()

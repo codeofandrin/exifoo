@@ -1,5 +1,5 @@
-import { StatusType } from "../utils/types"
-import { FileInputStatusBasicType, ErrorType } from "../utils/enums"
+import { StatusType } from "../../utils/types"
+import { FileInputStatusBasicType, ErrorType } from "../../utils/enums"
 
 function getErrorMsg(errorType: ErrorType, item: string | null): string {
   let statusMsg = ""

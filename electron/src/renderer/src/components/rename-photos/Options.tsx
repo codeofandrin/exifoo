@@ -1,12 +1,12 @@
 import { useEffect } from "react"
 
-import Dropdown from "./Dropdown"
-import ToggleSwitch from "./ToggleSwitch"
-import TextInput from "./TextInput"
-import InfoTooltip from "./InfoTooltip"
-import useDateOptionsContext from "../contexts/DateOptionsContext"
-import useTimeOptionsContext from "../contexts/TimeOptionsContext"
-import useCustomTextContext from "../contexts/CustomTextContext"
+import Dropdown from "../common/Dropdown"
+import ToggleSwitch from "../common/ToggleSwitch"
+import TextInput from "../common/TextInput"
+import InfoTooltip from "../common/InfoTooltip"
+import useDateOptionsContext from "../../contexts/DateOptionsContext"
+import useTimeOptionsContext from "../../contexts/TimeOptionsContext"
+import useCustomTextContext from "../../contexts/CustomTextContext"
 
 const CUSTOM_TEXT_MAX_LEN = 30
 
