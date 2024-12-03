@@ -89,7 +89,7 @@ function TimeOptions() {
     const isChecked = e.target.checked
     setIsAddTime(isChecked)
 
-    if (isChecked) {
+    if (!isChecked) {
       resetHoursFormat()
       resetMinutesFormat()
       resetSecondsFormat()
@@ -190,7 +190,7 @@ function OtherOptions() {
     const isChecked = e.target.checked
     setIsAddCustomText(isChecked)
 
-    if (isChecked) {
+    if (!isChecked) {
       resetCustomText()
     }
   }
