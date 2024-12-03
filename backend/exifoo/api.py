@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
@@ -10,6 +10,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from .metadata import rename_images
 from .errors import catch_exceptions_middleware
 from .utils import setup_logging
+from .types import DateOptionsType, TimeOptionsType
 
 
 @asynccontextmanager
@@ -36,8 +37,8 @@ async def http_exception_handler(request, exc):
 
 class ImagesPayload(BaseModel):
     paths: List[str]
-    year_option: str
-    time_option: bool
+    date_options: DateOptionsType
+    time_options: Optional[TimeOptionsType]
     custom_text: str
 
 
@@ -45,8 +46,8 @@ class ImagesPayload(BaseModel):
 async def rename(payload: ImagesPayload):
     rename_images(
         paths=payload.paths,
-        year_option=payload.year_option,
-        time_option=payload.time_option,
+        date_options=payload.date_options,
+        time_options=payload.time_options,
         custom_text=payload.custom_text,
     )
     return JSONResponse(content={"msg": "Successful"}, status_code=200)

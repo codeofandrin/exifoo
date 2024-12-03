@@ -1,16 +1,25 @@
 import datetime
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from PIL import Image
 
 from .errors import APIException, APIExceptionDetail
 from .enums import ErrorType
-
+from .types import DateOptionsType, TimeOptionsType
 
 EXIF_DATETIME_TAG = 36867
+
 VALID_FILE_TYPES = (".png", ".jpeg", ".jpg")
+VALID_YEAR_FORMATS = ("YYYY", "YY")
+VALID_MONTH_FORMATS = ("MM", "(M)M")
+VALID_DAY_FORMATS = ("DD", "(D)D")
+VALID_DATE_SEPARATORS = ("", "-", ".", ",")
+VALID_HOURS_FORMATS = ("HH", "(H)H")
+VALID_MINUTES_FORMATS = ("MM", "(M)M")
+VALID_SECONDS_FORMATS = ("SS", "(S)S")
+VALID_TIME_SEPARATORS = ("", "-", ".", ",")
 
 
 def _get_img_datetime(img_path: Path) -> datetime.datetime:
@@ -29,17 +38,54 @@ def _get_img_datetime(img_path: Path) -> datetime.datetime:
 
 
 def _rename_filename(
-    *, img_path: Path, dt: datetime.datetime, year_option: str, time_option: bool, custom_text: str
+    *,
+    img_path: Path,
+    dt: datetime.datetime,
+    year_format: str,
+    month_format: str,
+    day_format: str,
+    date_separator: str,
+    is_add_time: bool,
+    hours_format: Optional[str] = None,
+    minutes_format: Optional[str] = None,
+    seconds_format: Optional[str] = None,
+    time_separator: Optional[str] = None,
+    custom_text: str,
 ) -> None:
-    if year_option == "YY":
-        year_format = "%y"
+    if year_format == "YYYY":
+        year = "%Y"
     else:
-        year_format = "%Y"
+        year = "%y"
 
-    if time_option:
-        dt_format = f"{year_format}%m%d_%H%M%S"
+    if month_format == "MM":
+        month = "%m"
     else:
-        dt_format = f"{year_format}%m%d"
+        month = str(dt.month)
+
+    if day_format == "DD":
+        day = "%d"
+    else:
+        day = str(dt.day)
+
+    dt_format = date_separator.join([year, month, day])
+    if is_add_time:
+        if hours_format == "HH":
+            hours = "%H"
+        else:
+            hours = str(dt.hour)
+
+        if minutes_format == "MM":
+            minutes = "%M"
+        else:
+            minutes = str(dt.minute)
+
+        if seconds_format == "SS":
+            seconds = "%S"
+        else:
+            seconds = str(dt.second)
+
+        dt_format += "_"
+        dt_format += time_separator.join([hours, minutes, seconds])  # type: ignore # 'time_separator' can't be None here
 
     if custom_text:
         custom_text = f"_{custom_text}"
@@ -51,7 +97,66 @@ def _rename_filename(
     os.rename(img_path, new_path)
 
 
-def rename_images(*, paths: List[str], year_option: str, time_option: bool, custom_text: str) -> None:
+def rename_images(
+    *,
+    paths: List[str],
+    date_options: DateOptionsType,
+    time_options: Optional[TimeOptionsType],
+    custom_text: str,
+) -> None:
+    year_format = date_options["year_format"]
+    month_format = date_options["month_format"]
+    day_format = date_options["day_format"]
+    date_separator = date_options["separator"]
+
+    for i, (date_format, valid) in enumerate(
+        zip(
+            [year_format, month_format, day_format, date_separator],
+            [VALID_YEAR_FORMATS, VALID_MONTH_FORMATS, VALID_DAY_FORMATS, VALID_DATE_SEPARATORS],
+        )
+    ):
+        if date_format not in valid:
+            raise APIException(
+                status_code=400,
+                error_code=ErrorType.invalid_option.value,
+                msg="Invalid option",
+                detail=APIExceptionDetail(msg=f"Date option {i} must be one of {valid}", item=str(i)),
+            )
+
+    items = {
+        "year_format": year_format,
+        "month_format": month_format,
+        "day_format": day_format,
+        "date_separator": date_separator,
+        "is_add_time": False,
+    }
+
+    if time_options:
+        hours_format = time_options["hours_format"]
+        minutes_format = time_options["minutes_format"]
+        seconds_format = time_options["seconds_format"]
+        time_separator = time_options["separator"]
+
+        for i, (time_format, valid) in enumerate(
+            zip(
+                [hours_format, minutes_format, seconds_format, time_separator],
+                [VALID_HOURS_FORMATS, VALID_MINUTES_FORMATS, VALID_SECONDS_FORMATS, VALID_TIME_SEPARATORS],
+            )
+        ):
+            if time_format not in valid:
+                raise APIException(
+                    status_code=400,
+                    error_code=ErrorType.invalid_option.value,
+                    msg="Invalid option",
+                    detail=APIExceptionDetail(msg=f"Time option {i} must be one of {valid}", item=str(i)),
+                )
+
+        items["hours_format"] = hours_format
+        items["minutes_format"] = minutes_format
+        items["seconds_format"] = seconds_format
+        items["time_separator"] = time_separator
+        items["is_add_time"] = True
+
     for path_str in paths:
         img_path = Path(path_str)
 
@@ -66,10 +171,4 @@ def rename_images(*, paths: List[str], year_option: str, time_option: bool, cust
             )
 
         img_dt = _get_img_datetime(img_path)
-        _rename_filename(
-            img_path=img_path,
-            dt=img_dt,
-            year_option=year_option,
-            time_option=time_option,
-            custom_text=custom_text,
-        )
+        _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
