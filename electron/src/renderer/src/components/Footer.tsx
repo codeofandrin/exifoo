@@ -5,7 +5,7 @@ import SVGHelpCircle from "../assets/icons/HelpCircle.svg?react"
 
 export default function Footer() {
   return (
-    <footer className="my-6 text-neutral-500">
+    <footer className="mb-6 mt-auto text-neutral-500">
       {/* Feedback */}
       <div className="w-fit">
         <ExternalLink href={`mailto:${EMail.feedback}`} color="silent">
