@@ -18,14 +18,12 @@ interface InfoTooltipPropsType {
 
 export default function InfoTooltip({ text }: InfoTooltipPropsType) {
   return (
-    <div className="ml-2">
-      <FlowbiteTooltip
-        className="mx-1 max-w-lg text-xs delay-300"
-        content={text}
-        style="dark"
-        theme={toolTipTheme}>
-        <SVGInfo className="h-3.5 min-w-3.5 text-neutral-500 transition-colors duration-200 hover:text-accent-500" />
-      </FlowbiteTooltip>
-    </div>
+    <FlowbiteTooltip
+      className="mx-1 max-w-lg text-xs delay-300"
+      content={text}
+      style="dark"
+      theme={toolTipTheme}>
+      <SVGInfo className="h-3.5 min-w-3.5 text-neutral-500 transition-colors duration-200 hover:text-accent-500" />
+    </FlowbiteTooltip>
   )
 }

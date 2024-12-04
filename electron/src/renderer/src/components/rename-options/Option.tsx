@@ -29,7 +29,11 @@ export function Option({ children, title, first = false, className = "", infoTex
     <div className={`${className} flex flex-col ${!first && "ml-5"}`}>
       <div className="flex items-center">
         <OptionTitle>{title}</OptionTitle>
-        {infoText !== null && <InfoTooltip text={infoText} />}
+        {infoText !== null && (
+          <div className="ml-1">
+            <InfoTooltip text={infoText} />
+          </div>
+        )}
       </div>
       <div className="mt-1">{children}</div>
     </div>
