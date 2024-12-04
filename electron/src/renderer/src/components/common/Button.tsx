@@ -1,5 +1,5 @@
 import type { CustomFlowbiteTheme, ButtonProps } from "flowbite-react"
-import { Button as FlowBiteButton } from "flowbite-react"
+import { Button as FlowbiteButton } from "flowbite-react"
 
 const theme: CustomFlowbiteTheme["button"] = {
   color: {
@@ -11,8 +11,8 @@ const theme: CustomFlowbiteTheme["button"] = {
 
 export default function Button({ ...props }: ButtonProps) {
   return (
-    <FlowBiteButton theme={theme} {...props}>
+    <FlowbiteButton theme={theme} {...props}>
       {props.children}
-    </FlowBiteButton>
+    </FlowbiteButton>
   )
 }
