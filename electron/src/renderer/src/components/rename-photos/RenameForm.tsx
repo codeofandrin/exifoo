@@ -22,6 +22,7 @@ export default function RenameForm() {
   const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsContext()
   const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -34,7 +35,8 @@ export default function RenameForm() {
   // Variables
   const FILE_TYPES = ["image/png", "image/jpeg"]
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
-  const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid
+  const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
+  const renameText = isLoading ? "Renaming..." : "Rename"
 
   // Event handlers
   function handleBrowse() {
@@ -108,6 +110,8 @@ export default function RenameForm() {
   }
 
   async function handleRenameRequest() {
+    setIsLoading(true)
+
     let filePaths: string[] = []
     const imageFiles = fileInput.imageFiles
     if (imageFiles) {
@@ -133,7 +137,11 @@ export default function RenameForm() {
       }
     }
 
-    await sendImgPaths(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "")
+    await sendImgPaths(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "").then(
+      ({ isError, errorData }) => {
+        setIsLoading(false)
+      }
+    )
   }
 
   return (
@@ -187,11 +195,12 @@ export default function RenameForm() {
         </div>
         {/* Rename button */}
         <Button
-          className="mt-5 w-full font-semibold disabled:hover:bg-primary-500"
+          className="mt-5 w-full font-semibold"
           color="primary"
           onClick={handleRenameRequest}
-          disabled={renameBtnDisabled}>
-          Rename
+          disabled={renameBtnDisabled}
+          isLoading={isLoading}>
+          {renameText}
         </Button>
       </div>
       {/* Example Output */}
