@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react"
 import { FileInput, Label } from "flowbite-react"
 
-import { EmptyDropZone, FilesListDropZone } from "./DropZone"
+import { EmptyDropZone, FilesListDropZone, SuccessMsgDropZone } from "./DropZone"
 import { ImageFilesInputType } from "../../utils/types"
 import Button from "../common/Button"
 import ExampleOutput from "./ExampleOutput"
@@ -10,6 +10,8 @@ import { sendImgPaths } from "../../services/api"
 import useDateOptionsContext from "../../contexts/DateOptionsContext"
 import useTimeOptionsContext from "../../contexts/TimeOptionsContext"
 import useCustomTextContext from "../../contexts/CustomTextContext"
+import { StatusType } from "../../utils/types"
+import { ErrorType, RenameGeneralStatusType } from "../../utils/enums"
 
 export default function RenameForm() {
   // Hooks
@@ -23,6 +25,7 @@ export default function RenameForm() {
   const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
   const [isLoading, setIsLoading] = useState(false)
+  const [status, setStatus] = useState<StatusType | null>(null)
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -37,6 +40,18 @@ export default function RenameForm() {
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
   const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
   const renameText = isLoading ? "Renaming..." : "Rename"
+  let dropZone = <EmptyDropZone />
+  if (fileInput.imageFiles) {
+    dropZone = (
+      <FilesListDropZone
+        fileInput={fileInput}
+        setFileInput={setFileInput}
+        setIsLastFileRemoved={setIsLastFileRemoved}
+      />
+    )
+  } else if (status?.type === RenameGeneralStatusType.success) {
+    dropZone = <SuccessMsgDropZone renamedFiles={fileInput.renamedAmount} />
+  }
 
   // Event handlers
   function handleBrowse() {
@@ -55,6 +70,8 @@ export default function RenameForm() {
   }
 
   function handleFilesChange() {
+    setStatus(null)
+
     const fileInputElem = fileInput.ref.current as HTMLInputElement
     const newImageFiles = fileInputElem.files as FileList
     const storedImageFiles = fileInput.imageFiles
@@ -140,6 +157,31 @@ export default function RenameForm() {
     await sendImgPaths(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "").then(
       ({ isError, errorData }) => {
         setIsLoading(false)
+
+        if (isError) {
+          if (errorData === null) {
+            // unexpected
+            setStatus({
+              type: RenameGeneralStatusType.error,
+              error: { type: ErrorType.unexpected, item: null }
+            })
+          } else {
+            setStatus({
+              type: RenameGeneralStatusType.error,
+              error: { type: errorData["code"] as ErrorType, item: errorData["detail"]["item"] }
+            })
+          }
+        } else {
+          setStatus({ type: RenameGeneralStatusType.success, error: null })
+          setTimeout(() => setStatus(null), 5000)
+        }
+
+        setFileInput({
+          ...fileInput,
+          renamedAmount: imageFiles ? imageFiles.length : 0,
+          imageFiles: null
+        })
+        fileInput.ref.current && (fileInput.ref.current.value = "")
       }
     )
   }
@@ -161,15 +203,7 @@ export default function RenameForm() {
             className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}
             onDragOver={handleFileDragOver}
             onDrop={handleFileDrop}>
-            {fileInput.imageFiles ? (
-              <FilesListDropZone
-                fileInput={fileInput}
-                setFileInput={setFileInput}
-                setIsLastFileRemoved={setIsLastFileRemoved}
-              />
-            ) : (
-              <EmptyDropZone />
-            )}
+            {dropZone}
             <FileInput
               ref={fileInput.ref}
               onChange={handleFilesChange}

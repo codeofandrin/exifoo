@@ -1,4 +1,4 @@
-export enum FileInputStatusBasicType {
+export enum RenameGeneralStatusType {
     success,
     error
 }
@@ -6,5 +6,6 @@ export enum FileInputStatusBasicType {
 export enum ErrorType {
     unexpected,
     invalidFileType,
-    noExifData
+    noExifData,
+    invalid_option
 }

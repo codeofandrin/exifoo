@@ -1,6 +1,6 @@
 import { RefObject } from "react"
 
-import { FileInputStatusBasicType, ErrorType } from "./enums"
+import { RenameGeneralStatusType, ErrorType } from "./enums"
 
 export interface ErrorDataType {
     code: number
@@ -13,7 +13,7 @@ export interface APIRequestResponseType {
 }
 
 export interface StatusType {
-    type: FileInputStatusBasicType
+    type: RenameGeneralStatusType
     error: { type: ErrorType; item: string | null } | null
 }
 

@@ -2,6 +2,7 @@ import { ImageFilesInputType } from "../../utils/types"
 import { getTruncatedText, countInArray } from "../../utils/helpers"
 import SVGImage from "../../assets/icons/Image.svg?react"
 import SVGXCircle from "../../assets/icons/XCircle.svg?react"
+import SVGCheck from "../../assets/icons/Check.svg?react"
 
 export function EmptyDropZone() {
   return (
@@ -9,6 +10,25 @@ export function EmptyDropZone() {
       <SVGImage className="w-10 text-primary-600" />
       <p className="font-md mb-2 mt-2 text-sm text-neutral-700">Drop file or browse</p>
       <p className="text-xs font-normal text-neutral-500">Format: PNG, JPEG, JPG</p>
+    </div>
+  )
+}
+
+interface SuccessMsgDropZonePropsType {
+  renamedFiles: number
+}
+
+export function SuccessMsgDropZone({ renamedFiles }: SuccessMsgDropZonePropsType) {
+  return (
+    <div className="flex flex-col items-center pb-6 pt-5">
+      <div className="rounded-full bg-green-100/75 p-2">
+        <div className="rounded-full bg-green-200/75 p-2">
+          <SVGCheck className="w-7 text-green-500" />
+        </div>
+      </div>
+      <p className="font-md mb-2 mt-2 text-sm text-neutral-700">
+        Successfully renamed {renamedFiles} photos.
+      </p>
     </div>
   )
 }
