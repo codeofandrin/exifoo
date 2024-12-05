@@ -20,8 +20,10 @@ export default function Header() {
       {/* Icon Section */}
       <div>
         {/* About */}
-        <button onClick={handleAboutClick}>
-          <SVGInfo className="h-6 w-6 text-neutral-800 transition-colors duration-200 hover:text-neutral-500" />
+        <button
+          onClick={handleAboutClick}
+          className="rounded-lg border border-neutral-300 p-1.5 transition-colors duration-200 hover:bg-neutral-100">
+          <SVGInfo className="h-4 w-4 text-neutral-800" />
         </button>
       </div>
     </div>
