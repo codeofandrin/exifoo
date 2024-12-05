@@ -21,6 +21,7 @@ function getErrorMsg(errorType: ErrorType): string {
       statusMsg = `No exif data found.`
       break
 
+    case ErrorType.invalid_option:
     case ErrorType.unexpected:
     default:
       statusMsg = "Something went wrong unexpected. Please try again."
@@ -78,11 +79,15 @@ export default function RenameErrorModal() {
         </div>
         {/* Description */}
         <div className="mt-2 text-sm text-neutral-500">
-          <p>
-            Renaming{" "}
-            <code className="bg-neutral-100 p-0.5 text-code text-neutral-600">{truncatedFilePath}</code>{" "}
-            failed.
-          </p>
+          {errorMsg.includes("unexpected") ? (
+            <p>Renaming photos failed.</p>
+          ) : (
+            <p>
+              Renaming{" "}
+              <code className="bg-neutral-100 p-0.5 text-code text-neutral-600">{truncatedFilePath}</code>{" "}
+              failed.
+            </p>
+          )}
           <p>{errorMsg}</p>
         </div>
       </Modal.Body>
