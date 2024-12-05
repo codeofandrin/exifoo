@@ -34,7 +34,7 @@ function getErrorMsg(errorType: ErrorType): string {
 const modalTheme = {
   root: {
     sizes: {
-      md: "max-w-[450px] max-h-[360px]"
+      md: "max-w-[470px] max-h-[360px]"
     },
     show: {
       on: "flex bg-gray-900 bg-opacity-40"
@@ -91,7 +91,7 @@ export default function RenameErrorModal() {
           <p>{errorMsg}</p>
         </div>
       </Modal.Body>
-      <Modal.Footer className="max-w-[450px] justify-between">
+      <Modal.Footer className="justify-between">
         <div className="mt-auto items-end">
           <ExternalLink href={`mailto:${EMail.help}`} color="silent">
             <SVGHelpCircle className="w-4 stroke-2 text-neutral-500 transition-colors duration-200 hover:text-neutral-700" />
