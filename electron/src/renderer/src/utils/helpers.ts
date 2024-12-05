@@ -58,3 +58,14 @@ export function getSecondsStr(seconds: number, leadingZero: boolean = true) {
         return secondsStr
     }
 }
+
+export function getParentFolderStr(filePath: string): string {
+    const parentFolder = filePath.substring(0, filePath.lastIndexOf("/"))
+    const lastFolder = parentFolder.substring(parentFolder.lastIndexOf("/") + 1)
+    return `.../${lastFolder}`
+}
+
+export function getFileName(filePath: string): string {
+    const fileName = filePath.split("/").pop() as string
+    return fileName
+}

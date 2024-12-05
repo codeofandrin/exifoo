@@ -9,7 +9,8 @@ module.exports = {
         extend: {
             colors: exifooTheme.colors,
             fontSize: {
-                xxs: "0.625rem"
+                xxs: "0.625rem",
+                code: "0.8rem"
             },
             backdropBlur: {
                 xs: "2px"

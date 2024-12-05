@@ -1,5 +1,5 @@
 import { ImageFilesInputType } from "../../utils/types"
-import { getTruncatedText, countInArray } from "../../utils/helpers"
+import { getTruncatedText, countInArray, getParentFolderStr } from "../../utils/helpers"
 import SVGImage from "../../assets/icons/Image.svg?react"
 import SVGXCircle from "../../assets/icons/XCircle.svg?react"
 import SVGCheck from "../../assets/icons/Check.svg?react"
@@ -48,12 +48,6 @@ function removeFileFromFileList(fileInputElem: HTMLInputElement, files: FileList
   fileInputElem.files = dataTransfer.files
 
   return items
-}
-
-function getParentFolder(filePath) {
-  const parentFolder = filePath.substring(0, filePath.lastIndexOf("/"))
-  const lastFolder = parentFolder.substring(parentFolder.lastIndexOf("/") + 1)
-  return `.../${lastFolder}`
 }
 
 function isFileNameDuplicate(files: FileList, file: File) {
@@ -112,7 +106,7 @@ export function FilesListDropZone({
             <p className="ml-2 text-sm font-medium">{getTruncatedText(file.name, fileNameMaxLen)}</p>
             {isNameDuplicate && (
               <p className="ml-2 text-xxs font-normal leading-3">
-                {getTruncatedText(getParentFolder(filePath), 25)}
+                {getTruncatedText(getParentFolderStr(filePath), 25)}
               </p>
             )}
           </div>

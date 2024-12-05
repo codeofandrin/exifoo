@@ -12,12 +12,18 @@ export interface APIRequestResponseType {
     errorData: ErrorDataType | null
 }
 
-export interface StatusType {
+export interface RenameStatusType {
     type: RenameGeneralStatusType
     error: { type: ErrorType; item: string | null } | null
 }
 
-export interface AboutModalContextType {
+export interface RenameStatusContextType {
+    status: RenameStatusType | null
+    setStatus: Function
+    resetStatus: Function
+}
+
+export interface ModalContextType {
     isOpen: boolean
     openModal: Function
     closeModal: Function

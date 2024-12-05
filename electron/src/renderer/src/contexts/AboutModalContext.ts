@@ -1,13 +1,13 @@
 import { createContext, useContext } from "react"
 
-import { AboutModalContextType } from "../utils/types"
+import { ModalContextType } from "../utils/types"
 
-export const AboutModalContext = createContext<AboutModalContextType>({
+export const AboutModalContext = createContext<ModalContextType>({
     isOpen: false,
     openModal: () => {},
     closeModal: () => {}
 })
 
-export default function useAboutModalContext(): AboutModalContextType {
+export default function useAboutModalContext(): ModalContextType {
     return useContext(AboutModalContext)
 }

@@ -10,7 +10,8 @@ import { sendImgPaths } from "../../services/api"
 import useDateOptionsContext from "../../contexts/DateOptionsContext"
 import useTimeOptionsContext from "../../contexts/TimeOptionsContext"
 import useCustomTextContext from "../../contexts/CustomTextContext"
-import { StatusType } from "../../utils/types"
+import useRenameErrorModalContext from "../../contexts/RenameErrorModalContext"
+import useRenameStatusContext from "../../contexts/RenameStatusContext"
 import { ErrorType, RenameGeneralStatusType } from "../../utils/enums"
 
 export default function RenameForm() {
@@ -25,7 +26,8 @@ export default function RenameForm() {
   const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
   const [isLoading, setIsLoading] = useState(false)
-  const [status, setStatus] = useState<StatusType | null>(null)
+  const { status, setStatus, resetStatus } = useRenameStatusContext()
+  const { openModal } = useRenameErrorModalContext()
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -34,6 +36,12 @@ export default function RenameForm() {
       }, 0)
     }
   }, [isLastFileRemoved])
+
+  useEffect(() => {
+    if (status?.type === RenameGeneralStatusType.error) {
+      openModal()
+    }
+  }, [status])
 
   // Variables
   const FILE_TYPES = ["image/png", "image/jpeg"]
@@ -70,7 +78,7 @@ export default function RenameForm() {
   }
 
   function handleFilesChange() {
-    setStatus(null)
+    resetStatus()
 
     const fileInputElem = fileInput.ref.current as HTMLInputElement
     const newImageFiles = fileInputElem.files as FileList
@@ -173,7 +181,7 @@ export default function RenameForm() {
           }
         } else {
           setStatus({ type: RenameGeneralStatusType.success, error: null })
-          setTimeout(() => setStatus(null), 5000)
+          setTimeout(() => resetStatus(), 5000)
         }
 
         setFileInput({
