@@ -1,7 +1,7 @@
 import { ImageFilesInputType } from "../../utils/types"
 import { getTruncatedText, countInArray, getParentFolderStr } from "../../utils/helpers"
 import SVGImage from "../../assets/icons/Image.svg?react"
-import SVGXCircle from "../../assets/icons/XCircle.svg?react"
+import SVGX from "../../assets/icons/X.svg?react"
 import SVGCheck from "../../assets/icons/Check.svg?react"
 
 export function EmptyDropZone() {
@@ -115,7 +115,7 @@ export function FilesListDropZone({
           <button
             className="group rounded-lg bg-white/50 p-1.5 transition-colors duration-150 hover:bg-red-500"
             onClick={() => handleRemove(i)}>
-            <SVGXCircle className="w-5 text-red-500 transition-colors duration-150 group-hover:text-white" />
+            <SVGX className="w-5 text-red-500 transition-colors duration-150 group-hover:text-white" />
           </button>
         </div>
       </div>
