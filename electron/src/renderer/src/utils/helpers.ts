@@ -9,12 +9,12 @@ export function countInArray(arr: any[], element: any): number {
     return arr.filter((x) => x == element).length
 }
 
-export function getYearStr(year: number, short: boolean = false) {
+export function getYearStr(year: number, short: boolean = false): string {
     const yearStr = year.toString()
     return short ? yearStr.substring(2) : yearStr
 }
 
-export function getMonthStr(month: number, leadingZero: boolean = true) {
+export function getMonthStr(month: number, leadingZero: boolean = true): string {
     const monthStr = month.toString()
     if (leadingZero) {
         return month < 10 ? "0" + month : monthStr
@@ -23,7 +23,7 @@ export function getMonthStr(month: number, leadingZero: boolean = true) {
     }
 }
 
-export function getDayStr(day: number, leadingZero: boolean = true) {
+export function getDayStr(day: number, leadingZero: boolean = true): string {
     const dayStr = day.toString()
     if (leadingZero) {
         return day < 10 ? "0" + day : dayStr
@@ -32,7 +32,7 @@ export function getDayStr(day: number, leadingZero: boolean = true) {
     }
 }
 
-export function getHoursStr(hours: number, leadingZero: boolean = true) {
+export function getHoursStr(hours: number, leadingZero: boolean = true): string {
     const hoursStr = hours.toString()
     if (leadingZero) {
         return hours < 10 ? "0" + hours : hoursStr
@@ -41,7 +41,7 @@ export function getHoursStr(hours: number, leadingZero: boolean = true) {
     }
 }
 
-export function getMinutesStr(minutes: number, leadingZero: boolean = true) {
+export function getMinutesStr(minutes: number, leadingZero: boolean = true): string {
     const minutesStr = minutes.toString()
     if (leadingZero) {
         return minutes < 10 ? "0" + minutes : minutesStr
@@ -50,7 +50,7 @@ export function getMinutesStr(minutes: number, leadingZero: boolean = true) {
     }
 }
 
-export function getSecondsStr(seconds: number, leadingZero: boolean = true) {
+export function getSecondsStr(seconds: number, leadingZero: boolean = true): string {
     const secondsStr = seconds.toString()
     if (leadingZero) {
         return seconds < 10 ? "0" + seconds : secondsStr
