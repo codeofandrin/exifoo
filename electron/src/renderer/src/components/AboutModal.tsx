@@ -1,4 +1,4 @@
-import { Modal, CustomFlowbiteTheme } from "flowbite-react"
+import { Modal } from "flowbite-react"
 import { useEffect } from "react"
 
 import useAboutModalContext from "../contexts/AboutModalContext"
@@ -9,7 +9,7 @@ import { WebsiteLinks } from "../utils/constants"
 import ImgAppLogoSmall from "../assets/images/exifoo_logo_small.png"
 import SVGCheck from "../assets/icons/Check.svg?react"
 
-const modalTheme: CustomFlowbiteTheme["modal"] = {
+const modalTheme = {
   root: {
     sizes: {
       md: "max-w-[400px] max-h-[360px]"
