@@ -7,6 +7,10 @@
     "name": "Andrin Schaller",
     "url": "https://github.com/codeofandrin"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/codeofandrin/exifoo.git"
+  },
   "license": "SEE LICENSE FILE",
   "scripts": {
     "format": "prettier --write --list-different .",
