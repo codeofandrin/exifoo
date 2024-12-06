@@ -11,7 +11,6 @@
     "type": "git",
     "url": "git+https://github.com/codeofandrin/exifoo.git"
   },
-  "license": "SEE LICENSE FILE",
   "scripts": {
     "format": "prettier --write --list-different .",
     "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
