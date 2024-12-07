@@ -2,7 +2,7 @@
     "scripts": {
         "dev": "concurrently \"npm run dev-backend\" \"npm run dev-electron\"",
         "start": "concurrently \"npm run dev-backend\" \"npm run start-electron\"",
-        "build": "concurrently \"npm run build-backend\" \"npm run build-electron\"",
+        "build": "npm run build-backend && npm run build-electron",
         "dev-backend": "source venv/bin/activate && cd backend && python3.9 main.py",
         "dev-electron": "cd electron && npm run dev",
         "start-electron": "cd electron && npm run start",
