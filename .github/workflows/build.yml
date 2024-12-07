@@ -20,7 +20,7 @@ jobs:
           python-version: 3.9
 
       - name: Install backend dependencies
-        id: install-deps
+        id: install-backend-deps
         run: |
           cd backend
           pip install build
@@ -30,6 +30,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+
+      - name: Install frontend dependencies
+        id: install-frontend-deps
+        run: |
+          npx tsc 
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
