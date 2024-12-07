@@ -34,6 +34,7 @@ jobs:
       - name: Install frontend dependencies
         id: install-frontend-deps
         run: |
+          cd electron
           npm i
 
       - name: Build/release Electron app
