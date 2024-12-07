@@ -37,10 +37,15 @@ jobs:
           cd electron
           npm i --yes
 
+      - name: Build backend executable
+        id: build-backend
+        run: npm run build-backend
+
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
           package_root: ./electron
+          build_script_name: build-electron
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
