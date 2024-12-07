@@ -6,6 +6,7 @@ import { kill } from "process"
 import log from "electron-log/main"
 
 import { getMenu } from "./menu"
+import { checkForUpdatesAndNotify } from "./auto-updater"
 
 log.transports.file.level = "info"
 log.transports.file.resolvePathFn = (vars) =>
@@ -83,6 +84,11 @@ app.whenReady().then(() => {
         const aboutMenuItem = Menu.getApplicationMenu()?.getMenuItemById("about") as MenuItem
         aboutMenuItem.enabled = !isOpen
     })
+})
+
+app.on("ready", function () {
+    console.info("ready")
+    checkForUpdatesAndNotify()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common

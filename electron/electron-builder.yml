@@ -29,6 +29,12 @@ mac:
     - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
   notarize: false
   icon: "build/icon_macos_512x512@2x.png"
+  publish:
+    - provider: github
+      protocol: https
+      private: true
+      owner: codeofandrin
+      repo: exifoo
 dmg:
   artifactName: ${name}-${version}.${ext}
 linux:
