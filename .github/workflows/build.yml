@@ -14,6 +14,17 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.9
+
+      name: Install backend dependencies
+        id: install-deps
+        run: |
+          pip install build
+          pip install -U -r requirements.txt
+
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v4
         with:
