@@ -34,7 +34,7 @@ jobs:
       - name: Install frontend dependencies
         id: install-frontend-deps
         run: |
-          npx tsc 
+          npm i
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
