@@ -31,11 +31,11 @@ jobs:
         with:
           node-version: 18
 
-      - name: Install frontend dependencies
-        id: install-frontend-deps
-        run: |
-          cd electron
-          npm i --yes
+      # - name: Install frontend dependencies
+      #   id: install-frontend-deps
+      #   run: |
+      #     cd electron
+      #     npm i --yes
 
       - name: Build backend executable
         id: build-backend
