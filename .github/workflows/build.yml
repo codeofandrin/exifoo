@@ -19,7 +19,7 @@ jobs:
         with:
           python-version: 3.9
 
-      name: Install backend dependencies
+      - name: Install backend dependencies
         id: install-deps
         run: |
           pip install build
