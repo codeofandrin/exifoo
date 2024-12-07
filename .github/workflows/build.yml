@@ -22,6 +22,7 @@ jobs:
       - name: Install backend dependencies
         id: install-deps
         run: |
+          cd backend
           pip install build
           pip install -U -r requirements.txt
 
