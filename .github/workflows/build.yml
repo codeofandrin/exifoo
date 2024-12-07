@@ -35,7 +35,7 @@ jobs:
         id: install-frontend-deps
         run: |
           cd electron
-          npm i
+          RUN echo yes | npm i
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
