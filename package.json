@@ -9,7 +9,8 @@
         "build-backend": "cd backend && pyinstaller build.spec",
         "build-electron": "cd electron && npm run build",
         "format": "cd backend && black . && cd ../electron && npm run format",
-        "typecheck": "cd backend && pyright && cd ../electron && npm run typecheck"
+        "typecheck": "cd backend && pyright && cd ../electron && npm run typecheck",
+        "bump": "cd electron && npm version $npm_config_vers"
     },
     "dependencies": {
         "concurrently": "^9.0.1"
