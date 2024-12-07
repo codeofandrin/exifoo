@@ -2,12 +2,14 @@
     "scripts": {
         "dev": "concurrently \"npm run dev-backend\" \"npm run dev-electron\"",
         "start": "concurrently \"npm run dev-backend\" \"npm run start-electron\"",
-        "build": "npm run build-backend && npm run build-electron",
+        "build:mac": "npm run build-backend && npm run build-electron:mac",
+        "build-backend": "cd backend && pyinstaller build.spec",
+        "build-electron:mac": "cd electron && npm run build:mac",
+        "prebuild": "npm run build-backend && npm run prebuild-electron",
+        "prebuild-electron": "cd electron && npm run build",
         "dev-backend": "source venv/bin/activate && cd backend && python3.9 main.py",
         "dev-electron": "cd electron && npm run dev",
         "start-electron": "cd electron && npm run start",
-        "build-backend": "cd backend && pyinstaller build.spec",
-        "build-electron": "cd electron && npm run build",
         "format": "cd backend && black . && cd ../electron && npm run format",
         "typecheck": "cd backend && pyright && cd ../electron && npm run typecheck",
         "bump": "cd electron && npm version $npm_config_vers"
