@@ -36,6 +36,11 @@ jobs:
         run: |
           if [ "$RUNNER_OS" == "macOS" ]; then
             export GH_TOKEN={{ secrets.GH_TOKEN }}
+          else
+            echo "$RUNNER_OS not supported"
+            exit 1
+          fi
+        shell: bash
 
       - name: Build backend executable
         id: build-backend
