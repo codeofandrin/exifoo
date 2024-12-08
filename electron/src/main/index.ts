@@ -72,7 +72,7 @@ app.whenReady().then(() => {
                 createWindow()
             })
             .catch((error) => {
-                console.log(error)
+                log.error(error)
             })
     }
 
@@ -89,7 +89,7 @@ app.whenReady().then(() => {
 })
 
 app.on("ready", function () {
-    console.info("ready")
+    log.info("ready")
     checkForUpdatesAndNotify()
 })
 
