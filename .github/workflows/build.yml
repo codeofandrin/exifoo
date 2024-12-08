@@ -31,6 +31,12 @@ jobs:
         with:
           node-version: 18
 
+      - name: Export secrets to environment
+        id: export-secrets
+        run: |
+        if [ "$RUNNER_OS" == "macOS" ]; then
+              export GH_TOKEN={{ secrets.GH_TOKEN }}
+
       - name: Build backend executable
         id: build-backend
         run: npm run build-backend
