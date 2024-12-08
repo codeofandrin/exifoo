@@ -8,6 +8,8 @@ import log from "electron-log/main"
 import { getMenu } from "./menu"
 import { checkForUpdatesAndNotify } from "./auto-updater"
 
+
+log.errorHandler.startCatching()
 log.transports.file.level = "info"
 log.transports.file.resolvePathFn = (vars) =>
     join(vars.libraryDefaultDir, "../com.electron.exifoo/electron.log")
