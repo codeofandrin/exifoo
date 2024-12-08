@@ -6,7 +6,7 @@ autoUpdater.setFeedURL({
     private: true,
     owner: "codeofandrin",
     repo: "exifoo",
-    token: process.env.GH_TOKEN
+    token: process.env.GH_PAT_TOKEN
 })
 
 export function checkForUpdatesAndNotify() {
