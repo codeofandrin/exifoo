@@ -160,7 +160,7 @@ def rename_images(
     for path_str in paths:
         img_path = Path(path_str)
 
-        if img_path.suffix not in VALID_FILE_TYPES:
+        if img_path.suffix.lower() not in VALID_FILE_TYPES:
             raise APIException(
                 status_code=400,
                 error_code=ErrorType.invalid_file_type.value,
