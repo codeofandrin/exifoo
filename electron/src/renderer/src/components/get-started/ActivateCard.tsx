@@ -21,6 +21,7 @@ const theme: CustomFlowbiteTheme["card"] = {
 }
 
 export default function ActivateCard() {
+  // @ts-ignore: TODO remove ignore
   const [licenseKey, setLicenseKey] = useState("")
   const [error, setError] = useState<ErrorModalType | null>(null)
 
