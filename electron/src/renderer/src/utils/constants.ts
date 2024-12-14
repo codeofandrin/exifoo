@@ -5,6 +5,7 @@ export class Server {
 export class WebsiteLinks {
     static home = "https://exifoo.com"
     static terms = `${WebsiteLinks.home}/terms`
+    static license = `${WebsiteLinks.home}/license`
 }
 
 export class EMail {

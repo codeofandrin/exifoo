@@ -1,0 +1,9 @@
+#slogan {
+    color: transparent;
+    background: radial-gradient(
+        ellipse 300px 80px at 40% 40%,
+        rgba(39, 39, 42, 1) 25%,
+        rgba(203, 97, 235, 60%) 100%
+    );
+    background-clip: text;
+}

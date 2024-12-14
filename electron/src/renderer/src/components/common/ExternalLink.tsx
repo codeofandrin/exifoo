@@ -17,13 +17,16 @@ export default function ExternalLink({
   displayIcon = false,
   color = "primary"
 }: ExternalLinkPropsType) {
-  let colorClasses
+  let styleClasses
   switch (color) {
     case "primary":
-      colorClasses = "text-primary-500 hover:text-primary-700 underline"
+      styleClasses = "text-primary-500 hover:text-primary-700 underline"
       break
     case "silent":
-      colorClasses = "hover:underline"
+      styleClasses = "hover:underline"
+      break
+    case "underline":
+      styleClasses = "underline"
       break
   }
 
@@ -31,7 +34,7 @@ export default function ExternalLink({
     <a
       href={href}
       target="_blank"
-      className={`${className} ${colorClasses} transition-colors duration-200`}
+      className={`${className} ${styleClasses} transition-colors duration-200`}
       title={title}>
       {displayIcon ? (
         <div className="flex items-center">

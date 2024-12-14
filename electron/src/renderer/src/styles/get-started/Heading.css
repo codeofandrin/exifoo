@@ -1,0 +1,9 @@
+#get-started-title {
+    color: transparent;
+    background: radial-gradient(
+        ellipse 250px 80px at 30% 30%,
+        rgba(39, 39, 42, 1) 10%,
+        rgba(203, 97, 235, 60%) 100%
+    );
+    background-clip: text;
+}

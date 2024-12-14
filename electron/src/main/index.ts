@@ -4,6 +4,7 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 import { execFile } from "child_process"
 import { kill } from "process"
 import log from "electron-log/main"
+import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer"
 
 import { getMenu } from "./menu"
 import { checkForUpdatesAndNotify } from "./auto-updater"
@@ -63,6 +64,9 @@ app.whenReady().then(() => {
     })
 
     if (is.dev) {
+        installExtension(REACT_DEVELOPER_TOOLS)
+            .then((name) => console.log(`Added Extension:  ${name}`))
+            .catch((err) => console.log("An error occurred: ", err))
         createWindow()
     } else {
         // in development backend is started manually

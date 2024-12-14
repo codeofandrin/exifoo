@@ -23,12 +23,6 @@ export interface RenameStatusContextType {
     resetStatus: Function
 }
 
-export interface ModalContextType {
-    isOpen: boolean
-    openModal: Function
-    closeModal: Function
-}
-
 export interface DefaultProviderPropsType {
     children: React.ReactElement
 }
@@ -75,4 +69,9 @@ export interface CustomTextContextType {
     setCustomText: Function
     setIsValid: Function
     resetCustomText: Function
+}
+
+export interface ErrorModalType {
+    title: string
+    desc: string
 }

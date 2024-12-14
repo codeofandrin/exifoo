@@ -24,17 +24,20 @@
 }
 
 @font-face {
+    font-family: "Poppins";
+    src: url("../fonts/Poppins-Bold.ttf") format("truetype");
+    font-weight: 700;
+    font-style: normal;
+}
+
+@font-face {
     font-family: "Space Grotesk";
     src: url("../fonts/SpaceGrotesk-VariableFont_wght.ttf") format("truetype");
 }
 
 :root {
-    @apply bg-white px-6;
+    @apply bg-white;
     font-family: Poppins;
-}
-
-#root {
-    @apply flex h-screen flex-col;
 }
 
 button,
