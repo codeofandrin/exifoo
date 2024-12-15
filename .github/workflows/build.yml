@@ -62,7 +62,7 @@ jobs:
         with:
           package_root: ./electron
           build_script_name: prebuild
-          args: ${{ env.CODE_SIGN }}
+          args: ${{ env.CODE_SIGN || null }}
           # GitHub tokens
           github_token: ${{ secrets.GH_TOKEN }}
           github_release_token: ${{ secrets.GH_RELEASE_TOKEN }}
