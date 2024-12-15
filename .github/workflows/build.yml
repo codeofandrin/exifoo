@@ -4,7 +4,7 @@ on: push
 
 env:
   # do not sign code by default
-  BUILD_ARGS: "-c.mac.identity=null"
+  CODE_SIGN: "-c.mac.identity=null"
 
 jobs:
   build-release:
@@ -55,14 +55,14 @@ jobs:
       - name: Prepare for code signing
         if: startsWith(github.ref, 'refs/tags/v')
         # sign code if tag push
-        run: echo "BUILD_ARGS=''" >> "$GITHUB_ENV"
+        run: echo "CODE_SIGN=''" >> "$GITHUB_ENV"
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
         with:
           package_root: ./electron
           build_script_name: prebuild
-          args: ${{ env.BUILD_ARGS }}
+          args: ${{ env.CODE_SIGN }}
           # GitHub token, automatically provided to the action
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
