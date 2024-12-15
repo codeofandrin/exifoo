@@ -1,9 +1,9 @@
-name: Build/release
+name: Build/Release
 
 on: push
 
 jobs:
-  release:
+  build-release:
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -31,20 +31,22 @@ jobs:
         with:
           node-version: 18
 
-      - name: Export secrets to environment
-        id: export-secrets
+      - name: Install frontend dependencies
+        id: install-frontend-deps
         run: |
-          if [ "$RUNNER_OS" == "macOS" ]; then
-            export GH_PAT_TOKEN=${{ secrets.GH_TOKEN }}
-          else
-            echo "$RUNNER_OS not supported"
-            exit 1
-          fi
-        shell: bash
+          cd electron
+          npm i --yes
 
       - name: Build backend executable
         id: build-backend
         run: npm run build-backend
+
+      - name: Prepare for app notarization
+        if: startsWith(matrix.os, 'macos')
+        # Import Apple API key for app notarization on macOS
+        run: |
+          mkdir -p ~/private_keys/
+          echo "${{ secrets.MAC_API_KEY }}" > ~/private_keys/AuthKey_${{ secrets.MAC_API_KEY_ID }}.p8
 
       - name: Build/release Electron app
         uses: samuelmeuli/action-electron-builder@v1
@@ -55,6 +57,17 @@ jobs:
           # (No need to define this secret in the repo settings)
           github_token: ${{ secrets.github_token }}
 
+          # macOS code signing certificate 
+          mac_certs: ${{ secrets.MAC_CERTS }}
+          mac_certs_password: ${{ secrets.MAC_CERTS_PASSWORD }}
+
           # If the commit is tagged with a version (e.g. "v1.0.0"),
           # release the app after building
           release: ${{ startsWith(github.ref, 'refs/tags/v') }}
+        env:
+          # auto updates
+          GH_PAT_TOKEN: ${{ secrets.GH_TOKEN }}
+          # macOS Notarization
+          MAC_API_KEY_ID: ${{ secrets.MAC_API_KEY_ID }}
+          MAC_API_KEY_ISSUER_ID: ${{ secrets.MAC_API_KEY_ISSUER_ID }}
+          SKIP_NOTARIZE: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}

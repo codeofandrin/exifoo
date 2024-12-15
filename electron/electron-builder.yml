@@ -14,6 +14,7 @@ extraResources:
 extends: null
 asarUnpack:
   - resources/**
+afterSign: "notarize.js"
 win:
   executableName: exifoo
 nsis:
@@ -22,16 +23,14 @@ nsis:
   uninstallDisplayName: ${productName}
   createDesktopShortcut: always
 mac:
+  entitlements: "build/entitlements.mac.plist"
   entitlementsInherit: build/entitlements.mac.plist
-  extendInfo:
-    - NSCameraUsageDescription: Application requests access to the device's camera.
-    - NSMicrophoneUsageDescription: Application requests access to the device's microphone.
-    - NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
-    - NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
-  notarize: false
+  hardenedRuntime: true
   icon: "build/icon_macos_512x512@2x.png"
+  notarize: false
 dmg:
   artifactName: ${name}-${version}.${ext}
+  sign: false
 linux:
   target:
     - AppImage

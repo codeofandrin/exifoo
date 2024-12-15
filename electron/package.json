@@ -21,10 +21,11 @@
     "prebuild": "npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "local-build:win": "npm run prebuild && electron-builder --win",
-    "local-build:mac": "npm run prebuild && electron-builder --mac",
+    "local-build:mac": "npm run prebuild && dotenvx run -- electron-builder --mac",
     "local-build:linux": "npm run prebuild && electron-builder --linux"
   },
   "dependencies": {
+    "@dotenvx/dotenvx": "^1.30.1",
     "@electron-toolkit/utils": "^3.0.0",
     "axios": "^1.7.7",
     "dotenv": "^16.4.7",
@@ -38,6 +39,7 @@
   },
   "devDependencies": {
     "@electron-toolkit/tsconfig": "^1.0.1",
+    "@electron/notarize": "^2.5.0",
     "@types/node": "^20.14.8",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
