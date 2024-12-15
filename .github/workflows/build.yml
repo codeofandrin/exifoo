@@ -56,7 +56,6 @@ jobs:
           skip_sign: true # TODO: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
           # GitHub tokens
           github_token: ${{ secrets.GH_TOKEN }}
-          github_release_token: ${{ secrets.GH_RELEASE_TOKEN }}
 
           # macOS code signing certificate 
           mac_certs: ${{ secrets.MAC_CERTS }}
