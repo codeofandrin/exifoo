@@ -55,14 +55,14 @@ jobs:
       - name: Prepare for code signing
         if: startsWith(github.ref, 'refs/tags/v')
         # sign code if tag push
-        run: echo "CODE_SIGN=''" >> "$GITHUB_ENV"
+        run: echo "CODE_SIGN=null" >> "$GITHUB_ENV"
 
       - name: Build/release Electron app
         uses: codeofandrin/action-electron-builder@master
         with:
           package_root: ./electron
           build_script_name: prebuild
-          args: ${{ env.CODE_SIGN || null }}
+          args: ${{ env.CODE_SIGN }}
           # GitHub tokens
           github_token: ${{ secrets.GH_TOKEN }}
           github_release_token: ${{ secrets.GH_RELEASE_TOKEN }}
@@ -78,4 +78,4 @@ jobs:
           # macOS Notarization
           MAC_API_KEY_ID: ${{ secrets.MAC_API_KEY_ID }}
           MAC_API_KEY_ISSUER_ID: ${{ secrets.MAC_API_KEY_ISSUER_ID }}
-          SKIP_NOTARIZE: true
+          SKIP_NOTARIZE: true   # TODO: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
