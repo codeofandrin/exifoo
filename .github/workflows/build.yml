@@ -2,10 +2,6 @@ name: Build/Release
 
 on: push
 
-env:
-  # do not sign code by default
-  CODE_SIGN: "-c.mac.identity=null"
-
 jobs:
   build-release:
     runs-on: ${{ matrix.os }}
@@ -52,17 +48,12 @@ jobs:
           mkdir -p ~/private_keys/
           echo "${{ secrets.MAC_API_KEY }}" > ~/private_keys/AuthKey_${{ secrets.MAC_API_KEY_ID }}.p8
 
-      - name: Prepare for code signing
-        if: startsWith(github.ref, 'refs/tags/v')
-        # sign code if tag push
-        run: echo "CODE_SIGN=null" >> "$GITHUB_ENV"
-
       - name: Build/release Electron app
         uses: codeofandrin/action-electron-builder@master
         with:
           package_root: ./electron
           build_script_name: prebuild
-          args: ${{ env.CODE_SIGN }}
+          skip_sign: true # TODO: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
           # GitHub tokens
           github_token: ${{ secrets.GH_TOKEN }}
           github_release_token: ${{ secrets.GH_RELEASE_TOKEN }}
