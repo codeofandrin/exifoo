@@ -28,6 +28,11 @@ mac:
   hardenedRuntime: true
   icon: "build/icon_macos_512x512@2x.png"
   notarize: false
+  publish:
+    - provider: github
+      protocol: https
+      owner: codeofandrin
+      repo: exifoo-releases
 dmg:
   artifactName: ${name}-${version}.${ext}
   sign: false
