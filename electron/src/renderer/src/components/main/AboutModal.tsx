@@ -15,6 +15,57 @@ const modalTheme = {
   }
 }
 
+interface LicenseInfoPropsType {
+  isDemo: boolean
+}
+
+function LicenseInfo({ isDemo }: LicenseInfoPropsType) {
+  let content = (
+    <>
+      <p className="font-medium">Paid version</p>
+      <p className="mt-1">
+        License key: <span className="text-neutral-500">****-ABCD1234</span>
+      </p>
+      <div className="mt-3 pb-6">
+        <Button color="critical" size="xs" className="w-full">
+          Deactivate
+        </Button>
+      </div>
+    </>
+  )
+  if (isDemo) {
+    function handleActivateLicense() {
+      // TODO: Forward to activate page
+      console.log("Activate request")
+    }
+
+    content = (
+      <div>
+        <p className="font-medium">You're currently using the demo version.</p>
+        <div className="mt-3">
+          <Button color="accent" size="xs" className="w-full" onClick={handleActivateLicense}>
+            Activate license
+          </Button>
+        </div>
+        <p className="mt-1 pb-1 text-xxs text-neutral-500">
+          No license yet? Get one{" "}
+          <ExternalLink href={WebsiteLinks.license} color="underline">
+            here
+          </ExternalLink>
+          .
+        </p>
+      </div>
+    )
+  }
+
+  return (
+    <div className="mt-6 text-center text-xs text-neutral-700">
+      {/* TODO: Add real license status (paid, free, key) */}
+      {content}
+    </div>
+  )
+}
+
 interface AboutModalPropsType {
   isOpen: boolean
   close: Function
@@ -22,6 +73,7 @@ interface AboutModalPropsType {
 
 export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
   const appVersion = getAppVersion()
+  const isDemo = true
 
   function handleClose() {
     close()
@@ -35,7 +87,7 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
       onClose={handleClose}
       theme={modalTheme}
       size="sm">
-      <Modal.Body>
+      <Modal.Body className="px-16 pb-0">
         <div className="flex justify-center">
           <img src={ImgAppLogoSmall} alt="logo" className="w-16" />
         </div>
@@ -51,19 +103,21 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
           </div>
         </div>
         {/* Update Status */}
-        <div className="mt-8 text-center text-xs text-neutral-700">
+        <div className="mt-6 text-center text-xs text-neutral-700">
           {/* TODO: Add real status */}
           <div className="flex items-center justify-center">
             <p className="font-medium">Latest version installed</p>
             <SVGCheck className="ml-1 w-4 stroke-[3px] text-green-500"></SVGCheck>
           </div>
           <p className="mt-1">Last checked: just now</p>
-          <div className="mt-4 flex justify-center">
-            <Button color="accent" size="xs">
+          <div className="mt-3 flex justify-center">
+            <Button color="accent" size="xs" className="w-full">
               Check for Updates
             </Button>
           </div>
         </div>
+        {/* License information */}
+        <LicenseInfo isDemo={isDemo} />
       </Modal.Body>
       <Modal.Footer className="max-w-[400px] justify-end">
         <Button className="w-32" onClick={handleClose} color="primary" size="sm">
