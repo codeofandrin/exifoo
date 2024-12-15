@@ -7,7 +7,7 @@ const theme: CustomFlowbiteTheme["button"] = {
     primary:
       "bg-primary-500 text-white hover:bg-primary-600 font-medium transition-colors duration-200 disabled:hover:bg-primary-500",
     accent:
-      "bg-white hover:bg-accent-50 border border-accent-500 text-neutral-600 font-medium transition-colors duration-200",
+      "bg-white hover:bg-accent-50 border border-accent-500 text-neutral-600 font-medium transition-colors duration-200 disabled:hover:bg-white",
     silent:
       "bg-white hover:bg-neutral-100 border border-neutral-300 text-neutral-600 font-normal transition-colors duration-200"
   },

@@ -40,13 +40,14 @@ export default function RenameForm() {
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
   const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
   const renameText = isLoading ? "Renaming..." : "Rename"
-  let dropZone = <EmptyDropZone />
+  let dropZone = <EmptyDropZone isDisabled={isLoading} />
   if (fileInput.imageFiles) {
     dropZone = (
       <FilesListDropZone
         fileInput={fileInput}
         setFileInput={setFileInput}
         setIsLastFileRemoved={setIsLastFileRemoved}
+        isDisabled={isLoading}
       />
     )
   } else if (status?.type === RenameGeneralStatusType.success) {
@@ -115,6 +116,10 @@ export default function RenameForm() {
   }
 
   function handleFileDrop(e) {
+    if (isLoading) {
+      return
+    }
+
     const fileInputElem = fileInput.ref.current as HTMLInputElement
     const fileList = e.dataTransfer.files
     const file: File = fileList[0]
@@ -128,6 +133,9 @@ export default function RenameForm() {
   }
 
   function handleFileDragOver(e) {
+    if (isLoading) {
+      return
+    }
     e.preventDefault()
   }
 
@@ -211,7 +219,7 @@ export default function RenameForm() {
             <Label
               id="dropzone-label"
               htmlFor="dropzone-file"
-              className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"}`}
+              className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} ${isLoading && "cursor-not-allowed"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"} ${isLoading && "hover:bg-white"}`}
               onDragOver={handleFileDragOver}
               onDrop={handleFileDrop}>
               {dropZone}
@@ -221,7 +229,7 @@ export default function RenameForm() {
                 id="dropzone-file"
                 className="hidden"
                 accept={FILE_TYPES.join(",")}
-                disabled={!isFileInputEmpty || isLastFileRemoved}
+                disabled={!isFileInputEmpty || isLastFileRemoved || isLoading}
                 multiple
               />
             </Label>
@@ -229,7 +237,7 @@ export default function RenameForm() {
           <div className="flex justify-center rounded-b-lg bg-neutral-100 pt-3">
             <div className="flex flex-col items-center">
               {/* Browse button */}
-              <Button className="w-48" color="accent" size="sm" onClick={handleBrowse}>
+              <Button className="w-48" color="accent" size="sm" onClick={handleBrowse} disabled={isLoading}>
                 <div className="flex items-center">
                   <SVGUpload className="mr-2 w-4" />
                   <p className="text-sm">Browse</p>

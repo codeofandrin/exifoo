@@ -4,9 +4,13 @@ import SVGImage from "../../../assets/icons/Image.svg?react"
 import SVGX from "../../../assets/icons/X.svg?react"
 import SVGCheck from "../../../assets/icons/Check.svg?react"
 
-export function EmptyDropZone() {
+interface EmptyDropZonePropsType {
+  isDisabled: boolean
+}
+
+export function EmptyDropZone({ isDisabled }: EmptyDropZonePropsType) {
   return (
-    <div className="flex flex-col items-center pb-6 pt-5">
+    <div className={`${isDisabled && "cursor-not-allowed"} flex flex-col items-center pb-6 pt-5`}>
       <SVGImage className="w-10 text-primary-600" />
       <p className="font-md mb-2 mt-2 text-sm text-neutral-700">Drop file or browse</p>
       <p className="text-xs font-normal text-neutral-500">Format: PNG, JPEG, JPG</p>
@@ -63,12 +67,14 @@ interface FilesListDropZonePropsType {
   fileInput: ImageFilesInputType
   setFileInput: Function
   setIsLastFileRemoved: Function
+  isDisabled: boolean
 }
 
 export function FilesListDropZone({
   fileInput,
   setFileInput,
-  setIsLastFileRemoved
+  setIsLastFileRemoved,
+  isDisabled
 }: FilesListDropZonePropsType) {
   function handleRemove(key: number) {
     const newImageList = removeFileFromFileList(
@@ -113,8 +119,9 @@ export function FilesListDropZone({
         </div>
         <div>
           <button
-            className="group rounded-lg bg-white/50 p-1.5 transition-colors duration-150 hover:bg-red-500"
-            onClick={() => handleRemove(i)}>
+            className="group rounded-lg bg-white/50 p-1.5 transition-colors duration-150 hover:bg-red-500 disabled:cursor-not-allowed"
+            onClick={() => handleRemove(i)}
+            disabled={isDisabled}>
             <SVGX className="w-5 text-red-500 transition-colors duration-150 group-hover:text-white" />
           </button>
         </div>
