@@ -53,7 +53,7 @@ jobs:
         with:
           package_root: ./electron
           build_script_name: prebuild
-          skip_sign: true # TODO: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
+          skip_sign: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
           # GitHub tokens
           github_token: ${{ secrets.GH_TOKEN }}
 
@@ -68,4 +68,4 @@ jobs:
           # macOS Notarization
           MAC_API_KEY_ID: ${{ secrets.MAC_API_KEY_ID }}
           MAC_API_KEY_ISSUER_ID: ${{ secrets.MAC_API_KEY_ISSUER_ID }}
-          SKIP_NOTARIZE: true   # TODO: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
+          SKIP_NOTARIZE: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
