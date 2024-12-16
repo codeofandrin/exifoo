@@ -13,6 +13,7 @@ log.errorHandler.startCatching()
 log.transports.file.level = "info"
 log.transports.file.resolvePathFn = (vars) =>
     join(vars.libraryDefaultDir, "../com.exifoo.app/electron.log")
+log.info("App starting...")
 
 function createWindow(): void {
     // Create the browser window.
