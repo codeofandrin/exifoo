@@ -9,8 +9,18 @@ import "./styles/main.css"
 declare global {
   interface Window {
     electronAPI: {
-      onShowAbout: Function
+      // Sender
       menuAbout: Function
+      checkForUpdates: Function
+      quitAndInstallUpdate: Function
+      // Listener
+      onShowAbout: Function
+      onCheckingForUpdate: Function
+      onUpdateNotAvailable: Function
+      onUpdateAvailable: Function
+      onUpdateDownloadProgress: Function
+      onUpdateReady: Function
+      onUpdateError: Function
     }
   }
 }

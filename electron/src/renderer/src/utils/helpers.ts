@@ -1,3 +1,6 @@
+import dayjs from "dayjs"
+import relativeTime from "dayjs/plugin/relativeTime"
+
 export function getTruncatedText(text: string, maxLen: number): string {
     if (text.length > maxLen) {
         return text.substring(0, maxLen - 3) + "..."
@@ -68,4 +71,9 @@ export function getParentFolderStr(filePath: string): string {
 export function getFileName(filePath: string): string {
     const fileName = filePath.split("/").pop() as string
     return fileName
+}
+
+export function getRelativeTime(timestamp: number): string {
+    dayjs.extend(relativeTime)
+    return dayjs().to(dayjs(timestamp))
 }

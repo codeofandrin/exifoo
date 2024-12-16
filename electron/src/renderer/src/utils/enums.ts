@@ -9,3 +9,11 @@ export enum ErrorType {
     noExifData,
     invalid_option
 }
+
+export enum UpdateStatusType {
+    error,
+    checking,
+    notAvailable,
+    downloading,
+    ready
+}

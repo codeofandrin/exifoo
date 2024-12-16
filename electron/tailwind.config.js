@@ -9,6 +9,7 @@ module.exports = {
         extend: {
             colors: exifooTheme.colors,
             fontSize: {
+                xxxs: "0.58rem",
                 xxs: "0.625rem",
                 code: "0.8rem",
                 "3.5xl": "2.05rem"

@@ -18,16 +18,17 @@
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
-    "prebuild": "npm run typecheck && electron-vite build",
+    "prebuild": "npm run format && npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "local-build:win": "npm run prebuild && electron-builder --win",
-    "local-build:mac": "npm run prebuild && dotenvx run -- electron-builder --mac -c.mac.identity=null",
+    "local-build:mac": "npm run prebuild && dotenvx run -- electron-builder --mac",
     "local-build:linux": "npm run prebuild && electron-builder --linux"
   },
   "dependencies": {
     "@dotenvx/dotenvx": "^1.30.1",
     "@electron-toolkit/utils": "^3.0.0",
     "axios": "^1.7.7",
+    "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
     "electron-log": "^5.2.2",
     "electron-updater": "^6.1.7",
@@ -35,6 +36,8 @@
     "motion": "^11.13.3",
     "tailwindcss-motion": "github:romboHQ/tailwindcss-motion",
     "tree-kill": "^1.2.2",
+    "unstated-next": "^1.1.0",
+    "usehooks-ts": "^3.1.0",
     "vite-plugin-svgr": "^4.3.0"
   },
   "devDependencies": {

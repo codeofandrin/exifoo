@@ -1,23 +1,24 @@
-import { app, shell, BrowserWindow, Menu, ipcMain, MenuItem } from "electron"
+import { app, shell, BrowserWindow, Menu } from "electron"
 import { join } from "path"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"
-import { execFile } from "child_process"
-import { kill } from "process"
+
 import log from "electron-log/main"
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer"
 
 import { getMenu } from "./menu"
-import { checkForUpdatesAndNotify } from "./auto-updater"
+import { runBackend, killBackend } from "./backend-handler"
+import { checkForUpdates } from "./auto-updater"
 
 log.errorHandler.startCatching()
 log.transports.file.level = "info"
-log.transports.file.resolvePathFn = (vars) =>
-    join(vars.libraryDefaultDir, "../com.exifoo.app/electron.log")
+log.transports.file.resolvePathFn = (vars) => join(vars.libraryDefaultDir, "../com.exifoo.app/electron.log")
 log.info("App starting...")
+
+export let mainWindow: BrowserWindow
 
 function createWindow(): void {
     // Create the browser window.
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 1100,
         height: 755,
         minHeight: 755,
@@ -48,6 +49,8 @@ function createWindow(): void {
     } else {
         mainWindow.loadFile(join(__dirname, "../renderer/index.html"))
     }
+
+    checkForUpdates(true)
 }
 
 // This method will be called when Electron has finished
@@ -85,16 +88,10 @@ app.whenReady().then(() => {
         // dock icon is clicked and there are no other windows open.
         if (BrowserWindow.getAllWindows().length === 0) createWindow()
     })
-
-    ipcMain.on("menu-about", function (_event, isOpen: boolean) {
-        const aboutMenuItem = Menu.getApplicationMenu()?.getMenuItemById("about") as MenuItem
-        aboutMenuItem.enabled = !isOpen
-    })
 })
 
-app.on("ready", function () {
+app.on("ready", () => {
     log.info("ready")
-    checkForUpdatesAndNotify()
 })
 
 // Quit when all windows are closed, except on macOS. There, it's common
@@ -112,34 +109,3 @@ app.on("quit", () => {
         killBackend()
     }
 })
-
-// In this file you can include the rest of your app"s specific main process
-// code. You can also put them in separate files and require them here.
-
-let backend
-function runBackend() {
-    return new Promise<void>((resolve, reject) => {
-        backend = execFile(
-            join(process.resourcesPath, "backend/backend"),
-            [],
-            {
-                windowsHide: true,
-                shell: true
-            },
-            (error) => {
-                if (error) {
-                    log.error(error)
-                    reject(error)
-                }
-            }
-        )
-
-        setTimeout(function () {
-            resolve()
-        }, 1000)
-    })
-}
-
-function killBackend() {
-    kill(backend.pid)
-}
