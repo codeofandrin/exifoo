@@ -15,7 +15,7 @@ exports.default = async function notarizing(context) {
 
     // THIS MUST BE THE SAME AS THE `appId` property
     // in your electron builder configuration
-    const appId = "com.electron.exifoo"
+    const appId = "com.exifoo.app"
 
     const appPath = `${appOutDir}/${appName}.app`
     const { MAC_API_KEY_ID, MAC_API_KEY_ISSUER_ID } = process.env

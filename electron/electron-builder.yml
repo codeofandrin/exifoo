@@ -1,4 +1,4 @@
-appId: com.electron.exifoo
+appId: com.exifoo.app
 productName: exifoo
 directories:
   buildResources: build

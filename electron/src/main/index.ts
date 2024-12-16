@@ -12,7 +12,7 @@ import { checkForUpdatesAndNotify } from "./auto-updater"
 log.errorHandler.startCatching()
 log.transports.file.level = "info"
 log.transports.file.resolvePathFn = (vars) =>
-    join(vars.libraryDefaultDir, "../com.electron.exifoo/electron.log")
+    join(vars.libraryDefaultDir, "../com.exifoo.app/electron.log")
 
 function createWindow(): void {
     // Create the browser window.
@@ -54,7 +54,7 @@ function createWindow(): void {
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     // Set app user model id for windows
-    electronApp.setAppUserModelId("com.electron.exifoo")
+    electronApp.setAppUserModelId("com.exifoo.app")
 
     // Default open or close DevTools by F12 in development
     // and ignore CommandOrControl + R in production.

@@ -2,7 +2,7 @@ import os
 import logging
 
 
-LOG_PATH = "~/Library/Logs/com.electron.exifoo/backend.log"
+LOG_PATH = "~/Library/Logs/com.exifoo.app/backend.log"
 
 
 def setup_logging():
