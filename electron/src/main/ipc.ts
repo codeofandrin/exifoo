@@ -29,15 +29,17 @@ export function sendUpdateError(err: Error) {
 }
 
 // IPC Events
-ipcMain.on("menu-about", (_event, isOpen: boolean) => {
-    const aboutMenuItem = Menu.getApplicationMenu()?.getMenuItemById("about") as MenuItem
-    aboutMenuItem.enabled = !isOpen
-})
+export function registerIpcEvents() {
+    ipcMain.on("menu-about", (_event, isOpen: boolean) => {
+        const aboutMenuItem = Menu.getApplicationMenu()?.getMenuItemById("about") as MenuItem
+        aboutMenuItem.enabled = !isOpen
+    })
 
-ipcMain.on("check-for-updates", (_event) => {
-    checkForUpdates()
-})
+    ipcMain.on("check-for-updates", (_event) => {
+        checkForUpdates()
+    })
 
-ipcMain.on("quit-and-install-update", (_event) => {
-    quitAndInstall()
-})
+    ipcMain.on("quit-and-install-update", (_event) => {
+        quitAndInstall()
+    })
+}

@@ -8,6 +8,7 @@ import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-insta
 import { getMenu } from "./menu"
 import { runBackend, killBackend } from "./backend-handler"
 import { checkForUpdates } from "./auto-updater"
+import { registerIpcEvents } from "./ipc"
 
 log.errorHandler.startCatching()
 log.transports.file.level = "info"
@@ -66,6 +67,8 @@ app.whenReady().then(() => {
     app.on("browser-window-created", (_, window) => {
         optimizer.watchWindowShortcuts(window)
     })
+
+    registerIpcEvents()
 
     if (is.dev) {
         installExtension(REACT_DEVELOPER_TOOLS)
