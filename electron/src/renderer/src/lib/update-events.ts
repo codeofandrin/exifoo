@@ -1,7 +1,6 @@
 import { useUpdateStore } from "../store/main/useUpdateStore"
 import { UpdateStatusType } from "../utils/enums"
 
-
 class UpdateStore {
     static setStatus = useUpdateStore.getState().setStatus
     static setError = useUpdateStore.getState().setError
@@ -39,5 +38,3 @@ export function registerUpdaterEvents() {
         UpdateStore.setStatus(UpdateStatusType.error)
     })
 }
-
-
