@@ -1,4 +1,5 @@
-import { app, Menu, WebContents } from "electron"
+import { app, Menu, shell, WebContents } from "electron"
+import { getReleaseLink } from "./utils/app-info"
 
 export function getMenu(mainWebContents: WebContents) {
     const isMac = process.platform === "darwin"
@@ -10,11 +11,15 @@ export function getMenu(mainWebContents: WebContents) {
                 label: app.name,
                 submenu: [
                     {
-                        // role: "about"
                         id: "about",
                         label: `About ${app.name}`,
                         click: () => mainWebContents.send("show-about")
 
+                    },
+                    {
+                        id: "release-notes",
+                        label: `Release Notes`,
+                        click: () => shell.openExternal(getReleaseLink(`v${app.getVersion()}`))
                     },
                     { type: "separator" },
                     { role: "services" },

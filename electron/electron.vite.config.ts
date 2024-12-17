@@ -13,7 +13,10 @@ export default defineConfig({
             },
             outDir: "out/main-process"
         },
-        plugins: [externalizeDepsPlugin()]
+        plugins: [externalizeDepsPlugin()],
+        define: {
+            __RELEASE_REPO__: s("https://github.com/codeofandrin/exifoo-releases")
+        }
     },
     preload: {
         build: {
