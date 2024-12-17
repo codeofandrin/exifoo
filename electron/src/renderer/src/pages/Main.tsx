@@ -6,12 +6,11 @@ import ProviderComposer from "../providers/main/ProviderComposer"
 import DateOptionsProvider from "../providers/main/DateOptionsProvider"
 import TimeOptionsProvider from "../providers/main/TimeOptionsProvider"
 import CustomTextProvider from "../providers/main/CustomTextProvider"
-import UpdateStatusProvider from "../providers/main/UpdateStatusProvider"
+import "../lib/ipc-events"
 
-export default function App() {
+export default function Main() {
   return (
-    <ProviderComposer
-      components={[DateOptionsProvider, TimeOptionsProvider, CustomTextProvider, UpdateStatusProvider]}>
+    <ProviderComposer components={[DateOptionsProvider, TimeOptionsProvider, CustomTextProvider]}>
       <div className="flex h-screen flex-col px-6">
         <Header />
         <div className="mb-auto mt-5 flex justify-center">

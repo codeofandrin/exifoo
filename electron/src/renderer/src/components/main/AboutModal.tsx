@@ -6,7 +6,7 @@ import Button from "../common/Button"
 import { WebsiteLinks } from "../../utils/constants"
 import { UpdateStatusType } from "../../utils/enums"
 import ImgAppLogoSmall from "../../assets/images/exifoo_logo_small.png"
-import useUpdateStatus from "../../hooks/main/useUpdateStatus"
+import { useUpdateStore } from "../../store/main/useUpdateStore"
 import { getRelativeTime } from "../../utils/helpers"
 import SVGCheck from "../../assets/icons/Check.svg?react"
 import SVGX from "../../assets/icons/X.svg?react"
@@ -100,12 +100,12 @@ function StatusText({ status, lastChecked, downloadPercentage, error }: StatusTe
 }
 
 function UpdateStatus() {
-  const { updateStatus, updateError, downloadPercentage, lastChecked } = useUpdateStatus()
+  const { status, error, lastCheck, progress } = useUpdateStore()
 
-  const btnDisabled = [UpdateStatusType.checking, UpdateStatusType.downloading].includes(updateStatus)
+  const btnDisabled = [UpdateStatusType.checking, UpdateStatusType.downloading].includes(status)
   let btnText = "Checking for Updates"
   let btnOnClick = handleCheckForUpdates
-  if (updateStatus === UpdateStatusType.ready) {
+  if (status === UpdateStatusType.ready) {
     btnText = "Install and Restart"
     btnOnClick = handleQuitAndInstall
   }
@@ -120,12 +120,7 @@ function UpdateStatus() {
 
   return (
     <div className="mt-6 text-center text-xs text-neutral-700">
-      <StatusText
-        status={updateStatus}
-        lastChecked={lastChecked}
-        downloadPercentage={downloadPercentage}
-        error={updateError}
-      />
+      <StatusText status={status} lastChecked={lastCheck} downloadPercentage={progress} error={error} />
       <div className="mt-3 flex justify-center">
         <Button
           color="accent"
