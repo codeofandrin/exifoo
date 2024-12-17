@@ -1,6 +1,6 @@
 import { Modal } from "flowbite-react"
 
-import { getAppVersion } from "../../utils/app-info"
+import { getAppVersion, getReleaseLink } from "../../utils/app-info"
 import ExternalLink from "../common/ExternalLink"
 import Button from "../common/Button"
 import { WebsiteLinks } from "../../utils/constants"
@@ -216,7 +216,10 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
             About <span className="font-logo text-xl font-bold text-logo">exifoo</span>
           </h1>
           <p className="mt-1 text-xxs text-neutral-500">Version {appVersion}</p>
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center">
+            <ExternalLink href={getReleaseLink(`v${appVersion}`)} className="text-xxs" displayIcon>
+              Release Notes
+            </ExternalLink>
             <ExternalLink href={WebsiteLinks.terms} className="text-xxs" displayIcon>
               Terms and Conditions
             </ExternalLink>

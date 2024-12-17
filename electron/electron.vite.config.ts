@@ -38,7 +38,8 @@ export default defineConfig({
             __APP_NAME__: s(packageJson.name),
             __APP_DESC__: s(packageJson.description),
             __APP_VERSION__: s(packageJson.version),
-            __APP_AUTHOR__: packageJson.author
+            __APP_AUTHOR__: packageJson.author,
+            __RELEASE_REPO__: s("https://github.com/codeofandrin/exifoo-releases")
         }
     }
 })
