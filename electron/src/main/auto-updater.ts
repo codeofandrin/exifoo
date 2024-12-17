@@ -16,21 +16,17 @@ export function quitAndInstall() {
 
 autoUpdater.on("checking-for-update", () => {
     log.info("checking for update")
-    if (userInitiated) {
-        ipc.sendCheckingForUpdate()
-    }
+    ipc.sendCheckingForUpdate()
 })
 
 autoUpdater.on("update-available", (info: UpdateInfo) => {
     log.info(`update available: ${info.releaseName} ${info.version}, ${info.releaseDate}`)
-    if (userInitiated) {
-        ipc.sendUpdateAvailable()
-    }
+    ipc.sendUpdateAvailable()
 })
 
 autoUpdater.on("update-not-available", (info: UpdateInfo) => {
     log.info(`update not available, last: ${info.releaseName} ${info.version}, ${info.releaseDate}`)
-    if (userInitiated) ipc.sendUpdateNotAvailable()
+    ipc.sendUpdateNotAvailable()
 })
 
 autoUpdater.on("error", (err: Error) => {
@@ -46,9 +42,7 @@ autoUpdater.on("download-progress", (progress: ProgressInfo) => {
     const percentage = progress.percent
     log.info(`downloading update: ${percentage}`)
 
-    if (userInitiated) {
-        ipc.sendUpdateDownloadProgress(percentage)
-    }
+    ipc.sendUpdateDownloadProgress(percentage)
 })
 
 autoUpdater.on("update-downloaded", () => {
