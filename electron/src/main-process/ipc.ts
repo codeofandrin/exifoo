@@ -1,7 +1,7 @@
 import { ipcMain, Menu } from "electron"
 import type { MenuItem } from "electron"
 
-import { mainWindow } from "./index"
+import { mainWindow } from "./main"
 import { checkForUpdates, quitAndInstall } from "./auto-updater"
 
 export function sendCheckingForUpdate() {

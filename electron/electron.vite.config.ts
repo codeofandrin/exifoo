@@ -7,9 +7,22 @@ const s = JSON.stringify
 
 export default defineConfig({
     main: {
+        build: {
+            lib: {
+                entry: "src/main-process/main.ts"
+            },
+            outDir: "out/main-process"
+        },
         plugins: [externalizeDepsPlugin()]
     },
     preload: {
+        build: {
+            lib: {
+                entry: "src/main-process/preload.ts"
+            },
+            outDir: "out/main-process",
+            emptyOutDir: false
+        },
         plugins: [externalizeDepsPlugin()]
     },
     renderer: {
