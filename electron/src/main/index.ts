@@ -51,7 +51,10 @@ function createWindow(): void {
         mainWindow.loadFile(join(__dirname, "../renderer/index.html"))
     }
 
-    checkForUpdates(true)
+    // check for updates when browser is ready for showing in UI
+    mainWindow.webContents.once("dom-ready", () => {
+        checkForUpdates(true)
+    })
 }
 
 // This method will be called when Electron has finished
