@@ -1,7 +1,9 @@
+import { dialog } from "electron"
 import { autoUpdater } from "electron-updater"
 import type { ProgressInfo, UpdateInfo } from "electron-updater"
 import log from "electron-log"
 
+import { mainWindow } from "./main"
 import * as ipc from "./ipc"
 
 let userInitiated = true
@@ -45,7 +47,40 @@ autoUpdater.on("download-progress", (progress: ProgressInfo) => {
     ipc.sendUpdateDownloadProgress(percentage)
 })
 
-autoUpdater.on("update-downloaded", () => {
+autoUpdater.on("update-downloaded", (info: UpdateInfo) => {
     log.info(`update downloaded`)
     ipc.sendUpdateReady()
+
+    if (!userInitiated) {
+        const versionTag = `v${info.version}`
+
+        dialog
+            .showMessageBox(mainWindow, {
+                title: "Update available",
+                message: "Update available!",
+                detail: `A new version (${versionTag}) has been downloaded and is ready to install.
+                    Restart the application now to install the updates.`,
+                type: "info",
+                buttons: ["Later", "Install and Restart"],
+                defaultId: 1,
+                cancelId: 0,
+                textWidth: 300
+            })
+            .then((result) => {
+                switch (result.response) {
+                    // Later
+                    case 0:
+                        // do nothing -> closes automatically
+                        break
+
+                    // Install and Restart
+                    case 1:
+                        quitAndInstall()
+                        break
+
+                    default:
+                        break
+                }
+            })
+    }
 })
