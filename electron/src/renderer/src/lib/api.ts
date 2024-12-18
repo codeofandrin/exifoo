@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 
 import { Server as ServerConst } from "../utils/constants"
-import { APIRequestResponseType, ErrorDataType } from "../utils/types"
+import { APIRequestResponseType, APIErrorDataType } from "../utils/types"
 
 const client = axios.create({
     baseURL: ServerConst.apiBaseURL
@@ -25,7 +25,7 @@ async function request(
     }
     console.log(response)
 
-    let errorData: ErrorDataType | null = null
+    let errorData: APIErrorDataType | null = null
     if (isError) {
         if (response && response.status >= 400 && response.status < 500) {
             errorData = {
