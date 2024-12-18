@@ -3,25 +3,25 @@ import { Modal } from "flowbite-react"
 import Button from "../../common/Button"
 import ExternalLink from "../../common/ExternalLink"
 import { EMail } from "../../../utils/constants"
-import { ErrorType } from "../../../utils/enums"
+import { RenameErrorType } from "../../../utils/enums"
 import { RenameStatusType } from "../../../utils/types"
 import { getParentFolderStr, getFileName } from "../../../utils/helpers"
 import SVGX from "../../../assets/icons/X.svg?react"
 import SVGHelpCircle from "../../../assets/icons/HelpCircle.svg?react"
 
-function getErrorMsg(errorType: ErrorType): string {
+function getErrorMsg(errorType: RenameErrorType): string {
   let statusMsg = ""
   switch (errorType) {
-    case ErrorType.invalidFileType:
+    case RenameErrorType.invalidFileType:
       statusMsg = `Invalid file type.`
       break
 
-    case ErrorType.noExifData:
+    case RenameErrorType.noExifData:
       statusMsg = `No exif data found.`
       break
 
-    case ErrorType.invalid_option:
-    case ErrorType.unexpected:
+    case RenameErrorType.invalid_option:
+    case RenameErrorType.unexpected:
     default:
       statusMsg = "Something went wrong unexpected. Please try again."
       break
@@ -51,7 +51,7 @@ export default function RenameErrorModal({ isOpen, close, status }: RenameErrorM
   let errorMsg = ""
   let truncatedFilePath = ""
   if (isOpen) {
-    const errorType = status.error?.type as ErrorType
+    const errorType = status.error?.type as RenameErrorType
     const errorItem = status.error?.item as string
     const parentFolder = getParentFolderStr(errorItem)
     const fileName = getFileName(errorItem)

@@ -6,7 +6,7 @@ from typing import List, Optional
 from PIL import Image
 
 from .errors import APIException, APIExceptionDetail
-from .enums import ErrorType
+from .enums import RenameErrorType
 from .types import DateOptionsType, TimeOptionsType
 
 EXIF_DATETIME_TAG = 36867
@@ -28,7 +28,7 @@ def _get_img_datetime(img_path: Path) -> datetime.datetime:
     if exif_data is None:
         raise APIException(
             status_code=422,
-            error_code=ErrorType.no_exif_data.value,
+            error_code=RenameErrorType.no_exif_data.value,
             msg="No exif data available",
             detail=APIExceptionDetail(msg=None, item=str(img_path)),
         )
@@ -118,7 +118,7 @@ def rename_images(
         if date_format not in valid:
             raise APIException(
                 status_code=400,
-                error_code=ErrorType.invalid_option.value,
+                error_code=RenameErrorType.invalid_option.value,
                 msg="Invalid option",
                 detail=APIExceptionDetail(msg=f"Date option {i} must be one of {valid}", item=str(i)),
             )
@@ -146,7 +146,7 @@ def rename_images(
             if time_format not in valid:
                 raise APIException(
                     status_code=400,
-                    error_code=ErrorType.invalid_option.value,
+                    error_code=RenameErrorType.invalid_option.value,
                     msg="Invalid option",
                     detail=APIExceptionDetail(msg=f"Time option {i} must be one of {valid}", item=str(i)),
                 )
@@ -163,7 +163,7 @@ def rename_images(
         if img_path.suffix.lower() not in VALID_FILE_TYPES:
             raise APIException(
                 status_code=400,
-                error_code=ErrorType.invalid_file_type.value,
+                error_code=RenameErrorType.invalid_file_type.value,
                 msg="Invalid file type",
                 detail=APIExceptionDetail(
                     msg=f"File type must be one of {VALID_FILE_TYPES}", item=str(img_path)

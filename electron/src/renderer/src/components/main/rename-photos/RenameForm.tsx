@@ -11,7 +11,7 @@ import { sendImgPaths } from "../../../lib/api"
 import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
 import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
 import useCustomTextContext from "../../../contexts/main/CustomTextContext"
-import { ErrorType, RenameGeneralStatusType } from "../../../utils/enums"
+import { RenameErrorType, RenameGeneralStatusType } from "../../../utils/enums"
 
 export default function RenameForm() {
   // Hooks
@@ -176,12 +176,12 @@ export default function RenameForm() {
             // unexpected
             setStatus({
               type: RenameGeneralStatusType.error,
-              error: { type: ErrorType.unexpected, item: null }
+              error: { type: RenameErrorType.unexpected, item: null }
             })
           } else {
             setStatus({
               type: RenameGeneralStatusType.error,
-              error: { type: errorData["code"] as ErrorType, item: errorData["detail"]["item"] }
+              error: { type: errorData["code"] as RenameErrorType, item: errorData["detail"]["item"] }
             })
           }
         } else {

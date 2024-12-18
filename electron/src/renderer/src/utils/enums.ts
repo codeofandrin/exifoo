@@ -3,7 +3,7 @@ export enum RenameGeneralStatusType {
     error
 }
 
-export enum ErrorType {
+export enum RenameErrorType {
     unexpected,
     invalidFileType,
     noExifData,
