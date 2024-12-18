@@ -140,19 +140,7 @@ interface LicenseInfoPropsType {
 }
 
 function LicenseInfo({ isDemo }: LicenseInfoPropsType) {
-  let content = (
-    <>
-      <p className="font-medium">Paid version</p>
-      <p className="mt-1">
-        License key: <span className="text-neutral-500">****-ABCD1234</span>
-      </p>
-      <div className="mt-3 pb-6">
-        <Button color="critical" size="xs" className={`${bodyBtnWidth}`}>
-          Deactivate
-        </Button>
-      </div>
-    </>
-  )
+  let content
   if (isDemo) {
     function handleActivateLicense() {
       // TODO: Forward to activate page
@@ -175,6 +163,25 @@ function LicenseInfo({ isDemo }: LicenseInfoPropsType) {
           .
         </p>
       </div>
+    )
+  } else {
+    function handleDeactivateLicense() {
+      // TODO: Open deactivate modal
+      console.log("Deactivate license")
+    }
+
+    content = (
+      <>
+        <p className="font-medium">Paid version</p>
+        <p className="mt-1">
+          License key: <span className="text-neutral-500">****-ABCD1234</span>
+        </p>
+        <div className="mt-3 flex justify-center pb-6">
+          <Button color="critical" size="xs" className={`${bodyBtnWidth}`} onClick={handleDeactivateLicense}>
+            Deactivate
+          </Button>
+        </div>
+      </>
     )
   }
 
