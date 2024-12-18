@@ -35,7 +35,7 @@ async def http_exception_handler(request, exc):
     return JSONResponse(status_code=exc.status_code, content=exc.detail)
 
 
-class ImagesPayload(BaseModel):
+class RenamePayload(BaseModel):
     paths: List[str]
     date_options: DateOptionsType
     time_options: Optional[TimeOptionsType]
@@ -43,7 +43,7 @@ class ImagesPayload(BaseModel):
 
 
 @app.post("/rename")
-async def rename(payload: ImagesPayload):
+async def rename(payload: RenamePayload):
     rename_images(
         paths=payload.paths,
         date_options=payload.date_options,
