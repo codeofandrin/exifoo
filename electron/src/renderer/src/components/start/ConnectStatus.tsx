@@ -92,7 +92,7 @@ export default function ConnectStatus() {
   useEffect(() => {
     setTimeout(async () => {
       await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
-    }, 6000)
+    }, 5500)
   }, [])
 
   function retry() {
