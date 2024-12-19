@@ -4,9 +4,10 @@ import { getAppVersion, getReleaseLink } from "../../utils/app-info"
 import ExternalLink from "../common/ExternalLink"
 import Button from "../common/Button"
 import { WebsiteLinks } from "../../utils/constants"
-import { UpdateStatusType } from "../../utils/enums"
+import { UpdateStatusType, LicenseType } from "../../utils/enums"
 import ImgAppLogoSmall from "../../assets/images/exifoo_logo_small.png"
 import { useUpdateStore } from "../../store/main/useUpdateStore"
+import { useAppStore } from "../../store/useAppStore"
 import { getRelativeTime } from "../../utils/helpers"
 import SVGCheck from "../../assets/icons/Check.svg?react"
 import SVGX from "../../assets/icons/X.svg?react"
@@ -135,13 +136,30 @@ function UpdateStatus() {
   )
 }
 
-interface LicenseInfoPropsType {
-  isDemo: boolean
-}
+function LicenseInfo() {
+  const { license_type, license_key_short } = useAppStore()
 
-function LicenseInfo({ isDemo }: LicenseInfoPropsType) {
   let content
-  if (isDemo) {
+  if (license_type === LicenseType.full) {
+    function handleDeactivateLicense() {
+      // TODO: Open deactivate modal
+      console.log("Deactivate license")
+    }
+
+    content = (
+      <>
+        <p className="font-medium">Paid version</p>
+        <p className="mt-1">
+          License key: <span className="text-neutral-500">{license_key_short}</span>
+        </p>
+        <div className="mt-3 flex justify-center pb-6">
+          <Button color="critical" size="xs" className={`${bodyBtnWidth}`} onClick={handleDeactivateLicense}>
+            Deactivate
+          </Button>
+        </div>
+      </>
+    )
+  } else {
     function handleActivateLicense() {
       // TODO: Forward to activate page
       console.log("Activate request")
@@ -164,33 +182,9 @@ function LicenseInfo({ isDemo }: LicenseInfoPropsType) {
         </p>
       </div>
     )
-  } else {
-    function handleDeactivateLicense() {
-      // TODO: Open deactivate modal
-      console.log("Deactivate license")
-    }
-
-    content = (
-      <>
-        <p className="font-medium">Paid version</p>
-        <p className="mt-1">
-          License key: <span className="text-neutral-500">****-ABCD1234</span>
-        </p>
-        <div className="mt-3 flex justify-center pb-6">
-          <Button color="critical" size="xs" className={`${bodyBtnWidth}`} onClick={handleDeactivateLicense}>
-            Deactivate
-          </Button>
-        </div>
-      </>
-    )
   }
 
-  return (
-    <div className="mt-6 text-center text-xs text-neutral-700">
-      {/* TODO: Add real license status (paid, free, key) */}
-      {content}
-    </div>
-  )
+  return <div className="mt-6 text-center text-xs text-neutral-700">{content}</div>
 }
 
 interface AboutModalPropsType {
@@ -200,7 +194,6 @@ interface AboutModalPropsType {
 
 export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
   const appVersion = getAppVersion()
-  const isDemo = true
 
   function handleClose() {
     close()
@@ -235,7 +228,7 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
         {/* Update Status */}
         <UpdateStatus />
         {/* License information */}
-        <LicenseInfo isDemo={isDemo} />
+        <LicenseInfo />
       </Modal.Body>
       <Modal.Footer className="max-w-[400px] justify-end">
         <Button className="w-32" onClick={handleClose} color="primary" size="sm">

@@ -30,3 +30,8 @@ export enum AppStatusType {
     get_started,
     main
 }
+
+export enum LicenseType {
+    demo,
+    full
+}

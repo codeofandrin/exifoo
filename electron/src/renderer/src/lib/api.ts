@@ -35,7 +35,7 @@ async function request(
         }
     }
 
-    return { isError, errorData }
+    return { isError, errorData, successData: response?.data }
 }
 
 interface DateOptionsType {

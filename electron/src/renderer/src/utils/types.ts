@@ -10,6 +10,7 @@ export interface APIErrorDataType {
 export interface APIRequestResponseType {
     isError: boolean
     errorData: APIErrorDataType | null
+    successData: any | null
 }
 
 export interface RenameStatusType {

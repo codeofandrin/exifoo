@@ -3,34 +3,43 @@ import { useState, useEffect } from "react"
 import Button from "../common/Button"
 import { EMail } from "../../utils/constants"
 import * as api from "../../lib/api"
-import { APIErrorType, AppStatusType } from "../../utils/enums"
+import { APIErrorType, AppStatusType, LicenseType } from "../../utils/enums"
 import { useAppStore } from "../../store/useAppStore"
 import SVGSpinner from "../../assets/icons/Spinner.svg?react"
 import SVGX from "../../assets/icons/X.svg?react"
 
-function validateLicense(setIsError: Function, setStatus: Function) {
-  api.validateLicense().then(({ isError: isValidateError, errorData: validateErrorData }) => {
-    if (isValidateError) {
-      if (validateErrorData === null) {
-        // unexpected
-        setIsError(true)
-      } else {
-        const validateErrorType = validateErrorData.code as APIErrorType
-        if (
-          validateErrorType === APIErrorType.license_not_found ||
-          validateErrorType === APIErrorType.license_invalid
-        ) {
-          setStatus(AppStatusType.get_started)
-        } else {
+async function validateLicense(
+  setIsError: Function,
+  setStatus: Function,
+  setLicenseType: Function,
+  setLicenseKeyShort: Function
+) {
+  await api
+    .validateLicense()
+    .then(({ isError: isValidateError, errorData: validateErrorData, successData }) => {
+      if (isValidateError) {
+        if (validateErrorData === null) {
           // unexpected
           setIsError(true)
+        } else {
+          const validateErrorType = validateErrorData.code as APIErrorType
+          if (
+            validateErrorType === APIErrorType.license_not_found ||
+            validateErrorType === APIErrorType.license_invalid
+          ) {
+            setStatus(AppStatusType.get_started)
+          } else {
+            // unexpected
+            setIsError(true)
+          }
         }
+      } else {
+        setIsError(false)
+        setStatus(AppStatusType.main)
+        setLicenseType(LicenseType.full)
+        setLicenseKeyShort(successData.key_short)
       }
-    } else {
-      setIsError(false)
-      setStatus(AppStatusType.main)
-    }
-  })
+    })
 }
 
 interface ErrorPropsType {
@@ -78,18 +87,18 @@ function Loading() {
 
 export default function ConnectStatus() {
   const [isError, setIsError] = useState(false)
-  const { setStatus } = useAppStore()
+  const { setStatus, setLicenseType, setLicenseKeyShort } = useAppStore()
 
   useEffect(() => {
-    setTimeout(() => {
-      validateLicense(setIsError, setStatus)
+    setTimeout(async () => {
+      await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
     }, 6000)
   }, [])
 
   function retry() {
     setIsError(false)
-    setTimeout(() => {
-      validateLicense(setIsError, setStatus)
+    setTimeout(async () => {
+      await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
     }, 500)
   }
 

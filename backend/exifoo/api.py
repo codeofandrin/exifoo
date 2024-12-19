@@ -9,7 +9,7 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .metadata import rename_images
 from .errors import catch_exceptions_middleware, APIException, APIExceptionDetail, APIErrorType
-from .utils import setup_logging, get_machine_id
+from .utils import setup_logging, get_machine_id, get_short_key
 from .types import DateOptionsType, TimeOptionsType
 from . import lemsqzy
 from .license import store_license, get_license, delete_license, app_access
@@ -78,7 +78,9 @@ async def license_activate(payload: LicenseActivatePayload):
     instance_id = lemsqzy.activate_license(key=license_key, machine_id=MACHINE_ID)
     store_license(key=license_key, instance_id=instance_id)
     app_access.set_access(AppAccessType.full)
-    return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+    key_short = get_short_key(license_key)
+    return JSONResponse(content={"msg": "Successful", "key_short": key_short}, status_code=200)
 
 
 @app.post("/license/validate")
@@ -86,7 +88,9 @@ async def license_validate():
     license = get_license()
     lemsqzy.validate_license(key=license.key, instance_id=license.instance_id, machine_id=MACHINE_ID)
     app_access.set_access(AppAccessType.full)
-    return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+    key_short = get_short_key(license.key)
+    return JSONResponse(content={"msg": "Successful", "key_short": key_short}, status_code=200)
 
 
 @app.post("/license/deactivate")

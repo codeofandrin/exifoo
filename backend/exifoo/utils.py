@@ -28,3 +28,7 @@ def setup_logging():
 
 def get_machine_id():
     return machineid.id()
+
+
+def get_short_key(key: str) -> str:
+    return f"XXXX-{key[-12:]}"
