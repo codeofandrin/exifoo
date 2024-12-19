@@ -10,8 +10,8 @@ const client = axios.create({
 async function request(
     method: string,
     url: string,
-    data: Record<string, any>,
-    headers: Record<string, any>
+    data?: Record<string, any>,
+    headers?: Record<string, any>
 ): Promise<APIRequestResponseType> {
     const config = { method, url, data, headers }
 
@@ -67,4 +67,18 @@ export async function sendImgPaths(
     const headers = { "Content-Type": "application/json" }
 
     return await request("POST", "/rename", payload, headers)
+}
+
+export async function activateLicense(key: string): Promise<APIRequestResponseType> {
+    const payload = { key }
+    const headers = { "Content-Type": "application/json" }
+    return await request("POST", "/license/activate", payload, headers)
+}
+
+export async function validateLicense(): Promise<APIRequestResponseType> {
+    return await request("POST", "/license/validate")
+}
+
+export async function deactivateLicense(): Promise<APIRequestResponseType> {
+    return await request("POST", "/license/deactivate")
 }

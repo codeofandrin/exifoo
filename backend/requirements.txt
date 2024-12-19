@@ -2,3 +2,6 @@ fastapi
 uvicorn
 pillow
 pyinstaller
+requests
+py-machineid
+keyring

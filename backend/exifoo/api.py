@@ -8,9 +8,15 @@ from pydantic import BaseModel
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .metadata import rename_images
-from .errors import catch_exceptions_middleware
-from .utils import setup_logging
+from .errors import catch_exceptions_middleware, APIException, APIExceptionDetail, APIErrorType
+from .utils import setup_logging, get_machine_id
 from .types import DateOptionsType, TimeOptionsType
+from . import lemsqzy
+from .license import store_license, get_license, delete_license, app_access
+from .enums import AppAccessType
+
+
+MACHINE_ID = get_machine_id()
 
 
 @asynccontextmanager
@@ -44,10 +50,49 @@ class RenamePayload(BaseModel):
 
 @app.post("/rename")
 async def rename(payload: RenamePayload):
-    rename_images(
-        paths=payload.paths,
-        date_options=payload.date_options,
-        time_options=payload.time_options,
-        custom_text=payload.custom_text,
-    )
+    # TODO: Implement limit for demo version
+    if app_access.is_blocked():
+        raise APIException(
+            status_code=403,
+            error_code=APIErrorType.no_access,
+            msg="No access",
+            detail=APIExceptionDetail(msg="No access to renaming photos.", item=""),
+        )
+    else:
+        rename_images(
+            paths=payload.paths,
+            date_options=payload.date_options,
+            time_options=payload.time_options,
+            custom_text=payload.custom_text,
+        )
+        return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+
+class LicenseActivatePayload(BaseModel):
+    key: str
+
+
+@app.post("/license/activate")
+async def license_activate(payload: LicenseActivatePayload):
+    license_key = payload.key
+    instance_id = lemsqzy.activate_license(key=license_key, machine_id=MACHINE_ID)
+    store_license(key=license_key, instance_id=instance_id)
+    app_access.set_access(AppAccessType.full)
+    return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+
+@app.post("/license/validate")
+async def license_validate():
+    license = get_license()
+    lemsqzy.validate_license(key=license.key, instance_id=license.instance_id, machine_id=MACHINE_ID)
+    app_access.set_access(AppAccessType.full)
+    return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+
+@app.post("/license/deactivate")
+async def license_deactivate():
+    license = get_license()
+    lemsqzy.deactivate_license(key=license.key, instance_id=license.instance_id)
+    delete_license()
+    app_access.set_access(AppAccessType.blocked)
     return JSONResponse(content={"msg": "Successful"}, status_code=200)

@@ -6,6 +6,9 @@ import Button from "../common/Button"
 import TextInput from "../common/TextInput"
 import ErrorModal from "./ErrorModal"
 import { ErrorModalType } from "../../utils/types"
+import { activateLicense } from "../../lib/api"
+import { APIErrorType, AppStatusType } from "../../utils/enums"
+import { useAppStore } from "../../store/useAppStore"
 import ImgActivateLicenseIllus from "../../assets/images/get-started/activate_license_illus.png"
 
 const theme: CustomFlowbiteTheme["card"] = {
@@ -21,21 +24,44 @@ const theme: CustomFlowbiteTheme["card"] = {
 }
 
 export default function ActivateCard() {
-  // @ts-ignore: TODO remove ignore
   const [licenseKey, setLicenseKey] = useState("")
   const [error, setError] = useState<ErrorModalType | null>(null)
+  const { setStatus } = useAppStore()
 
   const isError = error !== null
 
-  function handleActivateLicense() {
-    // TODO: activate license
-    // setError({
-    //   title: "License already in use",
-    //   desc: "It looks like this license is already active on another device. Please deactiva you believe this is a mistake, please contact support."
-    // })
-    setError({
-      title: "Something went wrong.",
-      desc: "An unexpected error occurred while activating your license, please try again. If the issue persists, please contact support."
+  async function handleActivateLicense() {
+    const setUnexpectedError = () =>
+      setError({
+        title: "Something went wrong.",
+        desc: "An unexpected error occurred while activating your license, please try again. If the issue persists, please contact support."
+      })
+
+    await activateLicense(licenseKey).then(({ isError: isActivateError, errorData: activateErrorData }) => {
+      if (isActivateError) {
+        if (activateErrorData === null) {
+          // unexpected
+          setUnexpectedError()
+        } else {
+          const activateErrorType = activateErrorData.code as APIErrorType
+          if (activateErrorType === APIErrorType.license_used) {
+            setError({
+              title: "License already in use",
+              desc: "It looks like this license is already active on another device. Please deactivate it on the other device or contact support if you think this is a mistake."
+            })
+          } else if (activateErrorType === APIErrorType.license_invalid) {
+            setError({
+              title: "License key invalid",
+              desc: "This license key is not valid, please try again. If you think this is a mistake, please contact support."
+            })
+          } else {
+            // unexpected
+            setUnexpectedError()
+          }
+        }
+      } else {
+        setStatus(AppStatusType.main)
+      }
     })
   }
 

@@ -1,9 +1,11 @@
 import logging
-from typing import Optional, Dict, TypedDict
+from typing import Optional, Dict, TypedDict, Union, Any
 
-from fastapi import HTTPException
+import fastapi
 from fastapi.responses import JSONResponse
+from requests import Response
 
+from .enums import APIErrorType
 
 logger = logging.getLogger("uvicorn.error")
 
@@ -13,19 +15,42 @@ class APIExceptionDetail(TypedDict):
     item: str
 
 
-class APIException(HTTPException):
+class APIException(fastapi.HTTPException):
 
     def __init__(
         self,
         *,
         status_code: int,
-        error_code: int,
+        error_code: APIErrorType,
         msg: str,
         detail: APIExceptionDetail,
-        headers: Optional[Dict[str, str]] = None
+        headers: Optional[Dict[str, str]] = None,
     ):
-        d = {"code": error_code, "msg": msg, "detail": detail}
+        d = {"code": error_code.value, "msg": msg, "detail": detail}
         super().__init__(status_code=status_code, detail=d, headers=headers)
+
+
+class HTTPException(Exception):
+    def __init__(self, response: Response, data: Optional[Union[str, Dict[str, Any]]]):
+        self.response: Response = response
+        self.data: Optional[Union[str, Dict[str, Any]]] = data
+
+        self.status: int = self.response.status_code
+        self.reason: Optional[str] = self.response.reason
+        self.message: str
+
+        if isinstance(data, dict):
+            self.message = data["error"]
+        else:
+            self.message = data or ""
+
+        reason = f" {self.reason}" if self.reason is not None else ""
+        msg = f"{self.status}{reason}: {self.message}"
+        super().__init__(msg)
+
+
+class HTTPNotFound(HTTPException):
+    pass
 
 
 async def catch_exceptions_middleware(request, call_next):
