@@ -27,10 +27,14 @@ export default function ActivateCard() {
   const [licenseKey, setLicenseKey] = useState("")
   const [error, setError] = useState<ErrorModalType | null>(null)
   const { setStatus, setLicenseType, setLicenseKeyShort } = useAppStore()
+  const [isLoading, setIsLoading] = useState(false)
 
   const isError = error !== null
+  const btnDisabled = isLoading || !licenseKey
 
   async function handleActivateLicense() {
+    setIsLoading(true)
+
     const setUnexpectedError = () =>
       setError({
         title: "Something went wrong.",
@@ -39,6 +43,8 @@ export default function ActivateCard() {
 
     await activateLicense(licenseKey).then(
       ({ isError: isActivateError, errorData: activateErrorData, successData }) => {
+        setIsLoading(false)
+
         if (isActivateError) {
           if (activateErrorData === null) {
             // unexpected
@@ -98,7 +104,9 @@ export default function ActivateCard() {
                 className="w-full font-semibold"
                 size="sm-xs"
                 color="primary"
-                onClick={handleActivateLicense}>
+                onClick={handleActivateLicense}
+                isLoading={isLoading}
+                disabled={btnDisabled}>
                 Activate license
               </Button>
             </div>
