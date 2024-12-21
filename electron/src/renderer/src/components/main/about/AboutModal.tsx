@@ -1,18 +1,20 @@
+import { useState } from "react"
 import { Modal } from "flowbite-react"
 
-import { getAppVersion, getReleaseLink } from "../../utils/app-info"
-import ExternalLink from "../common/ExternalLink"
-import Button from "../common/Button"
-import { WebsiteLinks } from "../../utils/constants"
-import { UpdateStatusType, LicenseType } from "../../utils/enums"
-import ImgAppLogoSmall from "../../assets/images/exifoo_logo_small.png"
-import { useUpdateStore } from "../../store/main/useUpdateStore"
-import { useAppStore } from "../../store/useAppStore"
-import { getRelativeTime } from "../../utils/helpers"
-import SVGCheck from "../../assets/icons/Check.svg?react"
-import SVGX from "../../assets/icons/X.svg?react"
-import SVGSpinner from "../../assets/icons/Spinner.svg?react"
-import SVGDownload from "../../assets/icons/Download.svg?react"
+import { getAppVersion, getReleaseLink } from "../../../utils/app-info"
+import ExternalLink from "../../common/ExternalLink"
+import Button from "../../common/Button"
+import DeactivateLicenseModal from "./DeactivateLicenseModal"
+import { WebsiteLinks } from "../../../utils/constants"
+import { UpdateStatusType, LicenseType } from "../../../utils/enums"
+import { useUpdateStore } from "../../../store/main/useUpdateStore"
+import { useAppStore } from "../../../store/useAppStore"
+import { getRelativeTime } from "../../../utils/helpers"
+import ImgAppLogoSmall from "../../../assets/images/exifoo_logo_small.png"
+import SVGCheck from "../../../assets/icons/Check.svg?react"
+import SVGX from "../../../assets/icons/X.svg?react"
+import SVGSpinner from "../../../assets/icons/Spinner.svg?react"
+import SVGDownload from "../../../assets/icons/Download.svg?react"
 
 const modalTheme = {
   root: {
@@ -136,14 +138,17 @@ function UpdateStatus() {
   )
 }
 
-function LicenseInfo() {
+interface LicenseInfoPropsType {
+  setIsDeactivateModalOpen: Function
+}
+
+function LicenseInfo({ setIsDeactivateModalOpen }: LicenseInfoPropsType) {
   const { license_type, license_key_short } = useAppStore()
 
   let content
   if (license_type === LicenseType.full) {
     function handleDeactivateLicense() {
-      // TODO: Open deactivate modal
-      console.log("Deactivate license")
+      setIsDeactivateModalOpen(true)
     }
 
     content = (
@@ -193,6 +198,8 @@ interface AboutModalPropsType {
 }
 
 export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
+  const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false)
+
   const appVersion = getAppVersion()
 
   function handleClose() {
@@ -200,41 +207,47 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
   }
 
   return (
-    <Modal
-      className="z-[999] backdrop-blur-xs"
-      dismissible
-      show={isOpen}
-      onClose={handleClose}
-      theme={modalTheme}
-      size="md">
-      <Modal.Body className="px-16 pb-0">
-        <div className="flex justify-center">
-          <img src={ImgAppLogoSmall} alt="logo" className="w-16" />
-        </div>
-        <div className="mt-6 text-center">
-          <h1 className="text-lg font-semibold text-neutral-800">
-            About <span className="font-logo text-xl font-bold text-logo">exifoo</span>
-          </h1>
-          <p className="mt-1 text-xxs text-neutral-500">Version {appVersion}</p>
-          <div className="flex flex-col items-center">
-            <ExternalLink href={getReleaseLink(`v${appVersion}`)} className="text-xxs" displayIcon>
-              Release Notes
-            </ExternalLink>
-            <ExternalLink href={WebsiteLinks.terms} className="text-xxs" displayIcon>
-              Terms and Conditions
-            </ExternalLink>
+    <>
+      <DeactivateLicenseModal
+        isOpen={isDeactivateModalOpen}
+        setIsDeactivateModalOpen={setIsDeactivateModalOpen}
+      />
+      <Modal
+        className="z-[998] backdrop-blur-xs"
+        show={isOpen}
+        dismissible={!isDeactivateModalOpen}
+        onClose={handleClose}
+        theme={modalTheme}
+        size="md">
+        <Modal.Body className="px-16 pb-0">
+          <div className="flex justify-center">
+            <img src={ImgAppLogoSmall} alt="logo" className="w-16" />
           </div>
-        </div>
-        {/* Update Status */}
-        <UpdateStatus />
-        {/* License information */}
-        <LicenseInfo />
-      </Modal.Body>
-      <Modal.Footer className="max-w-[400px] justify-end">
-        <Button className="w-32" onClick={handleClose} color="primary" size="sm">
-          Close
-        </Button>
-      </Modal.Footer>
-    </Modal>
+          <div className="mt-6 text-center">
+            <h1 className="text-lg font-semibold text-neutral-800">
+              About <span className="font-logo text-xl font-bold text-logo">exifoo</span>
+            </h1>
+            <p className="mt-1 text-xxs text-neutral-500">Version {appVersion}</p>
+            <div className="flex flex-col items-center">
+              <ExternalLink href={getReleaseLink(`v${appVersion}`)} className="text-xxs" displayIcon>
+                Release Notes
+              </ExternalLink>
+              <ExternalLink href={WebsiteLinks.terms} className="text-xxs" displayIcon>
+                Terms and Conditions
+              </ExternalLink>
+            </div>
+          </div>
+          {/* Update Status */}
+          <UpdateStatus />
+          {/* License information */}
+          <LicenseInfo setIsDeactivateModalOpen={setIsDeactivateModalOpen} />
+        </Modal.Body>
+        <Modal.Footer className="max-w-[400px] justify-end">
+          <Button className="w-32" onClick={handleClose} color="primary" size="sm">
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </>
   )
 }

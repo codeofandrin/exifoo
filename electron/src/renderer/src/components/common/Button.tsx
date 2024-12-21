@@ -29,10 +29,19 @@ interface ButtonPropsType extends FlowbiteButtonPropsType {
 }
 
 export default function Button({ isLoading = false, ...props }: ButtonPropsType) {
+  let spinColors = ""
+  if (props.color === "primary") {
+    spinColors = "fill-white text-primary-600"
+  } else if (["accent", "silent"].includes(props.color as string)) {
+    spinColors = "fill-neutral-400 text-neutral-300"
+  } else if (props.color === "critical") {
+    spinColors = "fill-white text-red-700"
+  }
+
   return (
     <FlowbiteButton theme={theme} {...props}>
       <div className="flex items-center">
-        {isLoading && <SVGSpinner className="h-4 w-4 animate-spin fill-white text-primary-600" />}
+        {isLoading && <SVGSpinner className={`h-4 w-4 animate-spin ${spinColors}`} />}
         <div className={`${isLoading && "ml-2"}`}>{props.children}</div>
       </div>
     </FlowbiteButton>

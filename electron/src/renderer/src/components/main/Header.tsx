@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import AboutModal from "./AboutModal"
+import AboutModal from "./about/AboutModal"
 import ImgAppLogoLarge from "../../assets/images/exifoo_logo_large.png"
 import SVGInfo from "../../assets/icons/Info.svg?react"
 
