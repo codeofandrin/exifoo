@@ -37,7 +37,7 @@ export default function ActivateCard() {
 
     const setUnexpectedError = () =>
       setError({
-        title: "Something went wrong.",
+        title: "Something went wrong",
         desc: "An unexpected error occurred while activating your license, please try again. If the issue persists, please contact support."
       })
 

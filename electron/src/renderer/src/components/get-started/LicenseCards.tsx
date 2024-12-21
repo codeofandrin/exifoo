@@ -109,7 +109,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
       desc: "It looks like you've already used your free trial. Please consider purchasing and activating a license."
     })
     // setError({
-    //   title: "Something went wrong.",
+    //   title: "Something went wrong",
     //   desc: "An unexpected error occurred while activating your free trial, please try again. If the issue persists, please contact support."
     // })
   }
