@@ -1,5 +1,6 @@
 import uvicorn
 
+import env
 from exifoo.api import app
 
 

@@ -5,3 +5,4 @@ pyinstaller
 requests
 py-machineid
 keyring
+cryptography
