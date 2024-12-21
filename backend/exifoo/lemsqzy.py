@@ -118,7 +118,7 @@ def validate_license(*, key: str, instance_id: str, machine_id: str) -> None:
 
 def deactivate_license(*, key: str, instance_id: str) -> None:
     params = {"license_key": key, "instance_id": instance_id}
-    data = _request(Route("POST", "/licenses/validate"), params=params)
+    data = _request(Route("POST", "/licenses/deactivate"), params=params)
 
     deactivated: bool = data["deactivated"]
     if not deactivated:
