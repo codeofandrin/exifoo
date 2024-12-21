@@ -21,10 +21,7 @@ export const useUpdateStore = create<UpdateStoreType>()(
             error: null,
             progress: 0,
             lastCheck: null,
-            setStatus: (status) => {
-                set({ status: status })
-                console.log(`status changed: ${status}`)
-            },
+            setStatus: (status) => set({ status: status }),
             setError: (error) => set({ error: error }),
             setProgress: (percentage) => set({ progress: percentage }),
             setLastCheck: (timestamp) => set({ lastCheck: timestamp })
