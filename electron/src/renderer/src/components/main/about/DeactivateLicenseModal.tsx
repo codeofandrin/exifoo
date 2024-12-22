@@ -77,7 +77,7 @@ export default function DeactivateLicenseModal({
   }
 
   return (
-    <Modal show={isOpen} theme={modalTheme} size="md" className="z-[999] backdrop-blur-xs">
+    <Modal show={isOpen} theme={modalTheme} size="md" className="z-[99] backdrop-blur-xs">
       <Modal.Body>
         {/* Icon */}
         <div className="w-fit">

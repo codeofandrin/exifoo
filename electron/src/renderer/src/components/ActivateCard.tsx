@@ -1,16 +1,17 @@
-import { MouseEventHandler, useState } from "react"
+import { useState } from "react"
 import type { CustomFlowbiteTheme } from "flowbite-react"
 import { Card as FlowbiteCard } from "flowbite-react"
 
-import Button from "../common/Button"
-import TextInput from "../common/TextInput"
-import ErrorModal from "./ErrorModal"
-import { ErrorModalType } from "../../utils/types"
-import { activateLicense } from "../../lib/api"
-import { APIErrorType, AppStatusType, LicenseType } from "../../utils/enums"
-import { useAppStore } from "../../store/useAppStore"
-import SVGArrowLeft from "../../assets/icons/ArrowLeft.svg?react"
-import ImgActivateLicenseIllus from "../../assets/images/get-started/activate_license_illus.png"
+import Button from "./common/Button"
+import TextInput from "./common/TextInput"
+import ErrorModal from "./get-started/ErrorModal"
+import { ErrorModalType } from "../utils/types"
+import { activateLicense } from "../lib/api"
+import { APIErrorType, AppStatusType, LicenseType } from "../utils/enums"
+import { useAppStore } from "../store/useAppStore"
+import { useActivateLicenseStore } from "../store/main/useActivateLicenseStore"
+import SVGArrowLeft from "../assets/icons/ArrowLeft.svg?react"
+import ImgActivateLicenseIllus from "../assets/images/get-started/activate_license_illus.png"
 
 const theme: CustomFlowbiteTheme["card"] = {
   root: {
@@ -25,7 +26,7 @@ const theme: CustomFlowbiteTheme["card"] = {
 }
 
 interface ActivateCardPropsType {
-  goBackCallback: MouseEventHandler<HTMLButtonElement>
+  goBackCallback: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) {
@@ -33,6 +34,7 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
   const [error, setError] = useState<ErrorModalType | null>(null)
   const { setStatus, setLicenseType, setLicenseKeyShort } = useAppStore()
   const [isLoading, setIsLoading] = useState(false)
+  const { setIsOpen: setIsActivateLicenseMainOpen } = useActivateLicenseStore()
 
   const isError = error !== null
   const btnDisabled = isLoading || !licenseKey
@@ -75,6 +77,8 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
           setStatus(AppStatusType.main)
           setLicenseType(LicenseType.full)
           setLicenseKeyShort(successData.key_short)
+          // close activate license if opened via main (about modal)
+          setIsActivateLicenseMainOpen(false)
         }
       }
     )

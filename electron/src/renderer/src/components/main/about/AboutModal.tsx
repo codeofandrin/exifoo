@@ -9,6 +9,7 @@ import { WebsiteLinks } from "../../../utils/constants"
 import { UpdateStatusType, LicenseType } from "../../../utils/enums"
 import { useUpdateStore } from "../../../store/main/useUpdateStore"
 import { useAppStore } from "../../../store/useAppStore"
+import { useActivateLicenseStore } from "../../../store/main/useActivateLicenseStore"
 import { getRelativeTime } from "../../../utils/helpers"
 import ImgAppLogoSmall from "../../../assets/images/exifoo_logo_small.png"
 import SVGCheck from "../../../assets/icons/Check.svg?react"
@@ -140,9 +141,10 @@ function UpdateStatus() {
 
 interface LicenseInfoPropsType {
   setIsDeactivateModalOpen: Function
+  setIsActivateLicenseOpen: Function
 }
 
-function LicenseInfo({ setIsDeactivateModalOpen }: LicenseInfoPropsType) {
+function LicenseInfo({ setIsDeactivateModalOpen, setIsActivateLicenseOpen }: LicenseInfoPropsType) {
   const { license_type, license_key_short } = useAppStore()
 
   let content
@@ -166,8 +168,7 @@ function LicenseInfo({ setIsDeactivateModalOpen }: LicenseInfoPropsType) {
     )
   } else {
     function handleActivateLicense() {
-      // TODO: Forward to activate page
-      console.log("Activate request")
+      setIsActivateLicenseOpen(true)
     }
 
     content = (
@@ -199,6 +200,7 @@ interface AboutModalPropsType {
 
 export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
   const [isDeactivateModalOpen, setIsDeactivateModalOpen] = useState(false)
+  const { isOpen: isActivateLicenseOpen, setIsOpen: setIsActivateLicenseOpen } = useActivateLicenseStore()
 
   const appVersion = getAppVersion()
 
@@ -213,9 +215,9 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
         setIsDeactivateModalOpen={setIsDeactivateModalOpen}
       />
       <Modal
-        className="z-[998] backdrop-blur-xs"
+        className="z-[98] backdrop-blur-xs"
         show={isOpen}
-        dismissible={!isDeactivateModalOpen}
+        dismissible={!isDeactivateModalOpen && !isActivateLicenseOpen}
         onClose={handleClose}
         theme={modalTheme}
         size="md">
@@ -240,7 +242,10 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
           {/* Update Status */}
           <UpdateStatus />
           {/* License information */}
-          <LicenseInfo setIsDeactivateModalOpen={setIsDeactivateModalOpen} />
+          <LicenseInfo
+            setIsDeactivateModalOpen={setIsDeactivateModalOpen}
+            setIsActivateLicenseOpen={setIsActivateLicenseOpen}
+          />
         </Modal.Body>
         <Modal.Footer className="max-w-[400px] justify-end">
           <Button className="w-32" onClick={handleClose} color="primary" size="sm">

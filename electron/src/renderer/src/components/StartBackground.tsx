@@ -8,7 +8,7 @@ interface EllipsePropsType {
 function Ellipse({ className, initialX }: EllipsePropsType) {
   return (
     <motion.div
-      className={`${className} absolute -z-[999] rounded-full bg-primary-500 blur-[150px]`}
+      className={`${className} absolute -z-[99] rounded-full bg-primary-500 blur-[150px]`}
       initial={{ opacity: 0, scale: 0, x: initialX }}
       animate={{ opacity: 0.5, scale: 1, x: 0, transition: { duration: 2, delay: 0.5 } }}
     />

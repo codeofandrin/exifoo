@@ -5,7 +5,7 @@ import Logo from "../components/get-started/Logo"
 import Heading from "../components/get-started/Heading"
 import LicenseCards from "../components/get-started/LicenseCards"
 import ExternalLink from "../components/common/ExternalLink"
-import ActivateCard from "../components/get-started/ActivateCard"
+import ActivateCard from "../components/ActivateCard"
 import { WebsiteLinks } from "../utils/constants"
 
 export default function GetStarted() {
