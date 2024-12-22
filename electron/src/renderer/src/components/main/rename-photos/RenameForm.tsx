@@ -65,7 +65,7 @@ export default function RenameForm() {
   // Event handlers
   function handleErrorModalClose() {
     setStatus(null)
-    if (free_trial_remaining <= 0) {
+    if (license_type === LicenseType.demo && free_trial_remaining <= 0) {
       resetAppStore()
     }
   }
@@ -216,7 +216,10 @@ export default function RenameForm() {
           imageFiles: null
         })
         fileInput.ref.current && (fileInput.ref.current.value = "")
-        setFreeTrialRemaining(free_trial_remaining - filePaths.length) // TODO: Replace this with data from backend API
+
+        if (license_type === LicenseType.demo) {
+          setFreeTrialRemaining(free_trial_remaining - filePaths.length) // TODO: Replace this with data from backend API
+        }
       }
     )
   }
