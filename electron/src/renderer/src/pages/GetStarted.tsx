@@ -30,7 +30,11 @@ export default function GetStarted() {
               <p>Choose between starting with a free trial or activating your paid license.</p>
             )}
           </Heading>
-          {isActivatePrompt ? <ActivateCard /> : <LicenseCards setIsActivatePrompt={setIsActivatePrompt} />}
+          {isActivatePrompt ? (
+            <ActivateCard goBackCallback={() => setIsActivatePrompt(false)} />
+          ) : (
+            <LicenseCards setIsActivatePrompt={setIsActivatePrompt} />
+          )}
         </div>
       </div>
     </div>

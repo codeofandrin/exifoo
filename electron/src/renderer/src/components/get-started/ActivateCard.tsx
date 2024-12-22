@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { MouseEventHandler, useState } from "react"
 import type { CustomFlowbiteTheme } from "flowbite-react"
 import { Card as FlowbiteCard } from "flowbite-react"
 
@@ -9,6 +9,7 @@ import { ErrorModalType } from "../../utils/types"
 import { activateLicense } from "../../lib/api"
 import { APIErrorType, AppStatusType, LicenseType } from "../../utils/enums"
 import { useAppStore } from "../../store/useAppStore"
+import SVGArrowLeft from "../../assets/icons/ArrowLeft.svg?react"
 import ImgActivateLicenseIllus from "../../assets/images/get-started/activate_license_illus.png"
 
 const theme: CustomFlowbiteTheme["card"] = {
@@ -23,7 +24,11 @@ const theme: CustomFlowbiteTheme["card"] = {
   }
 }
 
-export default function ActivateCard() {
+interface ActivateCardPropsType {
+  goBackCallback: MouseEventHandler<HTMLButtonElement>
+}
+
+export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) {
   const [licenseKey, setLicenseKey] = useState("")
   const [error, setError] = useState<ErrorModalType | null>(null)
   const { setStatus, setLicenseType, setLicenseKeyShort } = useAppStore()
@@ -85,7 +90,15 @@ export default function ActivateCard() {
         img={ImgActivateLicenseIllus}
       />
       <div className="mt-14 flex items-center justify-center">
-        <FlowbiteCard theme={theme}>
+        <FlowbiteCard theme={theme} className="relative">
+          <div className="absolute left-0 top-0 ml-2 mt-2">
+            <button
+              className="group flex items-center p-1 text-neutral-500 hover:text-primary-500"
+              onClick={goBackCallback}>
+              <SVGArrowLeft className="w-3 transition-all duration-200 group-hover:-translate-x-0.5" />
+              <p className="ml-1 text-xxs transition-all duration-200">Go back</p>
+            </button>
+          </div>
           <img src={ImgActivateLicenseIllus} className="h-32" />
           <h1 className="mt-2 text-xl font-semibold text-neutral-700">Activate your license</h1>
           <p className="mt-2 max-w-96 text-center text-xs text-neutral-700">
