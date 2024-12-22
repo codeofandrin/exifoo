@@ -30,8 +30,6 @@ export default function RenameForm() {
   const [status, setStatus] = useState<RenameStatusType | null>(null)
   const { license_type, free_trial_remaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
 
-  console.log(`free_trial_remaining: ${free_trial_remaining}`)
-
   useEffect(() => {
     if (isLastFileRemoved) {
       setTimeout(() => {
