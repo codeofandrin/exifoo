@@ -11,6 +11,8 @@ import { sendImgPaths } from "../../../lib/api"
 import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
 import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
 import useCustomTextContext from "../../../contexts/main/CustomTextContext"
+import { useAppStore } from "../../../store/useAppStore"
+import { LicenseType } from "../../../utils/enums"
 import { APIErrorType, RenameGeneralStatusType } from "../../../utils/enums"
 
 export default function RenameForm() {
@@ -26,6 +28,9 @@ export default function RenameForm() {
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
   const [isLoading, setIsLoading] = useState(false)
   const [status, setStatus] = useState<RenameStatusType | null>(null)
+  const { license_type, free_trial_remaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
+
+  console.log(`free_trial_remaining: ${free_trial_remaining}`)
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -60,6 +65,13 @@ export default function RenameForm() {
   }
 
   // Event handlers
+  function handleErrorModalClose() {
+    setStatus(null)
+    if (free_trial_remaining <= 0) {
+      resetAppStore()
+    }
+  }
+
   function handleBrowse() {
     const fileInputElem = fileInput.ref.current
     if (fileInputElem) {
@@ -103,13 +115,24 @@ export default function RenameForm() {
         }
       }
 
-      // update files on element
-      fileInputElem.files = dataTransfer.files
       updatedImageFiles = dataTransfer.files
     }
 
     if (updatedImageFiles.length > 0) {
-      setFileInput({ ...fileInput, imageFiles: updatedImageFiles })
+      if (license_type === LicenseType.demo && updatedImageFiles.length > free_trial_remaining) {
+        let slicedUpdatedImageFiles = new DataTransfer()
+        for (let i = 0; i < free_trial_remaining; i++) {
+          slicedUpdatedImageFiles.items.add(updatedImageFiles[i])
+        }
+
+        setFileInput({ ...fileInput, imageFiles: slicedUpdatedImageFiles.files })
+        // update files on element
+        fileInputElem.files = slicedUpdatedImageFiles.files
+      } else {
+        setFileInput({ ...fileInput, imageFiles: updatedImageFiles })
+        // update files on element
+        fileInputElem.files = updatedImageFiles
+      }
     } else {
       setFileInput({ ...fileInput, imageFiles: null })
     }
@@ -195,6 +218,7 @@ export default function RenameForm() {
           imageFiles: null
         })
         fileInput.ref.current && (fileInput.ref.current.value = "")
+        setFreeTrialRemaining(free_trial_remaining - filePaths.length) // TODO: Replace this with data from backend API
       }
     )
   }
@@ -203,7 +227,7 @@ export default function RenameForm() {
     <>
       <RenameErrorModal
         isOpen={status?.type === RenameGeneralStatusType.error}
-        close={() => resetStatus()}
+        close={handleErrorModalClose}
         status={status as RenameStatusType}
       />
       <div>

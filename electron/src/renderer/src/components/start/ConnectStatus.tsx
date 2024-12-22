@@ -8,6 +8,41 @@ import { useAppStore } from "../../store/useAppStore"
 import SVGSpinner from "../../assets/icons/Spinner.svg?react"
 import SVGX from "../../assets/icons/X.svg?react"
 
+async function validateFreeTrial(
+  setIsError: Function,
+  setStatus: Function,
+  setLicenseType: Function,
+  setFreeTrialRemaining: Function,
+  setIsReadyForValidateLicense: Function
+) {
+  await api
+    .validateFreeTrial()
+    .then(({ isError: isValidateError, errorData: validateErrorData, successData }) => {
+      if (isValidateError) {
+        if (validateErrorData === null) {
+          // unexpected
+          setIsError(true)
+        } else {
+          const validateErrorType = validateErrorData.code as APIErrorType
+          if (
+            [APIErrorType.free_trial_expired, APIErrorType.free_trial_not_found].includes(validateErrorType)
+          ) {
+            // no free trial -> let's validate license
+            setIsReadyForValidateLicense(true)
+          } else {
+            // unexpected
+            setIsError(true)
+          }
+        }
+      } else {
+        setIsError(false)
+        setStatus(AppStatusType.main)
+        setLicenseType(LicenseType.demo)
+        setFreeTrialRemaining(successData.files_remaining)
+      }
+    })
+}
+
 async function validateLicense(
   setIsError: Function,
   setStatus: Function,
@@ -23,10 +58,7 @@ async function validateLicense(
           setIsError(true)
         } else {
           const validateErrorType = validateErrorData.code as APIErrorType
-          if (
-            validateErrorType === APIErrorType.license_not_found ||
-            validateErrorType === APIErrorType.license_invalid
-          ) {
+          if ([APIErrorType.license_not_found, APIErrorType.license_invalid].includes(validateErrorType)) {
             setStatus(AppStatusType.get_started)
           } else {
             // unexpected
@@ -87,18 +119,47 @@ function Loading() {
 
 export default function ConnectStatus() {
   const [isError, setIsError] = useState(false)
-  const { setStatus, setLicenseType, setLicenseKeyShort } = useAppStore()
+  const { setStatus, setLicenseType, setLicenseKeyShort, setFreeTrialRemaining } = useAppStore()
+  const [isReadyForValidateLicense, setIsReadyForValidateLicense] = useState(false)
 
+  // on mount
   useEffect(() => {
     setTimeout(async () => {
-      await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
+      // validate free trial only
+      // if no free trial and no error -> ready for validating license
+      await validateFreeTrial(
+        setIsError,
+        setStatus,
+        setLicenseType,
+        setFreeTrialRemaining,
+        setIsReadyForValidateLicense
+      )
     }, 5500)
   }, [])
+
+  // only validate license if ready
+  // this is only the case when following conditions are all met:
+  //    - no error occurred while validating free trial
+  //    - free trial didn't changed app status already (e.g. to main or get-started)
+  useEffect(() => {
+    async function inner() {
+      if (isReadyForValidateLicense) {
+        await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
+      }
+    }
+    inner()
+  }, [isReadyForValidateLicense])
 
   function retry() {
     setIsError(false)
     setTimeout(async () => {
-      await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
+      await validateFreeTrial(
+        setIsError,
+        setStatus,
+        setLicenseType,
+        setFreeTrialRemaining,
+        setIsReadyForValidateLicense
+      )
     }, 500)
   }
 

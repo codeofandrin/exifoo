@@ -13,6 +13,10 @@ class APIErrorType(Enum):
     license_used = 100
     license_invalid = 101
     license_not_found = 102
+    # free trial
+    free_trial_expired = 200
+    free_trial_files_exceeded = 201
+    free_trial_not_found = 201
 
 
 class LicenseStatusType(Enum):

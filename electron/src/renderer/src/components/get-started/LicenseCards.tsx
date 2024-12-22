@@ -7,6 +7,9 @@ import ExternalLink from "../common/ExternalLink"
 import ErrorModal from "./ErrorModal"
 import { WebsiteLinks } from "../../utils/constants"
 import { ErrorModalType } from "../../utils/types"
+import { activateFreeTrial } from "../../lib/api"
+import { useAppStore } from "../../store/useAppStore"
+import { LicenseType, AppStatusType, APIErrorType } from "../../utils/enums"
 import SVGCheck from "../../assets/icons/Check.svg?react"
 import SVGX from "../../assets/icons/X.svg?react"
 import ImgFreeTrialIllus from "../../assets/images/get-started/free_trial_illus.png"
@@ -34,6 +37,7 @@ interface LicenseCardPropsType {
   img: string
   footer?: any
   className?: string
+  isLoading?: boolean
 }
 
 function LicenseCard({
@@ -45,7 +49,8 @@ function LicenseCard({
   btnOnClick,
   img,
   footer = "",
-  className = ""
+  className = "",
+  isLoading = false
 }: LicenseCardPropsType) {
   const isFooter = footer != ""
 
@@ -79,7 +84,9 @@ function LicenseCard({
           className={`${btnText.weight} w-full rounded-full`}
           size="sm-xs"
           color={btnColor}
-          onClick={btnOnClick}>
+          onClick={btnOnClick}
+          disabled={isLoading}
+          isLoading={isLoading}>
           {btnText.content}
         </Button>
       </div>
@@ -98,20 +105,49 @@ interface LicenseCardsPropsType {
 
 export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsType) {
   const [error, setError] = useState<ErrorModalType | null>(null)
+  const [isFreeTrialLoading, setIsFreeTrialLoading] = useState(false)
+  const { setStatus, setLicenseType, setFreeTrialRemaining } = useAppStore()
 
   const isError = error !== null
 
-  function handleFreeTrial() {
-    // TODO: add machine ID validation
+  async function handleFreeTrial() {
+    setIsFreeTrialLoading(true)
 
-    setError({
-      title: "Free Trial expired",
-      desc: "It looks like you've already used your free trial. Please consider purchasing and activating a license."
-    })
-    // setError({
-    //   title: "Something went wrong",
-    //   desc: "An unexpected error occurred while activating your free trial, please try again. If the issue persists, please contact support."
-    // })
+    const setUnexpectedError = () =>
+      setError({
+        title: "Something went wrong",
+        desc: `An unexpected error occurred while activating your free trial.
+              Please make sure you have a network connection and try again. 
+              If the issue persists, please contact support.`
+      })
+
+    await activateFreeTrial().then(
+      ({ isError: isActivateError, errorData: activateErrorData, successData }) => {
+        setIsFreeTrialLoading(false)
+
+        if (isActivateError) {
+          if (activateErrorData === null) {
+            // unexpected
+            setUnexpectedError()
+          } else {
+            const activateErrorType = activateErrorData.code as APIErrorType
+            if (activateErrorType === APIErrorType.free_trial_expired) {
+              setError({
+                title: "Free Trial expired",
+                desc: "It looks like you've already used your free trial. Please consider purchasing and activating a license."
+              })
+            } else {
+              // unexpected
+              setUnexpectedError()
+            }
+          }
+        } else {
+          setStatus(AppStatusType.main)
+          setLicenseType(LicenseType.demo)
+          setFreeTrialRemaining(successData.files_remaining)
+        }
+      }
+    )
   }
 
   function handleActivateLicense() {
@@ -140,6 +176,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
           btnColor="silent"
           btnText={{ content: "Start free trial", weight: "font-normal" }}
           btnOnClick={handleFreeTrial}
+          isLoading={isFreeTrialLoading}
         />
         {/* Paid License */}
         <LicenseCard

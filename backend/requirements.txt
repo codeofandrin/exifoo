@@ -6,3 +6,4 @@ requests
 py-machineid
 keyring
 cryptography
+supabase

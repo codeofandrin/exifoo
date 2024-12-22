@@ -82,3 +82,11 @@ export async function validateLicense(): Promise<APIRequestResponseType> {
 export async function deactivateLicense(): Promise<APIRequestResponseType> {
     return await request("POST", "/license/deactivate")
 }
+
+export async function activateFreeTrial(): Promise<APIRequestResponseType> {
+    return await request("POST", "/free-trial/activate")
+}
+
+export async function validateFreeTrial(): Promise<APIRequestResponseType> {
+    return await request("POST", "/free-trial/validate")
+}

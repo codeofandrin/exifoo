@@ -1,10 +1,14 @@
-from typing import Any, Optional, Dict
+from __future__ import annotations
+
+from typing import Any, Optional, Dict, TYPE_CHECKING
 
 import requests
 
 from .enums import APIErrorType, LicenseStatusType
 from .errors import APIException, APIExceptionDetail, HTTPNotFound, HTTPException
-from .license import delete_license
+
+if TYPE_CHECKING:
+    from .license import LicenseStorage
 
 
 API_VERSION = 1
@@ -23,103 +27,110 @@ class Route:
         self.url: str = url
 
 
-def _request(
-    route: Route,
-    *,
-    params: Optional[Dict[str, Any]] = None,
-    payload: Optional[Dict[str, Any]] = None,
-):
-    method = route.method
-    url = route.url
+class LemSqzyClient:
 
-    headers = {"Accept": "application/json"}
-    if method == "POST":
-        headers["Content-Type"] = "application/x-www-form-urlencoded"
+    def __init__(self, license_storage: LicenseStorage):
+        self.license_storage: LicenseStorage = license_storage
 
-    response = requests.request(method=method, url=url, params=params, data=payload)
-    http_status = response.status_code
-    data = response.json()
+    def _request(
+        self,
+        route: Route,
+        *,
+        params: Optional[Dict[str, Any]] = None,
+        payload: Optional[Dict[str, Any]] = None,
+    ):
+        method = route.method
+        url = route.url
 
-    if 200 <= http_status < 300:
-        return data
-    else:
-        if http_status == 404:
-            raise HTTPNotFound(response, data)
+        headers = {"Accept": "application/json"}
+        if method == "POST":
+            headers["Content-Type"] = "application/x-www-form-urlencoded"
+
+        response = requests.request(method=method, url=url, params=params, data=payload)
+        http_status = response.status_code
+        data = response.json()
+
+        if 200 <= http_status < 300:
+            return data
         else:
-            raise HTTPException(response, data)
+            if http_status == 404:
+                raise HTTPNotFound(response, data)
+            else:
+                raise HTTPException(response, data)
 
-
-def activate_license(*, key: str, machine_id: str) -> str:
-    params = {"license_key": key, "instance_name": machine_id}
-    try:
-        data = _request(Route("POST", "/licenses/activate"), params=params)
-    except HTTPNotFound:
-        raise APIException(
-            status_code=400,
-            error_code=APIErrorType.license_invalid,
-            msg="License key not valid",
-            detail=APIExceptionDetail(
-                msg=f"License key could not be found on server and therefore invalid", item=key
-            ),
-        )
-    except HTTPException as err:
-        if "activation limit" in err.message:
+    def activate(self, *, key: str, machine_id: str) -> str:
+        params = {"license_key": key, "instance_name": machine_id}
+        try:
+            data = self._request(Route("POST", "/licenses/activate"), params=params)
+        except HTTPNotFound:
             raise APIException(
                 status_code=400,
-                error_code=APIErrorType.license_used,
-                msg="License in use",
-                detail=APIExceptionDetail(msg=f"License key already activated", item=key),
+                error_code=APIErrorType.license_invalid,
+                msg="License key not valid",
+                detail=APIExceptionDetail(
+                    msg=f"License key could not be found on server and therefore invalid",
+                    item=key,
+                ),
             )
-        else:
-            raise HTTPException(err.response, err.data)
+        except HTTPException as err:
+            if "activation limit" in err.message:
+                raise APIException(
+                    status_code=400,
+                    error_code=APIErrorType.license_used,
+                    msg="License in use",
+                    detail=APIExceptionDetail(msg=f"License key already activated", item=key),
+                )
+            else:
+                raise HTTPException(err.response, err.data)
 
-    activated: bool = data["activated"]
-    if not activated:
-        raise ValueError("license key could not be activated unexpectedly")
+        activated: bool = data["activated"]
+        if not activated:
+            raise ValueError("license key could not be activated unexpectedly")
 
-    instance_id = data["instance"]["id"]
-    return instance_id
+        instance_id = data["instance"]["id"]
+        return instance_id
 
+    def validate(self, *, key: str, instance_id: str, machine_id: str) -> None:
+        params = {"license_key": key, "instance_id": instance_id}
+        try:
+            data = self._request(Route("POST", "/licenses/validate"), params=params)
+        except HTTPNotFound:
+            # let's delete the invalid license here
+            self.license_storage.delete()
+            raise APIException(
+                status_code=400,
+                error_code=APIErrorType.license_invalid,
+                msg="License key not valid",
+                detail=APIExceptionDetail(
+                    msg=f"License key could not be found on server and therefore invalid",
+                    item=key,
+                ),
+            )
 
-def validate_license(*, key: str, instance_id: str, machine_id: str) -> None:
-    params = {"license_key": key, "instance_id": instance_id}
-    try:
-        data = _request(Route("POST", "/licenses/validate"), params=params)
-    except HTTPNotFound:
-        # let's delete the invalid license here
-        delete_license()
-        raise APIException(
-            status_code=400,
-            error_code=APIErrorType.license_invalid,
-            msg="License key not valid",
-            detail=APIExceptionDetail(
-                msg=f"License key could not be found on server and therefore invalid", item=key
-            ),
-        )
+        valid = data["valid"]
+        license_key = data["license_key"]
+        status = LicenseStatusType(license_key["status"])
+        instance = data["instance"]
+        instance_name = instance["name"]
 
-    valid = data["valid"]
-    license_key = data["license_key"]
-    status = LicenseStatusType(license_key["status"])
-    instance = data["instance"]
-    instance_name = instance["name"]
+        if not valid or not status.active or instance_name != machine_id:
+            # license is invalid (also includes machine id validation), inactive, or disabled
+            # let's delete the invalid license here
+            self.license_storage.delete()
 
-    if not valid or not status.active or instance_name != machine_id:
-        # license is invalid (also includes machine id validation), inactive, or disabled
-        # let's delete the invalid license here
-        delete_license()
+            raise APIException(
+                status_code=400,
+                error_code=APIErrorType.license_invalid,
+                msg="License key instance invalid",
+                detail=APIExceptionDetail(
+                    msg="License key instance not valid or not active", item=instance_id
+                ),
+            )
 
-        raise APIException(
-            status_code=400,
-            error_code=APIErrorType.license_invalid,
-            msg="License key instance invalid",
-            detail=APIExceptionDetail(msg="License key instance not valid or not active", item=instance_id),
-        )
+    def deactivate(self, *, key: str, instance_id: str) -> None:
+        params = {"license_key": key, "instance_id": instance_id}
+        data = self._request(Route("POST", "/licenses/deactivate"), params=params)
 
-
-def deactivate_license(*, key: str, instance_id: str) -> None:
-    params = {"license_key": key, "instance_id": instance_id}
-    data = _request(Route("POST", "/licenses/deactivate"), params=params)
-
-    deactivated: bool = data["deactivated"]
-    if not deactivated:
-        raise ValueError("license key could not be deactivated unexpectedly")
+        deactivated: bool = data["deactivated"]
+        if not deactivated:
+            raise ValueError("license key could not be deactivated unexpectedly")

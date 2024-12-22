@@ -8,15 +8,28 @@ from pydantic import BaseModel
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .metadata import rename_images
-from .errors import catch_exceptions_middleware, APIException, APIExceptionDetail, APIErrorType
+from .errors import (
+    catch_exceptions_middleware,
+    APIException,
+    APIExceptionDetail,
+    APIErrorType,
+)
 from .utils import setup_logging, get_machine_id, get_short_key
 from .types import DateOptionsType, TimeOptionsType
-from . import lemsqzy
-from .license import store_license, get_license, delete_license, app_access
+from .lemsqzy import LemSqzyClient
+from .license import LicenseStorage, FreeTrialStorage, AppAccess
 from .enums import AppAccessType
+from .supabase import MachineIDs
 
 
 MACHINE_ID = get_machine_id()
+FREE_TRIAL_FILES_AMOUNT = 20
+
+app_access = AppAccess()
+license_storage = LicenseStorage()
+free_trial_storage = FreeTrialStorage()
+lemsqzy = LemSqzyClient(license_storage=license_storage)
+machine_ids = MachineIDs()
 
 
 @asynccontextmanager
@@ -50,15 +63,43 @@ class RenamePayload(BaseModel):
 
 @app.post("/rename")
 async def rename(payload: RenamePayload):
-    # TODO: Implement limit for demo version
-    if app_access.is_blocked():
-        raise APIException(
-            status_code=403,
-            error_code=APIErrorType.no_access,
-            msg="No access",
-            detail=APIExceptionDetail(msg="No access to renaming photos.", item=""),
-        )
-    else:
+    if app_access.is_demo():
+        free_trial = free_trial_storage.get()
+        files_amount = len(payload.paths)
+
+        if (free_trial.files_remaining - files_amount) < 0:
+            raise APIException(
+                status_code=400,
+                error_code=APIErrorType.free_trial_files_exceeded,
+                msg="Free Trial files exceeded",
+                detail=APIExceptionDetail(
+                    msg="The requested amount of files exceeded free trial remaining files.",
+                    item="",
+                ),
+            )
+        else:
+            rename_images(
+                paths=payload.paths,
+                date_options=payload.date_options,
+                time_options=payload.time_options,
+                custom_text=payload.custom_text,
+            )
+
+            remaining = free_trial.files_remaining - files_amount
+            if remaining <= 0:
+                free_trial_storage.delete()
+                app_access.set_access(AppAccessType.blocked)
+                raise APIException(
+                    status_code=400,
+                    error_code=APIErrorType.free_trial_expired,
+                    msg="Free Trial expired",
+                    detail=APIExceptionDetail(msg="No free trial files remaining.", item=""),
+                )
+
+            free_trial_storage.store(files_remaining=remaining)
+            return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+    elif app_access.is_full():
         rename_images(
             paths=payload.paths,
             date_options=payload.date_options,
@@ -66,6 +107,14 @@ async def rename(payload: RenamePayload):
             custom_text=payload.custom_text,
         )
         return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+    else:
+        raise APIException(
+            status_code=403,
+            error_code=APIErrorType.no_access,
+            msg="No access",
+            detail=APIExceptionDetail(msg="No access to renaming photos.", item=""),
+        )
 
 
 class LicenseActivatePayload(BaseModel):
@@ -75,8 +124,12 @@ class LicenseActivatePayload(BaseModel):
 @app.post("/license/activate")
 async def license_activate(payload: LicenseActivatePayload):
     license_key = payload.key
-    instance_id = lemsqzy.activate_license(key=license_key, machine_id=MACHINE_ID)
-    store_license(key=license_key, instance_id=instance_id)
+    instance_id = lemsqzy.activate(key=license_key, machine_id=MACHINE_ID)
+    license_storage.store(key=license_key, instance_id=instance_id)
+
+    if free_trial_storage.is_stored():
+        free_trial_storage.delete()
+
     app_access.set_access(AppAccessType.full)
 
     key_short = get_short_key(license_key)
@@ -85,8 +138,8 @@ async def license_activate(payload: LicenseActivatePayload):
 
 @app.post("/license/validate")
 async def license_validate():
-    license = get_license()
-    lemsqzy.validate_license(key=license.key, instance_id=license.instance_id, machine_id=MACHINE_ID)
+    license = license_storage.get()
+    lemsqzy.validate(key=license.key, instance_id=license.instance_id, machine_id=MACHINE_ID)
     app_access.set_access(AppAccessType.full)
 
     key_short = get_short_key(license.key)
@@ -95,8 +148,45 @@ async def license_validate():
 
 @app.post("/license/deactivate")
 async def license_deactivate():
-    license = get_license()
-    lemsqzy.deactivate_license(key=license.key, instance_id=license.instance_id)
-    delete_license()
+    license = license_storage.get()
+    lemsqzy.deactivate(key=license.key, instance_id=license.instance_id)
+    license_storage.delete()
     app_access.set_access(AppAccessType.blocked)
     return JSONResponse(content={"msg": "Successful"}, status_code=200)
+
+
+@app.post("/free-trial/activate")
+async def free_trial_activate():
+    if machine_ids.exists(MACHINE_ID):
+        raise APIException(
+            status_code=400,
+            error_code=APIErrorType.free_trial_expired,
+            msg="Free Trial expired",
+            detail=APIExceptionDetail(msg="Free Trial already used once.", item=""),
+        )
+
+    machine_ids.add(MACHINE_ID)
+    free_trial_storage.store(files_remaining=FREE_TRIAL_FILES_AMOUNT)
+    app_access.set_access(AppAccessType.demo)
+    return JSONResponse(
+        content={"msg": "Successful", "files_remaining": FREE_TRIAL_FILES_AMOUNT}, status_code=200
+    )
+
+
+@app.post("/free-trial/validate")
+async def free_trial_validate():
+    free_trial = free_trial_storage.get()
+    if free_trial.files_remaining == 0:
+        free_trial_storage.delete()
+        raise APIException(
+            status_code=400,
+            error_code=APIErrorType.free_trial_expired,
+            msg="Free Trial expired",
+            detail=APIExceptionDetail(msg="No free trial files remaining.", item=""),
+        )
+
+    app_access.set_access(AppAccessType.demo)
+    return JSONResponse(
+        content={"msg": "Successful", "files_remaining": free_trial.files_remaining},
+        status_code=200,
+    )

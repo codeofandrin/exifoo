@@ -1,6 +1,6 @@
 import uvicorn
 
-import env
+import env  # type: ignore
 from exifoo.api import app
 
 
