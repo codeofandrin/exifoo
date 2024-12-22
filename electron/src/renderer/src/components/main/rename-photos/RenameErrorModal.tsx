@@ -13,11 +13,11 @@ function getErrorMsg(errorType: APIErrorType): string {
   let statusMsg = ""
   switch (errorType) {
     case APIErrorType.invalidFileType:
-      statusMsg = `Invalid file type.`
+      statusMsg = "Invalid file type."
       break
 
     case APIErrorType.noExifData:
-      statusMsg = `No exif data found.`
+      statusMsg = "No exif data found."
       break
 
     case APIErrorType.no_access:
