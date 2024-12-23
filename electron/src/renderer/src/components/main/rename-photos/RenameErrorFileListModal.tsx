@@ -21,6 +21,18 @@ function getFileErrorMsg(errorType: APIErrorType): string {
     case APIErrorType.noExifData:
       statusMsg = "No exif data found"
       break
+
+    case APIErrorType.notFound:
+      statusMsg = "File not found"
+      break
+
+    case APIErrorType.alreadyExists:
+      statusMsg = "File already exists"
+      break
+
+    case APIErrorType.noPermission:
+      statusMsg = "No permission"
+      break
   }
 
   return statusMsg

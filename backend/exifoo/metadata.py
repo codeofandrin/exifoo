@@ -96,6 +96,10 @@ def _rename_filename(
     dt_str = dt.strftime(format_str)
     new_name = f"{dt_str}_{img_path.name}"
     new_path = img_path.parent / new_name
+
+    if os.path.isfile(new_path):
+        raise FileExistsError
+
     os.rename(img_path, new_path)
 
 
@@ -179,14 +183,30 @@ def rename_images(
             )
             continue
 
-        img_dt = _get_img_datetime(img_path)
-        if img_dt is None:
+        try:
+            img_dt = _get_img_datetime(img_path)
+            if img_dt is None:
+                result.append(
+                    FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_exif_data)
+                )
+                continue
+
+            _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
+            result.append(FileRenameStatus(path=path_str, is_success=True, error_type=None))
+        except FileNotFoundError:
             result.append(
-                FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_exif_data)
+                FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.not_found)
             )
             continue
-
-        _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
-        result.append(FileRenameStatus(path=path_str, is_success=True, error_type=None))
+        except FileExistsError:
+            result.append(
+                FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.already_exists)
+            )
+            continue
+        except PermissionError:
+            result.append(
+                FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_permission)
+            )
+            continue
 
     return result

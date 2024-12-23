@@ -9,6 +9,9 @@ class APIErrorType(Enum):
     no_exif_data = 2
     invalid_option = 3
     no_access = 4
+    not_found = 5
+    already_exists = 6
+    no_permission = 7
     # license
     license_used = 100
     license_invalid = 101

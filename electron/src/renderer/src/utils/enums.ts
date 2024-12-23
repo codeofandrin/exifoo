@@ -6,6 +6,9 @@ export enum APIErrorType {
     noExifData = 2,
     invalidOption = 3,
     noAccess = 4,
+    notFound = 5,
+    alreadyExists = 6,
+    noPermission = 7,
     // license
     licenseUsed = 100,
     licenseInvalid = 101,
