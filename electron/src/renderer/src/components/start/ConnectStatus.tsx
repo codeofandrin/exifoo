@@ -134,7 +134,7 @@ export default function ConnectStatus() {
         setFreeTrialRemaining,
         setIsReadyForValidateLicense
       )
-    }, 5500)
+    }, 6000)
   }, [])
 
   // only validate license if ready
