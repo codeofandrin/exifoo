@@ -151,6 +151,7 @@ export default function ConnectStatus() {
   function retry() {
     setIsError(false)
     setTimeout(async () => {
+      setIsReadyForValidateLicense(false)
       await validateFreeTrial(
         setIsError,
         setStatus,
