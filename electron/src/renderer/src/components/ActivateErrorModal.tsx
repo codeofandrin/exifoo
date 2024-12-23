@@ -5,7 +5,6 @@ import Button from "./common/Button"
 import { EMail } from "../utils/constants"
 import SVGX from "../assets/icons/X.svg?react"
 import SVGHelpCircle from "../assets/icons/HelpCircle.svg?react"
-import ImgActivateLicenseIllus from "../assets/images/get-started/activate_license_illus.png"
 
 const modalTheme = {
   root: {
@@ -28,6 +27,7 @@ export default function ActivateErrorModal({
   close,
   title,
   desc,
+  img = null
 }: ActivateErrorModalPropsType) {
   function handleClose() {
     close()
@@ -56,9 +56,11 @@ export default function ActivateErrorModal({
             {/* Description */}
             <p className="mt-2 text-sm text-neutral-500">{desc}</p>
           </div>
-          <div className="ml-2">
-            <img src={ImgActivateLicenseIllus} className="w-32 max-w-32" />
-          </div>
+          {img !== null && (
+            <div className="ml-2">
+              <img src={img} className="w-32 max-w-32" />
+            </div>
+          )}
         </div>
       </Modal.Body>
       <Modal.Footer className="justify-between">
