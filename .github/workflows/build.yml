@@ -43,9 +43,9 @@ jobs:
           cd backend
           touch env.py
           echo "import os" >> env.py
-          echo 'os.environ["STORAGE_KEY"] = {{ secrets.STORAGE_KEY }}' >> env.py
-          echo 'os.environ["SUPABASE_URL"] = {{ secrets.SUPABASE_URL }}' >> env.py
-          echo 'os.environ["SUPABASE_KEY"] = {{ secrets.SUPABASE_KEY }}' >> env.py
+          echo 'os.environ["STORAGE_KEY"] = ${{ secrets.STORAGE_KEY }}' >> env.py
+          echo 'os.environ["SUPABASE_URL"] = ${{ secrets.SUPABASE_URL }}' >> env.py
+          echo 'os.environ["SUPABASE_KEY"] = ${{ secrets.SUPABASE_KEY }}' >> env.py
 
       - name: Build backend executable
         id: build-backend
