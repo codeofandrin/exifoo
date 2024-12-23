@@ -2,7 +2,7 @@ import { Modal } from "flowbite-react"
 
 import Button from "../common/Button"
 import SVGCheck from "../../assets/icons/Check.svg?react"
-import ImgFreeTrialIllus from "../../assets/images/get-started/license_illus.png"
+import ImgFreeTrialIllus from "../../assets/images//license_illus.png"
 
 const modalTheme = {
   root: {

@@ -13,8 +13,8 @@ import { useAppStore } from "../../store/useAppStore"
 import { LicenseType, AppStatusType, APIErrorType } from "../../utils/enums"
 import SVGCheck from "../../assets/icons/Check.svg?react"
 import SVGX from "../../assets/icons/X.svg?react"
-import ImgFreeTrialIllus from "../../assets/images/get-started/free_trial_illus.png"
-import ImgLicenseIllus from "../../assets/images/get-started/license_illus.png"
+import ImgFreeTrialIllus from "../../assets/images//free_trial_illus.png"
+import ImgLicenseIllus from "../../assets/images//license_illus.png"
 
 const theme: CustomFlowbiteTheme["card"] = {
   root: {

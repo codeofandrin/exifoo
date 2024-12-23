@@ -12,7 +12,7 @@ import { APIErrorType, AppStatusType, LicenseType } from "../utils/enums"
 import { useAppStore } from "../store/useAppStore"
 import { useActivateLicenseStore } from "../store/main/useActivateLicenseStore"
 import SVGArrowLeft from "../assets/icons/ArrowLeft.svg?react"
-import ImgActivateLicenseIllus from "../assets/images/get-started/activate_license_illus.png"
+import ImgActivateLicenseIllus from "../assets/images//activate_license_illus.png"
 
 const theme: CustomFlowbiteTheme["card"] = {
   root: {

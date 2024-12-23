@@ -9,7 +9,7 @@ import { getParentFolderStr, getFileName } from "../../../utils/helpers"
 import SVGX from "../../../assets/icons/X.svg?react"
 import SVGHelpCircle from "../../../assets/icons/HelpCircle.svg?react"
 import SVGInfo from "../../../assets/icons/Info.svg?react"
-import ImgFreeTrialIllus from "../../../assets/images/get-started/free_trial_illus.png"
+import ImgFreeTrialIllus from "../../../assets/images//free_trial_illus.png"
 
 function getItemErrorMsg(errorType: APIErrorType): string {
   let statusMsg = ""
