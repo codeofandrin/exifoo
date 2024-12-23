@@ -2,6 +2,7 @@ import datetime
 import os
 from pathlib import Path
 from typing import List, Optional
+from typing_extensions import NamedTuple
 
 from PIL import Image
 
@@ -22,16 +23,17 @@ VALID_SECONDS_FORMATS = ("SS", "(S)S")
 VALID_TIME_SEPARATORS = ("", "-", ".", ",")
 
 
-def _get_img_datetime(img_path: Path) -> datetime.datetime:
+class FileRenameStatus(NamedTuple):
+    path: str
+    is_success: bool
+    error_type: Optional[APIErrorType]
+
+
+def _get_img_datetime(img_path: Path) -> Optional[datetime.datetime]:
     img = Image.open(img_path)
     exif_data = img._getexif()  # type: ignore
     if exif_data is None:
-        raise APIException(
-            status_code=422,
-            error_code=APIErrorType.no_exif_data,
-            msg="No exif data available",
-            detail=APIExceptionDetail(msg=None, item=str(img_path)),
-        )
+        return None
 
     dt_str = exif_data[EXIF_DATETIME_TAG]
     return datetime.datetime.strptime(dt_str, "%Y:%m:%d %H:%M:%S")
@@ -103,7 +105,7 @@ def rename_images(
     date_options: DateOptionsType,
     time_options: Optional[TimeOptionsType],
     custom_text: str,
-) -> None:
+) -> List[FileRenameStatus]:
     year_format = date_options["year_format"]
     month_format = date_options["month_format"]
     day_format = date_options["day_format"]
@@ -167,19 +169,24 @@ def rename_images(
         items["time_separator"] = time_separator
         items["is_add_time"] = True
 
+    result: List[FileRenameStatus] = []
     for path_str in paths:
         img_path = Path(path_str)
 
         if img_path.suffix.lower() not in VALID_FILE_TYPES:
-            raise APIException(
-                status_code=400,
-                error_code=APIErrorType.invalid_file_type,
-                msg="Invalid file type",
-                detail=APIExceptionDetail(
-                    msg=f"File type must be one of {VALID_FILE_TYPES}",
-                    item=str(img_path),
-                ),
+            result.append(
+                FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.invalid_file_type)
             )
+            continue
 
         img_dt = _get_img_datetime(img_path)
+        if img_dt is None:
+            result.append(
+                FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_exif_data)
+            )
+            continue
+
         _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
+        result.append(FileRenameStatus(path=path_str, is_success=True, error_type=None))
+
+    return result

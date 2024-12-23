@@ -1,19 +1,24 @@
 import { useRef, useState, useEffect } from "react"
 import { FileInput, Label } from "flowbite-react"
 
-import { EmptyDropZone, FilesListDropZone, SuccessMsgDropZone } from "./DropZone"
-import { ImageFilesInputType, RenameStatusType } from "../../../utils/types"
+import {
+  EmptyDropZone,
+  FilesListDropZone,
+  SuccessOrFailedAllDropZone,
+  PartialFailedDropZone
+} from "./DropZone"
+import { ImageFilesInputType, FileRenameResultType } from "../../../utils/types"
 import Button from "../../common/Button"
 import ExampleOutput from "./ExampleOutput"
-import RenameErrorModal from "./RenameErrorModal"
+import RenameGeneralErrorModal from "./RenameGeneralErrorModal"
+import RenameErrorFileListModal from "./RenameErrorFileListModal"
 import ExternalLink from "../../common/ExternalLink"
 import { renameImages } from "../../../lib/api"
 import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
 import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
 import useCustomTextContext from "../../../contexts/main/CustomTextContext"
 import { useAppStore } from "../../../store/useAppStore"
-import { LicenseType } from "../../../utils/enums"
-import { APIErrorType, RenameGeneralStatusType } from "../../../utils/enums"
+import { APIErrorType, LicenseType } from "../../../utils/enums"
 import { WebsiteLinks } from "../../../utils/constants"
 import SVGUpload from "../../../assets/icons/Upload.svg?react"
 import SVGStar from "../../../assets/icons/Star.svg?react"
@@ -22,15 +27,20 @@ export default function RenameForm() {
   // Hooks
   const [fileInput, setFileInput] = useState<ImageFilesInputType>({
     ref: useRef<HTMLInputElement>(null),
-    imageFiles: null,
-    renamedAmount: 0
+    imageFiles: null
   })
+  const [renameResult, setRenameResult] = useState<{
+    successAll: boolean
+    failedAll: boolean
+    result: FileRenameResultType[]
+  }>({ successAll: false, failedAll: false, result: [] })
+  const [isFailedListModalOpen, setIsFailedListModalOpen] = useState(false)
+  const [generalError, setGeneralError] = useState<APIErrorType | null>(null)
   const [isLastFileRemoved, setIsLastFileRemoved] = useState<boolean>(false)
   const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsContext()
   const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
   const [isLoading, setIsLoading] = useState(false)
-  const [status, setStatus] = useState<RenameStatusType | null>(null)
   const { licenseType, freeTrialRemaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
 
   useEffect(() => {
@@ -60,18 +70,37 @@ export default function RenameForm() {
         isDisabled={isLoading}
       />
     )
-  } else if (status?.type === RenameGeneralStatusType.success) {
-    dropZone = <SuccessMsgDropZone renamedFiles={fileInput.renamedAmount} />
+  } else if (renameResult.result.length > 0) {
+    if (renameResult.successAll || renameResult.failedAll) {
+      dropZone = (
+        <SuccessOrFailedAllDropZone
+          amount={renameResult.result.length}
+          failed={renameResult.failedAll}
+          setIsFailedListModalOpen={setIsFailedListModalOpen}
+        />
+      )
+    } else {
+      dropZone = (
+        <PartialFailedDropZone
+          renameResult={renameResult.result}
+          setIsFailedListModalOpen={setIsFailedListModalOpen}
+        />
+      )
+    }
   }
 
   // General Functions
-  function resetStatus() {
-    setStatus(null)
+  function resetGeneralError() {
+    setGeneralError(null)
+  }
+
+  function resetRenameResult() {
+    setRenameResult({ successAll: false, failedAll: false, result: [] })
   }
 
   // Event handlers
-  function handleErrorModalClose() {
-    setStatus(null)
+  function handleGeneralErrorModalClose() {
+    resetGeneralError()
     if (licenseType === LicenseType.demo && freeTrialRemaining <= 0) {
       resetAppStore()
     }
@@ -93,7 +122,7 @@ export default function RenameForm() {
   }
 
   function handleFilesChange() {
-    resetStatus()
+    resetRenameResult()
 
     const fileInputElem = fileInput.ref.current as HTMLInputElement
     const newImageFiles = fileInputElem.files as FileList
@@ -196,30 +225,46 @@ export default function RenameForm() {
     }
 
     await renameImages(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "").then(
-      ({ isError, errorData }) => {
+      ({ isError, errorData, successData }) => {
         setIsLoading(false)
 
         if (isError) {
           if (errorData === null) {
             // unexpected
-            setStatus({
-              type: RenameGeneralStatusType.error,
-              error: { type: APIErrorType.unexpected, item: null }
-            })
+            setGeneralError(APIErrorType.unexpected)
           } else {
-            setStatus({
-              type: RenameGeneralStatusType.error,
-              error: { type: errorData["code"] as APIErrorType, item: errorData["detail"]["item"] }
-            })
+            setGeneralError(errorData["code"])
           }
         } else {
-          setStatus({ type: RenameGeneralStatusType.success, error: null })
-          setTimeout(() => resetStatus(), 5000)
+          const renameResult = successData.result
+
+          let resultAdjusted: FileRenameResultType[] = []
+          let successAll = true
+          let failedAll = true
+          for (let i = 0; i < renameResult.length; i++) {
+            const fileRenameStatus = renameResult[i]
+            if (fileRenameStatus.is_success) {
+              failedAll = false
+            } else {
+              successAll = false
+            }
+
+            const errorType = fileRenameStatus.error_type as APIErrorType
+            resultAdjusted.push({
+              path: fileRenameStatus.path,
+              isSuccess: fileRenameStatus.is_success,
+              errorType
+            })
+          }
+
+          setRenameResult({ successAll, failedAll, result: resultAdjusted })
+          if (successAll) {
+            setTimeout(() => resetRenameResult(), 5000)
+          }
         }
 
         setFileInput({
           ...fileInput,
-          renamedAmount: imageFiles ? imageFiles.length : 0,
           imageFiles: null
         })
         fileInput.ref.current && (fileInput.ref.current.value = "")
@@ -233,10 +278,15 @@ export default function RenameForm() {
 
   return (
     <>
-      <RenameErrorModal
-        isOpen={status?.type === RenameGeneralStatusType.error}
-        close={handleErrorModalClose}
-        status={status as RenameStatusType}
+      <RenameGeneralErrorModal
+        isOpen={generalError !== null}
+        close={handleGeneralErrorModalClose}
+        errorType={generalError as APIErrorType}
+      />
+      <RenameErrorFileListModal
+        isOpen={isFailedListModalOpen}
+        close={() => setIsFailedListModalOpen(false)}
+        renameResult={renameResult.result}
       />
       <div>
         {/* Heading */}
@@ -267,7 +317,7 @@ export default function RenameForm() {
             <Label
               id="dropzone-label"
               htmlFor="dropzone-file"
-              className={`flex h-64 w-full ${isFileInputEmpty && "cursor-pointer"} ${isLoading && "cursor-not-allowed"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && "hover:bg-accent-50"} ${isLoading && "hover:bg-white"}`}
+              className={`flex h-64 w-full ${isFileInputEmpty && renameResult.result.length === 0 && "cursor-pointer"} ${isLoading && "cursor-not-allowed"} flex-col items-center ${isFileInputEmpty && "justify-center"} rounded-t-lg border border-dashed border-primary-600 transition-colors duration-200 ${isFileInputEmpty && renameResult.result.length === 0 && "hover:bg-accent-50"} ${isLoading && "hover:bg-white"}`}
               onDragOver={handleFileDragOver}
               onDrop={handleFileDrop}>
               {dropZone}
@@ -277,7 +327,9 @@ export default function RenameForm() {
                 id="dropzone-file"
                 className="hidden"
                 accept={FILE_TYPES.join(",")}
-                disabled={!isFileInputEmpty || isLastFileRemoved || isLoading}
+                disabled={
+                  !isFileInputEmpty || isLastFileRemoved || isLoading || renameResult.result.length > 0
+                }
                 multiple
               />
             </Label>

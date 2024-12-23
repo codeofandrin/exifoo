@@ -1,8 +1,3 @@
-export enum RenameGeneralStatusType {
-    success,
-    error
-}
-
 export enum APIErrorType {
     unexpected = 0,
 

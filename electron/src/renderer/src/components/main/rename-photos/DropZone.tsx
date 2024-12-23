@@ -1,8 +1,9 @@
-import { ImageFilesInputType } from "../../../utils/types"
+import { ImageFilesInputType, FileRenameResultType } from "../../../utils/types"
 import { getTruncatedText, countInArray, getParentFolderStr } from "../../../utils/helpers"
 import SVGImage from "../../../assets/icons/Image.svg?react"
 import SVGX from "../../../assets/icons/X.svg?react"
 import SVGCheck from "../../../assets/icons/Check.svg?react"
+import SVGAlertTriangle from "../../../assets/icons/AlertTriangle.svg?react"
 
 interface EmptyDropZonePropsType {
   isDisabled: boolean
@@ -18,21 +19,108 @@ export function EmptyDropZone({ isDisabled }: EmptyDropZonePropsType) {
   )
 }
 
-interface SuccessMsgDropZonePropsType {
-  renamedFiles: number
+interface PartialFailedDropZonePropsType {
+  renameResult: FileRenameResultType[]
+  setIsFailedListModalOpen: Function
 }
 
-export function SuccessMsgDropZone({ renamedFiles }: SuccessMsgDropZonePropsType) {
+export function PartialFailedDropZone({
+  renameResult,
+  setIsFailedListModalOpen
+}: PartialFailedDropZonePropsType) {
+  const statusAmount = renameResult.length
+  let successAmount = 0
+  for (let i = 0; i < statusAmount; i++) {
+    if (renameResult[i].isSuccess) {
+      successAmount += 1
+    }
+  }
+  const failedAmount = statusAmount - successAmount
+
+  function handleSeeFailedList() {
+    setIsFailedListModalOpen(true)
+  }
+
   return (
     <div className="flex flex-col items-center pb-6 pt-5">
-      <div className="rounded-full bg-green-100/75 p-2">
-        <div className="rounded-full bg-green-200/75 p-2">
-          <SVGCheck className="w-7 text-green-500" />
+      <div className="rounded-full bg-yellow-100/75 p-2">
+        <div className="rounded-full bg-yellow-200/75 p-2">
+          <SVGAlertTriangle className="w-7 text-yellow-500" />
         </div>
       </div>
-      <p className="font-md mb-2 mt-2 text-sm text-neutral-700">
-        Successfully renamed {renamedFiles} photos.
+      <div className="font-md mb-2 mt-2 text-sm text-neutral-700">
+        <p>
+          <span className="font-bold text-green-500">{successAmount}</span>{" "}
+          {successAmount === 1 ? "photo" : "photos"} successfully renamed.
+        </p>
+        <div className="mt-1 flex">
+          <p>
+            <span className="font-bold text-red-600">{failedAmount}</span>{" "}
+            {failedAmount === 1 ? "photo" : "photos"} failed.
+          </p>
+          <button className="ml-2 text-xs text-neutral-500 hover:underline" onClick={handleSeeFailedList}>
+            See why
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+interface SuccessOrFailedAllDropZonePropsType {
+  amount: number
+  failed: boolean
+  setIsFailedListModalOpen: Function
+}
+
+export function SuccessOrFailedAllDropZone({
+  amount,
+  failed,
+  setIsFailedListModalOpen
+}: SuccessOrFailedAllDropZonePropsType) {
+  let icon = (
+    <div className="rounded-full bg-green-100/75 p-2">
+      <div className="rounded-full bg-green-200/75 p-2">
+        <SVGCheck className="w-7 text-green-500" />
+      </div>
+    </div>
+  )
+  let text = (
+    <div className="font-md mb-2 mt-2 text-sm text-neutral-700">
+      <p>
+        Successfully renamed {amount} {amount === 1 ? "photo" : "photos"}.
       </p>
+    </div>
+  )
+
+  if (failed) {
+    function handleSeeFailedList() {
+      setIsFailedListModalOpen(true)
+    }
+
+    icon = (
+      <div className="rounded-full bg-red-100/75 p-2">
+        <div className="rounded-full bg-red-200/75 p-2">
+          <SVGX className="w-7 text-red-500" />
+        </div>
+      </div>
+    )
+    text = (
+      <div className="font-md mb-2 mt-2 flex text-sm text-neutral-700">
+        <p>All photos ({amount}) failed.</p>
+        <button
+          className="ml-2 text-xs text-neutral-500 underline decoration-transparent transition-colors duration-200 hover:text-neutral-600 hover:decoration-neutral-600"
+          onClick={handleSeeFailedList}>
+          See why
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col items-center pb-6 pt-5">
+      {icon}
+      <div className="font-md mb-2 mt-2 text-sm text-neutral-700">{text}</div>
     </div>
   )
 }

@@ -1,6 +1,6 @@
 import { RefObject } from "react"
 
-import { RenameGeneralStatusType, APIErrorType } from "./enums"
+import { APIErrorType } from "./enums"
 
 export interface APIErrorDataType {
     code: number
@@ -13,17 +13,6 @@ export interface APIRequestResponseType {
     successData: any | null
 }
 
-export interface RenameStatusType {
-    type: RenameGeneralStatusType
-    error: { type: APIErrorType; item: string | null } | null
-}
-
-export interface RenameStatusContextType {
-    status: RenameStatusType | null
-    setStatus: Function
-    resetStatus: Function
-}
-
 export interface DefaultProviderPropsType {
     children: React.ReactElement
 }
@@ -31,7 +20,12 @@ export interface DefaultProviderPropsType {
 export interface ImageFilesInputType {
     ref: RefObject<HTMLInputElement>
     imageFiles: FileList | null
-    renamedAmount: number
+}
+
+export interface FileRenameResultType {
+    path: string
+    isSuccess: boolean
+    errorType: APIErrorType | null
 }
 
 export interface DateOptionsContextType {

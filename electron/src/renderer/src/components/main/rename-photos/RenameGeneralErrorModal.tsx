@@ -4,27 +4,10 @@ import Button from "../../common/Button"
 import ExternalLink from "../../common/ExternalLink"
 import { EMail } from "../../../utils/constants"
 import { APIErrorType } from "../../../utils/enums"
-import { RenameStatusType } from "../../../utils/types"
-import { getParentFolderStr, getFileName } from "../../../utils/helpers"
 import SVGX from "../../../assets/icons/X.svg?react"
 import SVGHelpCircle from "../../../assets/icons/HelpCircle.svg?react"
 import SVGInfo from "../../../assets/icons/Info.svg?react"
 import ImgFreeTrialIllus from "../../../assets/images//free_trial_illus.png"
-
-function getItemErrorMsg(errorType: APIErrorType): string {
-  let statusMsg = ""
-  switch (errorType) {
-    case APIErrorType.invalidFileType:
-      statusMsg = "Invalid file type."
-      break
-
-    case APIErrorType.noExifData:
-      statusMsg = "No exif data found."
-      break
-  }
-
-  return statusMsg
-}
 
 const modalTheme = {
   root: {
@@ -38,15 +21,24 @@ const modalTheme = {
   }
 }
 
-interface RenameErrorModalPropsType {
+interface RenameGeneralErrorModalPropsType {
   isOpen: boolean
   close: Function
-  status: RenameStatusType
+  errorType: APIErrorType
 }
 
-export default function RenameErrorModal({ isOpen, close, status }: RenameErrorModalPropsType) {
+export default function RenameGeneralErrorModal({
+  isOpen,
+  close,
+  errorType
+}: RenameGeneralErrorModalPropsType) {
   let errorTitle = "Something went wrong"
-  let errorMsg
+  let errorMsg = (
+    <>
+      <p>Renaming photos failed.</p>
+      <p>Something went wrong unexpectedly. Please try again.</p>
+    </>
+  )
   let showHelpCircle = true
   let img: string | null = null
   let btnText = "Close"
@@ -59,56 +51,29 @@ export default function RenameErrorModal({ isOpen, close, status }: RenameErrorM
   )
 
   if (isOpen) {
-    const errorType = status.error?.type as APIErrorType
-    const errorItem = status.error?.item as string
-    const isItemError = [APIErrorType.invalidFileType, APIErrorType.noExifData].includes(errorType)
-    if (isItemError) {
-      const parentFolder = getParentFolderStr(errorItem)
-      const fileName = getFileName(errorItem)
+    if (errorType === APIErrorType.freeTrialExpired) {
+      errorTitle = "Free Trial used up"
       errorMsg = (
         <>
           <p>
-            Renaming{" "}
-            <code className="bg-neutral-100 p-0.5 text-code text-neutral-600">
-              {parentFolder}/${fileName}
-            </code>{" "}
-            failed.
+            It looks like you just used up your free trial. Please consider purchasing and activating a
+            license.
           </p>
-          <p>{getItemErrorMsg(errorType)}</p>
+          <p className="mt-2">
+            Clicking the button will take you back to the start, where you can activate your license.
+          </p>
         </>
       )
-    } else {
-      if (APIErrorType.freeTrialExpired) {
-        errorTitle = "Free Trial used up"
-        errorMsg = (
-          <>
-            <p>
-              It looks like you just used up your free trial. Please consider purchasing and activating a
-              license.
-            </p>
-            <p className="mt-2">
-              Clicking the button will take you back to the start, where you can activate your license.
-            </p>
-          </>
-        )
-        showHelpCircle = false
-        img = ImgFreeTrialIllus
-        btnText = "Got it"
-        icon = (
-          <div className="rounded-full bg-yellow-100/50 p-2">
-            <div className="rounded-full bg-yellow-200/50 p-2">
-              <SVGInfo className="w-6 text-yellow-500" />
-            </div>
+      showHelpCircle = false
+      img = ImgFreeTrialIllus
+      btnText = "Got it"
+      icon = (
+        <div className="rounded-full bg-yellow-100/50 p-2">
+          <div className="rounded-full bg-yellow-200/50 p-2">
+            <SVGInfo className="w-6 text-yellow-500" />
           </div>
-        )
-      } else {
-        errorMsg = (
-          <>
-            <p>Renaming photos failed.</p>
-            <p>Something went wrong unexpectedly. Please try again.</p>
-          </>
-        )
-      }
+        </div>
+      )
     }
   }
 

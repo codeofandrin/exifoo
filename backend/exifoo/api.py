@@ -78,7 +78,7 @@ async def rename(payload: RenamePayload):
                 ),
             )
         else:
-            rename_images(
+            result = rename_images(
                 paths=payload.paths,
                 date_options=payload.date_options,
                 time_options=payload.time_options,
@@ -97,16 +97,42 @@ async def rename(payload: RenamePayload):
                 )
 
             free_trial_storage.store(files_remaining=remaining)
-            return JSONResponse(content={"msg": "Successful"}, status_code=200)
+            return JSONResponse(
+                content={
+                    "msg": "Successful",
+                    "result": [
+                        {
+                            "path": status.path,
+                            "is_success": status.is_success,
+                            "error_type": status.error_type.value if status.error_type is not None else None,
+                        }
+                        for status in result
+                    ],
+                },
+                status_code=200,
+            )
 
     elif app_access.is_full():
-        rename_images(
+        result = rename_images(
             paths=payload.paths,
             date_options=payload.date_options,
             time_options=payload.time_options,
             custom_text=payload.custom_text,
         )
-        return JSONResponse(content={"msg": "Successful"}, status_code=200)
+        return JSONResponse(
+            content={
+                "msg": "Successful",
+                "result": [
+                    {
+                        "path": status.path,
+                        "is_success": status.is_success,
+                        "error_type": status.error_type.value if status.error_type is not None else None,
+                    }
+                    for status in result
+                ],
+            },
+            status_code=200,
+        )
 
     else:
         raise APIException(
