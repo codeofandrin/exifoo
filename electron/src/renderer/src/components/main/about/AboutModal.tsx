@@ -145,10 +145,10 @@ interface LicenseInfoPropsType {
 }
 
 function LicenseInfo({ setIsDeactivateModalOpen, setIsActivateLicenseOpen }: LicenseInfoPropsType) {
-  const { license_type, license_key_short } = useAppStore()
+  const { licenseType, licenseKeyShort } = useAppStore()
 
   let content
-  if (license_type === LicenseType.full) {
+  if (licenseType === LicenseType.full) {
     function handleDeactivateLicense() {
       setIsDeactivateModalOpen(true)
     }
@@ -157,7 +157,7 @@ function LicenseInfo({ setIsDeactivateModalOpen, setIsActivateLicenseOpen }: Lic
       <>
         <p className="font-medium">Full version</p>
         <p className="mt-1">
-          License key: <span className="text-neutral-500">{license_key_short}</span>
+          License key: <span className="text-neutral-500">{licenseKeyShort}</span>
         </p>
         <div className="mt-3 flex justify-center pb-6">
           <Button color="critical" size="xs" className={`${bodyBtnWidth}`} onClick={handleDeactivateLicense}>

@@ -17,9 +17,9 @@ registerUpdaterEvents()
 
 export default function Main() {
   const { isOpen: isActivateLicenseOpen, setIsOpen: setIsActivateLicenseOpen } = useActivateLicenseStore()
-  const { license_type } = useAppStore()
+  const { licenseType } = useAppStore()
 
-  const isDemo = license_type === LicenseType.demo
+  const isDemo = licenseType === LicenseType.demo
 
   return (
     <>

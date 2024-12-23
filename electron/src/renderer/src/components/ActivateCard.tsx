@@ -62,12 +62,12 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
             setUnexpectedError()
           } else {
             const activateErrorType = activateErrorData.code as APIErrorType
-            if (activateErrorType === APIErrorType.license_used) {
+            if (activateErrorType === APIErrorType.licenseUsed) {
               setError({
                 title: "License already in use",
                 desc: "It looks like this license is already active on another device. Please deactivate it on the other device or contact support if you think this is a mistake."
               })
-            } else if (activateErrorType === APIErrorType.license_invalid) {
+            } else if (activateErrorType === APIErrorType.licenseInvalid) {
               setError({
                 title: "License key invalid",
                 desc: "This license key is not valid, please try again. If you think this is a mistake, please contact support."

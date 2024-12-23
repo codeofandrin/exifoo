@@ -4,9 +4,9 @@ import { AppStatusType, LicenseType } from "../utils/enums"
 
 interface AppStoreStatesType {
     status: AppStatusType
-    license_type: LicenseType | null
-    license_key_short: string | null
-    free_trial_remaining: number
+    licenseType: LicenseType | null
+    licenseKeyShort: string | null
+    freeTrialRemaining: number
 }
 
 interface AppStoreActions {
@@ -19,17 +19,17 @@ interface AppStoreActions {
 
 const initialStates: AppStoreStatesType = {
     status: AppStatusType.start,
-    license_type: null,
-    license_key_short: null,
-    free_trial_remaining: 0
+    licenseType: null,
+    licenseKeyShort: null,
+    freeTrialRemaining: 0
 }
 
 export const useAppStore = create<AppStoreStatesType & AppStoreActions>()((set) => ({
     ...initialStates,
     setStatus: (status) => set({ status: status }),
-    setLicenseType: (type) => set({ license_type: type }),
-    setLicenseKeyShort: (key) => set({ license_key_short: key }),
-    setFreeTrialRemaining: (remaining) => set({ free_trial_remaining: remaining }),
+    setLicenseType: (type) => set({ licenseType: type }),
+    setLicenseKeyShort: (key) => set({ licenseKeyShort: key }),
+    setFreeTrialRemaining: (remaining) => set({ freeTrialRemaining: remaining }),
     reset: () => {
         set(initialStates)
     }

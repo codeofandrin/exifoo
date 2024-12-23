@@ -24,9 +24,7 @@ async function validateFreeTrial(
           setIsError(true)
         } else {
           const validateErrorType = validateErrorData.code as APIErrorType
-          if (
-            [APIErrorType.free_trial_expired, APIErrorType.free_trial_not_found].includes(validateErrorType)
-          ) {
+          if ([APIErrorType.freeTrialExpired, APIErrorType.freeTrialNotFound].includes(validateErrorType)) {
             // no free trial -> let's validate license
             setIsReadyForValidateLicense(true)
           } else {
@@ -58,8 +56,8 @@ async function validateLicense(
           setIsError(true)
         } else {
           const validateErrorType = validateErrorData.code as APIErrorType
-          if ([APIErrorType.license_not_found, APIErrorType.license_invalid].includes(validateErrorType)) {
-            setStatus(AppStatusType.get_started)
+          if ([APIErrorType.licenseNotFound, APIErrorType.licenseInvalid].includes(validateErrorType)) {
+            setStatus(AppStatusType.getStarted)
           } else {
             // unexpected
             setIsError(true)

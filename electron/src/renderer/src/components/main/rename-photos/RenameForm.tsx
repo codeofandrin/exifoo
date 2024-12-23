@@ -31,7 +31,7 @@ export default function RenameForm() {
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
   const [isLoading, setIsLoading] = useState(false)
   const [status, setStatus] = useState<RenameStatusType | null>(null)
-  const { license_type, free_trial_remaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
+  const { licenseType, freeTrialRemaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -47,7 +47,7 @@ export default function RenameForm() {
   const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
   const renameText = isLoading ? "Renaming..." : "Rename"
   let remainingTextStyle = "text-inherhit"
-  if (free_trial_remaining <= 10) {
+  if (freeTrialRemaining <= 10) {
     remainingTextStyle = "text-red-500 font-bold"
   }
   let dropZone = <EmptyDropZone isDisabled={isLoading} />
@@ -72,7 +72,7 @@ export default function RenameForm() {
   // Event handlers
   function handleErrorModalClose() {
     setStatus(null)
-    if (license_type === LicenseType.demo && free_trial_remaining <= 0) {
+    if (licenseType === LicenseType.demo && freeTrialRemaining <= 0) {
       resetAppStore()
     }
   }
@@ -124,9 +124,9 @@ export default function RenameForm() {
     }
 
     if (updatedImageFiles.length > 0) {
-      if (license_type === LicenseType.demo && updatedImageFiles.length > free_trial_remaining) {
+      if (licenseType === LicenseType.demo && updatedImageFiles.length > freeTrialRemaining) {
         let slicedUpdatedImageFiles = new DataTransfer()
-        for (let i = 0; i < free_trial_remaining; i++) {
+        for (let i = 0; i < freeTrialRemaining; i++) {
           slicedUpdatedImageFiles.items.add(updatedImageFiles[i])
         }
 
@@ -224,8 +224,8 @@ export default function RenameForm() {
         })
         fileInput.ref.current && (fileInput.ref.current.value = "")
 
-        if (license_type === LicenseType.demo) {
-          setFreeTrialRemaining(free_trial_remaining - filePaths.length) // TODO: Replace this with data from backend API
+        if (licenseType === LicenseType.demo) {
+          setFreeTrialRemaining(freeTrialRemaining - filePaths.length) // TODO: Replace this with data from backend API
         }
       }
     )
@@ -243,11 +243,11 @@ export default function RenameForm() {
         <div>
           <h1 className="text-xl font-semibold text-neutral-800">Rename Photos</h1>
           <p className="mt-1 text-sm text-neutral-700">You can add photos in png, jpeg, and jpg format</p>
-          {license_type === LicenseType.demo && (
+          {licenseType === LicenseType.demo && (
             <div className={`mt-[0.75rem] flex items-center text-xs font-medium text-neutral-400`}>
               <p>
-                <span className={`${remainingTextStyle}`}>{free_trial_remaining}</span>{" "}
-                {free_trial_remaining === 1 ? "file" : "files"} remaining
+                <span className={`${remainingTextStyle}`}>{freeTrialRemaining}</span>{" "}
+                {freeTrialRemaining === 1 ? "file" : "files"} remaining
               </p>
               <p className="mx-1">•</p>
               <ExternalLink
@@ -261,7 +261,7 @@ export default function RenameForm() {
           )}
         </div>
         {/* Form */}
-        <div className={`${license_type === LicenseType.demo ? "mt-1" : "mt-8"} w-[35rem]`}>
+        <div className={`${licenseType === LicenseType.demo ? "mt-1" : "mt-8"} w-[35rem]`}>
           {/* File Drop Zone */}
           <div className="flex w-full items-center justify-center">
             <Label

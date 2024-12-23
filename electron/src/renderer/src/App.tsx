@@ -10,7 +10,7 @@ export default function App() {
   if (status === AppStatusType.start) {
     return <Start />
   }
-  if (status === AppStatusType.get_started) {
+  if (status === AppStatusType.getStarted) {
     return <GetStarted />
   }
   if (status === AppStatusType.main) {

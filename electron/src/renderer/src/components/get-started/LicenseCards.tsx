@@ -133,7 +133,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
             setUnexpectedError()
           } else {
             const activateErrorType = activateErrorData.code as APIErrorType
-            if (activateErrorType === APIErrorType.free_trial_expired) {
+            if (activateErrorType === APIErrorType.freeTrialExpired) {
               setError({
                 title: "Free Trial expired",
                 desc: "It looks like you've already used your free trial. Please consider purchasing and activating a license."

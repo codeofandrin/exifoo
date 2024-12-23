@@ -78,7 +78,7 @@ export default function RenameErrorModal({ isOpen, close, status }: RenameErrorM
         </>
       )
     } else {
-      if (APIErrorType.free_trial_expired) {
+      if (APIErrorType.freeTrialExpired) {
         errorTitle = "Free Trial used up"
         errorMsg = (
           <>
