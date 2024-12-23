@@ -165,7 +165,7 @@ function TimeOptions() {
   )
 }
 
-export function isValidCustomText(value: string): boolean {
+function isValidCustomText(value: string): boolean {
   const macOSFileNameRegex = new RegExp(String.raw`^[^/]{0,${CUSTOM_TEXT_MAX_LEN}}$`, "g")
   return macOSFileNameRegex.test(value)
 }
