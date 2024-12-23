@@ -41,15 +41,22 @@ jobs:
         id: create-backend-env
         run: |
           cd backend
+          ls -a
           touch env.py
           echo "import os" >> env.py
           echo 'os.environ["STORAGE_KEY"] = ${{ secrets.STORAGE_KEY }}' >> env.py
           echo 'os.environ["SUPABASE_URL"] = ${{ secrets.SUPABASE_URL }}' >> env.py
           echo 'os.environ["SUPABASE_KEY"] = ${{ secrets.SUPABASE_KEY }}' >> env.py
+          ls -a
+          cat env.py
 
       - name: Build backend executable
         id: build-backend
-        run: npm run build-backend
+        run: | 
+          cd backend
+          ls -a
+          cd ..
+          npm run build-backend
 
       - name: Prepare for app notarization
         if: startsWith(matrix.os, 'macos')
