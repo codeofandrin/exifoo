@@ -92,7 +92,19 @@ app.whenReady().then(() => {
     app.on("activate", function () {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.
-        if (BrowserWindow.getAllWindows().length === 0) createWindow()
+        if (BrowserWindow.getAllWindows().length === 0) {
+            if (is.dev) {
+                createWindow()
+            } else {
+                runBackend()
+                    .then(() => {
+                        createWindow()
+                    })
+                    .catch((error) => {
+                        log.error(error)
+                    })
+            }
+        }
     })
 })
 
@@ -104,7 +116,12 @@ app.on("ready", () => {
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on("window-all-closed", () => {
-    if (process.platform !== "darwin") {
+    if (process.platform === "darwin") {
+        // in development server is killed manually
+        if (!is.dev) {
+            killBackend()
+        }
+    } else {
         app.quit()
     }
 })
