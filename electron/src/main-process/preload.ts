@@ -19,6 +19,8 @@ const electronAPI = {
     checkForUpdates: () => send("check-for-updates"),
     quitAndInstallUpdate: () => send("quit-and-install-update"),
     removeShowAboutListeners: () => ipcRenderer.removeAllListeners("show-about"),
+    logError: (error: Error, info: React.ErrorInfo) => send("log-error", error, info),
+    restart: () => send("restart"),
 
     // Listener
     onShowAbout: listenNoData("show-about"),

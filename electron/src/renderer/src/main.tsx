@@ -2,8 +2,10 @@
 
 import React from "react"
 import ReactDOM from "react-dom/client"
+import { ErrorBoundary } from "react-error-boundary"
 
 import App from "./App"
+import GlobalError, { logError } from "./components/GlobalError"
 import "./styles/main.css"
 
 declare global {
@@ -14,6 +16,8 @@ declare global {
       checkForUpdates: Function
       quitAndInstallUpdate: Function
       removeShowAboutListeners: Function
+      logError: Function
+      restart: Function
       // Listener
       onShowAbout: Function
       onCheckingForUpdate: Function
@@ -28,6 +32,8 @@ declare global {
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <React.StrictMode>
-    <App />
+    <ErrorBoundary fallbackRender={GlobalError} onError={logError}>
+      <App />
+    </ErrorBoundary>
   </React.StrictMode>
 )

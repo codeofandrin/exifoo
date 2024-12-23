@@ -1,5 +1,7 @@
-import { ipcMain, Menu } from "electron"
+import { ipcMain, Menu, app } from "electron"
 import type { MenuItem } from "electron"
+import log from "electron-log/main"
+import { ErrorInfo } from "react"
 
 import { mainWindow } from "./main"
 import { checkForUpdates, quitAndInstall } from "./auto-updater"
@@ -41,5 +43,15 @@ export function registerIpcEvents() {
 
     ipcMain.on("quit-and-install-update", (_event) => {
         quitAndInstall()
+    })
+
+    ipcMain.on("log-error", (_event, error: Error, info: ErrorInfo) => {
+        log.error(`[renderer] ${error} ${info.componentStack}`)
+    })
+
+    ipcMain.on("restart", (_event) => {
+        log.info("restart app")
+        app.relaunch()
+        app.exit()
     })
 }
