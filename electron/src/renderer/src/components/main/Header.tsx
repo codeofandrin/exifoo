@@ -11,13 +11,20 @@ export default function Header() {
     window.electronAPI.menuAbout(isAboutModalOpen)
   }, [isAboutModalOpen])
 
+  // register/unregiser onShowAbout on mount/unmount
+  useEffect(() => {
+    window.electronAPI.onShowAbout(() => {
+      handleAboutClick()
+    })
+
+    return function cleanup() {
+      window.electronAPI.removeShowAboutListeners()
+    }
+  }, [])
+
   function handleAboutClick() {
     setIsAboutModalOpen(true)
   }
-
-  window.electronAPI.onShowAbout(() => {
-    handleAboutClick()
-  })
 
   return (
     <>

@@ -18,6 +18,7 @@ const electronAPI = {
     menuAbout: (isOpen: boolean) => send("menu-about", isOpen),
     checkForUpdates: () => send("check-for-updates"),
     quitAndInstallUpdate: () => send("quit-and-install-update"),
+    removeShowAboutListeners: () => ipcRenderer.removeAllListeners("show-about"),
 
     // Listener
     onShowAbout: listenNoData("show-about"),

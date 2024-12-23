@@ -13,6 +13,7 @@ declare global {
       menuAbout: Function
       checkForUpdates: Function
       quitAndInstallUpdate: Function
+      removeShowAboutListeners: Function
       // Listener
       onShowAbout: Function
       onCheckingForUpdate: Function
