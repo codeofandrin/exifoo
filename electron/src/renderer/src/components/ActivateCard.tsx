@@ -47,7 +47,9 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
     const setUnexpectedError = () =>
       setError({
         title: "Something went wrong",
-        desc: "An unexpected error occurred while activating your license, please try again. If the issue persists, please contact support."
+        desc: `An unexpected error occurred while activating your license.
+              Please make sure you have a network connection and try again. 
+              If the issue persists, please contact support.`
       })
 
     await activateLicense(licenseKey).then(
