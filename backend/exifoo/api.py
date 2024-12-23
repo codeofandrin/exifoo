@@ -123,11 +123,12 @@ class LicenseActivatePayload(BaseModel):
 
 @app.post("/license/activate")
 async def license_activate(payload: LicenseActivatePayload):
+    license_key = payload.key
+    instance_id = lemsqzy.activate(key=license_key, machine_id=MACHINE_ID)
+
     if free_trial_storage.is_stored():
         free_trial_storage.delete()
 
-    license_key = payload.key
-    instance_id = lemsqzy.activate(key=license_key, machine_id=MACHINE_ID)
     license_storage.store(key=license_key, instance_id=instance_id)
     app_access.set_access(AppAccessType.full)
 
