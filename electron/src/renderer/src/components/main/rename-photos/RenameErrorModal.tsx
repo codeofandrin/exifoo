@@ -95,9 +95,9 @@ export default function RenameErrorModal({ isOpen, close, status }: RenameErrorM
         img = ImgFreeTrialIllus
         btnText = "Got it"
         icon = (
-          <div className="rounded-full bg-accent-100/50 p-2">
-            <div className="rounded-full bg-accent-200/50 p-2">
-              <SVGInfo className="w-6 text-accent-600" />
+          <div className="rounded-full bg-yellow-100/50 p-2">
+            <div className="rounded-full bg-yellow-200/50 p-2">
+              <SVGInfo className="w-6 text-yellow-500" />
             </div>
           </div>
         )
