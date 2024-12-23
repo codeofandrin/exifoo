@@ -80,13 +80,10 @@ app.whenReady().then(() => {
         createWindow()
     } else {
         // in development backend is started manually
-        runBackend()
-            .then(() => {
-                createWindow()
-            })
-            .catch((error) => {
-                log.error(error)
-            })
+        createWindow()
+        runBackend().catch((error) => {
+            log.error(error)
+        })
     }
 
     app.on("activate", function () {
@@ -96,13 +93,10 @@ app.whenReady().then(() => {
             if (is.dev) {
                 createWindow()
             } else {
-                runBackend()
-                    .then(() => {
-                        createWindow()
-                    })
-                    .catch((error) => {
-                        log.error(error)
-                    })
+                createWindow()
+                runBackend().catch((error) => {
+                    log.error(error)
+                })
             }
         }
     })
