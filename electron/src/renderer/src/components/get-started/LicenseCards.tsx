@@ -4,7 +4,8 @@ import { Card as FlowbiteCard } from "flowbite-react"
 
 import Button from "../common/Button"
 import ExternalLink from "../common/ExternalLink"
-import ErrorModal from "../ActivateErrorModal"
+import ActivateErrorModal from "../ActivateErrorModal"
+import FreeTrialSuccessModal from "./FreeTrialSuccessModal"
 import { WebsiteLinks } from "../../utils/constants"
 import { ErrorModalType } from "../../utils/types"
 import { activateFreeTrial } from "../../lib/api"
@@ -57,10 +58,10 @@ function LicenseCard({
   return (
     <FlowbiteCard theme={theme} className={`${className}`}>
       <img src={img} className="h-32" />
-      <h1 className="mt-2 text-xl font-semibold text-neutral-700">{title}</h1>
+      <h1 className="mt-3 text-xl font-semibold text-neutral-700">{title}</h1>
       <p className="mt-2 max-w-60 text-center text-xs text-neutral-700">{desc}</p>
       {/* Features */}
-      <div className="mt-3 justify-end">
+      <div className="mt-4 justify-end">
         {features.map(({ text, active }, i) => {
           const circleBgColor = active ? "bg-primary-500" : "bg-neutral-300"
           const textColor = active ? "text-neutral-500" : "text-neutral-300"
@@ -79,7 +80,7 @@ function LicenseCard({
           )
         })}
       </div>
-      <div className="mt-7 w-full">
+      <div className="mt-9 w-full">
         <Button
           className={`${btnText.weight} w-full rounded-full`}
           size="sm-xs"
@@ -107,6 +108,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
   const [error, setError] = useState<ErrorModalType | null>(null)
   const [isFreeTrialLoading, setIsFreeTrialLoading] = useState(false)
   const { setStatus, setLicenseType, setFreeTrialRemaining } = useAppStore()
+  const [isFreeTrialSuccess, setIsFreeTrialSuccess] = useState(false)
 
   const isError = error !== null
 
@@ -142,9 +144,10 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
             }
           }
         } else {
-          setStatus(AppStatusType.main)
           setLicenseType(LicenseType.demo)
           setFreeTrialRemaining(successData.files_remaining)
+          // open success modal
+          setIsFreeTrialSuccess(true)
         }
       }
     )
@@ -154,20 +157,25 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
     setIsActivatePrompt(true)
   }
 
+  function handleFreeTrialContinue() {
+    setStatus(AppStatusType.main)
+  }
+
   return (
     <>
-      <ErrorModal
+      <ActivateErrorModal
         isOpen={isError}
         close={() => setError(null)}
         title={error?.title as string}
         desc={error?.desc as string}
         img={ImgFreeTrialIllus}
       />
+      <FreeTrialSuccessModal isOpen={isFreeTrialSuccess} close={handleFreeTrialContinue} />
       <div className="mt-14 flex items-center justify-center">
         {/* Free Trial */}
         <LicenseCard
           title="Free Trial"
-          desc="Try it out for free with the demo version (limited to 10 photos)."
+          desc="Try it out for free with the demo version."
           features={[
             { text: "All features included", active: true },
             { text: "Unlimited photos", active: false }
@@ -181,8 +189,8 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
         {/* Paid License */}
         <LicenseCard
           className="ml-24"
-          title="Paid License"
-          desc="Active your paid license to get full access."
+          title="License"
+          desc="Activate your license. Enjoy full access."
           features={[
             { text: "All features included", active: true },
             { text: "Unlimited photos", active: true }
