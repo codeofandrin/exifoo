@@ -43,6 +43,13 @@ export default function RenameForm() {
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
   const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
   const renameText = isLoading ? "Renaming..." : "Rename"
+  let remainingColor = "text-green-400"
+  if (free_trial_remaining <= 5) {
+    remainingColor = "text-red-500"
+  } else if (free_trial_remaining < 10) {
+    remainingColor = "text-yellow-400"
+  }
+
   let dropZone = <EmptyDropZone isDisabled={isLoading} />
   if (fileInput.imageFiles) {
     dropZone = (
@@ -236,9 +243,14 @@ export default function RenameForm() {
         <div>
           <h1 className="text-xl font-semibold text-neutral-800">Rename Photos</h1>
           <p className="mt-1 text-sm text-neutral-700">You can add photos in png, jpeg, and jpg format</p>
+          {license_type === LicenseType.demo && (
+            <p className={`mt-[0.75rem] text-xs font-medium text-neutral-400 ${remainingColor}`}>
+              {free_trial_remaining} {free_trial_remaining === 1 ? "file" : "files"} remaining
+            </p>
+          )}
         </div>
         {/* Form */}
-        <div className="mt-8 w-[35rem]">
+        <div className={`${license_type === LicenseType.demo ? "mt-1" : "mt-8"} w-[35rem]`}>
           {/* File Drop Zone */}
           <div className="flex w-full items-center justify-center">
             <Label
