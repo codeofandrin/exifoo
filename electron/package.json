@@ -22,6 +22,7 @@
     "postinstall": "electron-builder install-app-deps",
     "local-build:win": "npm run prebuild && electron-builder --win",
     "local-build:mac": "npm run prebuild && dotenvx run -- electron-builder --mac",
+    "local-build-no-sign:mac": "npm run prebuild && dotenvx run -- electron-builder --mac -c.mac.identity=null",
     "local-build:linux": "npm run prebuild && electron-builder --linux"
   },
   "dependencies": {
