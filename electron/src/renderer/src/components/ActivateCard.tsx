@@ -5,7 +5,7 @@ import { Card as FlowbiteCard } from "flowbite-react"
 import Button from "./common/Button"
 import TextInput from "./common/TextInput"
 import ActivateErrorModal from "./ActivateErrorModal"
-import ActivateSuccessModal from "./ActivateSuccessModal"
+import LicenseSuccessModal from "./LicenseSuccessModal"
 import { ErrorModalType } from "../utils/types"
 import { activateLicense } from "../lib/api"
 import { APIErrorType, AppStatusType, LicenseType } from "../utils/enums"
@@ -102,7 +102,7 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
         desc={error?.desc as string}
         img={ImgActivateLicenseIllus}
       />
-      <ActivateSuccessModal isOpen={isSuccess} close={handleContinue} />
+      <LicenseSuccessModal isOpen={isSuccess} close={handleContinue} />
       <div className="mt-14 flex items-center justify-center">
         <FlowbiteCard theme={theme} className="relative">
           <div className="absolute left-0 top-0 ml-2 mt-2">

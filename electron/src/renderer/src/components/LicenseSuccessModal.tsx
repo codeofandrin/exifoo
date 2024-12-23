@@ -12,12 +12,12 @@ const modalTheme = {
   }
 }
 
-interface ActivateSuccessModalPropsType {
+interface LicenseSuccessModalPropsType {
   isOpen: boolean
   close: Function
 }
 
-export default function ActivateSuccessModal({ isOpen, close }: ActivateSuccessModalPropsType) {
+export default function LicenseSuccessModal({ isOpen, close }: LicenseSuccessModalPropsType) {
   function handleClose() {
     close()
   }
@@ -44,10 +44,11 @@ export default function ActivateSuccessModal({ isOpen, close }: ActivateSuccessM
             <h1 className="neutral-800 mt-3 text-lg font-semibold">License activated</h1>
             {/* Description */}
             <div className="mt-2 text-sm text-neutral-500">
+              <p>Your license has been activated successfully.</p>
               <p>
-                Your license has been activated successfully.
+                Enjoy <span className="font-logo text-base font-bold text-logo">exifoo</span> with unlimited
+                access!
               </p>
-              <p>Enjoy <span className="font-logo text-logo font-bold text-base">exifoo</span> with unlimited access!</p>
             </div>
           </div>
           <div className="ml-2">
