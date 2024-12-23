@@ -1,9 +1,10 @@
 import { execFile } from "child_process"
+import type { ChildProcess } from "child_process"
 import { kill } from "process"
 import { join } from "path"
 import log from "electron-log/main"
 
-let backend
+let backend: ChildProcess | null = null
 export function runBackend() {
     return new Promise<void>((resolve, reject) => {
         backend = execFile(
@@ -28,5 +29,9 @@ export function runBackend() {
 }
 
 export function killBackend() {
-    kill(backend.pid)
+    // only try to kill backend if not already killed
+    if (backend !== null) {
+        kill(backend.pid as number)
+        backend = null
+    }
 }
