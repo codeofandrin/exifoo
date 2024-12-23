@@ -4,7 +4,7 @@ import { Card as FlowbiteCard } from "flowbite-react"
 
 import Button from "../common/Button"
 import ExternalLink from "../common/ExternalLink"
-import ErrorModal from "./ErrorModal"
+import ErrorModal from "../ActivateErrorModal"
 import { WebsiteLinks } from "../../utils/constants"
 import { ErrorModalType } from "../../utils/types"
 import { activateFreeTrial } from "../../lib/api"

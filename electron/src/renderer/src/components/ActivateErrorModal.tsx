@@ -1,10 +1,11 @@
 import { Modal } from "flowbite-react"
 
-import ExternalLink from "../common/ExternalLink"
-import Button from "../common/Button"
-import { EMail } from "../../utils/constants"
-import SVGX from "../../assets/icons/X.svg?react"
-import SVGHelpCircle from "../../assets/icons/HelpCircle.svg?react"
+import ExternalLink from "./common/ExternalLink"
+import Button from "./common/Button"
+import { EMail } from "../utils/constants"
+import SVGX from "../assets/icons/X.svg?react"
+import SVGHelpCircle from "../assets/icons/HelpCircle.svg?react"
+import ImgActivateLicenseIllus from "../assets/images/get-started/activate_license_illus.png"
 
 const modalTheme = {
   root: {
@@ -14,7 +15,7 @@ const modalTheme = {
   }
 }
 
-interface ErrorModalPropsType {
+interface ActivateErrorModalPropsType {
   isOpen: boolean
   close: Function
   title: string
@@ -22,7 +23,12 @@ interface ErrorModalPropsType {
   img?: string | null
 }
 
-export default function ErrorModal({ isOpen, close, title, desc, img = null }: ErrorModalPropsType) {
+export default function ActivateErrorModal({
+  isOpen,
+  close,
+  title,
+  desc,
+}: ActivateErrorModalPropsType) {
   function handleClose() {
     close()
   }
@@ -50,11 +56,9 @@ export default function ErrorModal({ isOpen, close, title, desc, img = null }: E
             {/* Description */}
             <p className="mt-2 text-sm text-neutral-500">{desc}</p>
           </div>
-          {img !== null && (
-            <div className="ml-2">
-              <img src={img} className="w-32 max-w-32" />
-            </div>
-          )}
+          <div className="ml-2">
+            <img src={ImgActivateLicenseIllus} className="w-32 max-w-32" />
+          </div>
         </div>
       </Modal.Body>
       <Modal.Footer className="justify-between">

@@ -4,7 +4,8 @@ import { Card as FlowbiteCard } from "flowbite-react"
 
 import Button from "./common/Button"
 import TextInput from "./common/TextInput"
-import ErrorModal from "./get-started/ErrorModal"
+import ActivateErrorModal from "./ActivateErrorModal"
+import ActivateSuccessModal from "./ActivateSuccessModal"
 import { ErrorModalType } from "../utils/types"
 import { activateLicense } from "../lib/api"
 import { APIErrorType, AppStatusType, LicenseType } from "../utils/enums"
@@ -35,6 +36,7 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
   const { setStatus, setLicenseType, setLicenseKeyShort } = useAppStore()
   const [isLoading, setIsLoading] = useState(false)
   const { setIsOpen: setIsActivateLicenseMainOpen } = useActivateLicenseStore()
+  const [isSuccess, setIsSuccess] = useState(false)
 
   const isError = error !== null
   const btnDisabled = isLoading || !licenseKey
@@ -74,25 +76,31 @@ export default function ActivateCard({ goBackCallback }: ActivateCardPropsType) 
             }
           }
         } else {
-          setStatus(AppStatusType.main)
           setLicenseType(LicenseType.full)
           setLicenseKeyShort(successData.key_short)
-          // close activate license if opened via main (about modal)
-          setIsActivateLicenseMainOpen(false)
+          // show success modal
+          setIsSuccess(true)
         }
       }
     )
   }
 
+  function handleContinue() {
+    setStatus(AppStatusType.main)
+    // close activate license if opened via main (about modal)
+    setIsActivateLicenseMainOpen(false)
+  }
+
   return (
     <>
-      <ErrorModal
+      <ActivateErrorModal
         isOpen={isError}
         close={() => setError(null)}
         title={error?.title as string}
         desc={error?.desc as string}
         img={ImgActivateLicenseIllus}
       />
+      <ActivateSuccessModal isOpen={isSuccess} close={handleContinue} />
       <div className="mt-14 flex items-center justify-center">
         <FlowbiteCard theme={theme} className="relative">
           <div className="absolute left-0 top-0 ml-2 mt-2">
