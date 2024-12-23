@@ -14,8 +14,8 @@ export function FreeTrialBanner() {
   return (
     <div className="absolute bottom-0 right-0 mb-5 mr-5 flex items-center rounded-lg bg-neutral-700 px-3 py-2 shadow-[rgba(50,50,93,0.25)_0px_6px_12px_-2px,_rgba(0,0,0,0.5)_0px_3px_7px_-3px]">
       <SVGAlertTriangle className="w-5 text-yellow-400" />
-      <p className="ml-2 text-xs text-neutral-300">
-        <span className="font-semibold">No license</span>
+      <div className="ml-2 flex items-center text-xs text-neutral-300">
+        <p className="font-semibold">No license</p>
         {bulletPoint}
         <button
           className="underline decoration-transparent transition-colors duration-200 hover:decoration-inherit"
@@ -23,10 +23,10 @@ export function FreeTrialBanner() {
           Activate
         </button>
         {bulletPoint}
-        <ExternalLink href={WebsiteLinks.license} color="silent">
+        <ExternalLink href={WebsiteLinks.license} color="silent" displayIcon>
           Buy
         </ExternalLink>
-      </p>
+      </div>
     </div>
   )
 }
