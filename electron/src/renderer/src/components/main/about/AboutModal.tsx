@@ -155,7 +155,7 @@ function LicenseInfo({ setIsDeactivateModalOpen, setIsActivateLicenseOpen }: Lic
 
     content = (
       <>
-        <p className="font-medium">Paid version</p>
+        <p className="font-medium">Full version</p>
         <p className="mt-1">
           License key: <span className="text-neutral-500">{license_key_short}</span>
         </p>

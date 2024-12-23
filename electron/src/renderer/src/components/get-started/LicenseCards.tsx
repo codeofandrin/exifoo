@@ -186,7 +186,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
           btnOnClick={handleFreeTrial}
           isLoading={isFreeTrialLoading}
         />
-        {/* Paid License */}
+        {/* License */}
         <LicenseCard
           className="ml-24"
           title="License"

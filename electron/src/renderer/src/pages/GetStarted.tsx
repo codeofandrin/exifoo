@@ -27,7 +27,7 @@ export default function GetStarted() {
                 .
               </p>
             ) : (
-              <p>Choose between starting with a free trial or activating your paid license.</p>
+              <p>Choose between starting with a free trial or activating your license.</p>
             )}
           </Heading>
           {isActivatePrompt ? (
