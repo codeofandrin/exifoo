@@ -1,4 +1,6 @@
 import { app, Menu, shell, WebContents } from "electron"
+import { is } from "@electron-toolkit/utils"
+
 import { getReleaseLink } from "./utils/app-info"
 
 export function getMenu(mainWebContents: WebContents) {
@@ -72,7 +74,7 @@ export function getMenu(mainWebContents: WebContents) {
                 { type: "separator" },
                 { role: "togglefullscreen" },
                 { type: "separator" },
-                { role: "toggleDevTools" }
+                ...(is.dev ? [{ role: "toggleDevTools" }] : [])
             ]
         },
         // { role: 'windowMenu' }
