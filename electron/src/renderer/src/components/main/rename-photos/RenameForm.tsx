@@ -6,7 +6,7 @@ import { ImageFilesInputType, RenameStatusType } from "../../../utils/types"
 import Button from "../../common/Button"
 import ExampleOutput from "./ExampleOutput"
 import RenameErrorModal from "./RenameErrorModal"
-import SVGUpload from "../../../assets/icons/Upload.svg?react"
+import ExternalLink from "../../common/ExternalLink"
 import { sendImgPaths } from "../../../lib/api"
 import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
 import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
@@ -14,6 +14,9 @@ import useCustomTextContext from "../../../contexts/main/CustomTextContext"
 import { useAppStore } from "../../../store/useAppStore"
 import { LicenseType } from "../../../utils/enums"
 import { APIErrorType, RenameGeneralStatusType } from "../../../utils/enums"
+import { WebsiteLinks } from "../../../utils/constants"
+import SVGUpload from "../../../assets/icons/Upload.svg?react"
+import SVGStar from "../../../assets/icons/Star.svg?react"
 
 export default function RenameForm() {
   // Hooks
@@ -43,13 +46,10 @@ export default function RenameForm() {
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
   const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
   const renameText = isLoading ? "Renaming..." : "Rename"
-  let remainingColor = "text-green-400"
-  if (free_trial_remaining <= 5) {
-    remainingColor = "text-red-500"
-  } else if (free_trial_remaining < 10) {
-    remainingColor = "text-yellow-400"
+  let remainingTextStyle = "text-inherhit"
+  if (free_trial_remaining <= 10) {
+    remainingTextStyle = "text-red-500 font-bold"
   }
-
   let dropZone = <EmptyDropZone isDisabled={isLoading} />
   if (fileInput.imageFiles) {
     dropZone = (
@@ -244,9 +244,22 @@ export default function RenameForm() {
           <h1 className="text-xl font-semibold text-neutral-800">Rename Photos</h1>
           <p className="mt-1 text-sm text-neutral-700">You can add photos in png, jpeg, and jpg format</p>
           {license_type === LicenseType.demo && (
-            <p className={`mt-[0.75rem] text-xs font-medium text-neutral-400 ${remainingColor}`}>
-              {free_trial_remaining} {free_trial_remaining === 1 ? "file" : "files"} remaining
-            </p>
+            <div className={`mt-[0.75rem] flex items-center text-xs font-medium text-neutral-400`}>
+              <p>
+                <span className={`${remainingTextStyle}`}>{free_trial_remaining}</span>{" "}
+                {free_trial_remaining === 1 ? "file" : "files"} remaining
+              </p>
+              <p className="mx-1">•</p>
+              <div className="group flex items-center">
+                <ExternalLink
+                  className="font-normal text-amber-500 group-hover:text-amber-400"
+                  href={WebsiteLinks.license}
+                  color="silent">
+                  <p className="">Unlock unlimited files</p>
+                </ExternalLink>
+                <SVGStar className="ml-1 w-3 text-amber-500 transition-colors duration-200 group-hover:text-amber-400" />
+              </div>
+            </div>
           )}
         </div>
         {/* Form */}
