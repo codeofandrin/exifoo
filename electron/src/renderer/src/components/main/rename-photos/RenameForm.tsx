@@ -250,15 +250,13 @@ export default function RenameForm() {
                 {free_trial_remaining === 1 ? "file" : "files"} remaining
               </p>
               <p className="mx-1">•</p>
-              <div className="group flex items-center">
-                <ExternalLink
-                  className="font-normal text-amber-500 group-hover:text-amber-400"
-                  href={WebsiteLinks.license}
-                  color="silent">
-                  <p className="">Unlock unlimited files</p>
-                </ExternalLink>
-                <SVGStar className="ml-1 w-3 text-amber-500 transition-colors duration-200 group-hover:text-amber-400" />
-              </div>
+              <ExternalLink
+                className="font-medium text-amber-500 hover:text-amber-400 flex items-center"
+                href={WebsiteLinks.license}
+                color="silent">
+                <p className="">Unlock unlimited files</p>
+                <SVGStar className="ml-1 w-3" />
+              </ExternalLink>
             </div>
           )}
         </div>
