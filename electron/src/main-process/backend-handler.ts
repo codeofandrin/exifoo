@@ -8,7 +8,7 @@ let backend: ChildProcess | null = null
 export function runBackend() {
     return new Promise<void>((resolve, reject) => {
         backend = execFile(
-            join(process.resourcesPath, "backend/backend"),
+            join(process.resourcesPath, "backend/exifoo-backend"),
             [],
             {
                 windowsHide: true,
