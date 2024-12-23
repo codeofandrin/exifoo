@@ -29,9 +29,11 @@ export default function Main() {
         <ProviderComposer components={[DateOptionsProvider, TimeOptionsProvider, CustomTextProvider]}>
           <div className="flex h-screen flex-col px-6">
             <Header />
-            <div className="mb-auto mt-5 flex justify-center">
-              <RenameForm />
-              <Options />
+            <div className="flex h-full items-center justify-center">
+              <div className="flex items-start">
+                <RenameForm />
+                <Options />
+              </div>
             </div>
             <Footer />
             {isDemo && <FreeTrialBanner />}

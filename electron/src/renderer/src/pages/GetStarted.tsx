@@ -15,26 +15,28 @@ export default function GetStarted() {
     <div className="h-screen">
       <div className="relative h-full w-full overflow-x-hidden">
         <StartBackground />
-        <div className="flex flex-col">
-          <Logo />
-          <Heading>
+        <div className="flex h-full items-center justify-center">
+          <div className="flex flex-col">
+            <Logo />
+            <Heading>
+              {isActivatePrompt ? (
+                <p>
+                  Enter your license key below. No license key yet? Get one{" "}
+                  <ExternalLink href={WebsiteLinks.license} color="underline">
+                    here
+                  </ExternalLink>
+                  .
+                </p>
+              ) : (
+                <p>Choose between starting with a free trial or activating your license.</p>
+              )}
+            </Heading>
             {isActivatePrompt ? (
-              <p>
-                Enter your license key below. No license key yet? Get one{" "}
-                <ExternalLink href={WebsiteLinks.license} color="underline">
-                  here
-                </ExternalLink>
-                .
-              </p>
+              <ActivateCard goBackCallback={() => setIsActivatePrompt(false)} />
             ) : (
-              <p>Choose between starting with a free trial or activating your license.</p>
+              <LicenseCards setIsActivatePrompt={setIsActivatePrompt} />
             )}
-          </Heading>
-          {isActivatePrompt ? (
-            <ActivateCard goBackCallback={() => setIsActivatePrompt(false)} />
-          ) : (
-            <LicenseCards setIsActivatePrompt={setIsActivatePrompt} />
-          )}
+          </div>
         </div>
       </div>
     </div>

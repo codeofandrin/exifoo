@@ -54,5 +54,5 @@ interface OptionsContainerPropsType {
 }
 
 export function OptionsContainer({ children, first = false }: OptionsContainerPropsType) {
-  return <div className={`flex flex-col ${!first && "mt-8"}`}>{children}</div>
+  return <div className={`flex flex-col ${!first && "mt-[1.625rem]"}`}>{children}</div>
 }
