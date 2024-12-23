@@ -52,7 +52,7 @@ interface TimeOptionsType {
     separator: string
 }
 
-export async function sendImgPaths(
+export async function renameImages(
     paths: string[],
     dateOptions: DateOptionsType,
     timeOptions: TimeOptionsType | null,

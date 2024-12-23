@@ -7,7 +7,7 @@ import Button from "../../common/Button"
 import ExampleOutput from "./ExampleOutput"
 import RenameErrorModal from "./RenameErrorModal"
 import ExternalLink from "../../common/ExternalLink"
-import { sendImgPaths } from "../../../lib/api"
+import { renameImages } from "../../../lib/api"
 import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
 import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
 import useCustomTextContext from "../../../contexts/main/CustomTextContext"
@@ -195,7 +195,7 @@ export default function RenameForm() {
       }
     }
 
-    await sendImgPaths(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "").then(
+    await renameImages(filePaths, yearOptions, timeOptions, isAddCustomText ? customText : "").then(
       ({ isError, errorData }) => {
         setIsLoading(false)
 
