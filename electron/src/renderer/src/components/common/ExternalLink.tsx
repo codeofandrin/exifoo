@@ -23,7 +23,7 @@ export default function ExternalLink({
       styleClasses = "text-primary-500 hover:text-primary-700 underline"
       break
     case "silent":
-      styleClasses = "hover:underline"
+      styleClasses = "underline decoration-transparent hover:decoration-inherit"
       break
     case "underline":
       styleClasses = "underline"
