@@ -39,7 +39,7 @@ export default function ExternalLink({
       {displayIcon ? (
         <div className="flex items-center">
           {children}
-          <SVGExternalLink className="ml-0.5 w-3" />
+          <SVGExternalLink className="ml-1 w-3" />
         </div>
       ) : (
         <>{children}</>
