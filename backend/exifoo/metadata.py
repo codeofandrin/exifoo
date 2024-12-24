@@ -16,11 +16,11 @@ VALID_FILE_TYPES = (".png", ".jpeg", ".jpg")
 VALID_YEAR_FORMATS = ("YYYY", "YY")
 VALID_MONTH_FORMATS = ("MM", "(M)M")
 VALID_DAY_FORMATS = ("DD", "(D)D")
-VALID_DATE_SEPARATORS = ("", "-", ".", ",")
+VALID_DATE_SEPARATORS = ("", "-", "/", ".", " ")
 VALID_HOURS_FORMATS = ("HH", "(H)H")
 VALID_MINUTES_FORMATS = ("MM", "(M)M")
 VALID_SECONDS_FORMATS = ("SS", "(S)S")
-VALID_TIME_SEPARATORS = ("", "-", ".", ",")
+VALID_TIME_SEPARATORS = ("", "-", "/", ".", " ")
 
 
 class FileRenameStatus(NamedTuple):

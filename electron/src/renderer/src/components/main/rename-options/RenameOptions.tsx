@@ -59,8 +59,9 @@ function DateOptions() {
             options={[
               { id: "", value: "None" },
               { id: "-", value: "Dash (-)" },
+              { id: "/", value: "Slash (/)" },
               { id: ".", value: "Period (.)" },
-              { id: ",", value: "Comma (,)" }
+              { id: " ", value: "Space ( )" }
             ]}
             setValue={setDateSeparator}
           />
@@ -151,8 +152,9 @@ function TimeOptions() {
                   options={[
                     { id: "", value: "None" },
                     { id: "-", value: "Dash (-)" },
+                    { id: "/", value: "Slash (/)" },
                     { id: ".", value: "Period (.)" },
-                    { id: ",", value: "Comma (,)" }
+                    { id: " ", value: "Space ( )" }
                   ]}
                   setValue={setTimeSeparator}
                 />
