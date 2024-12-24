@@ -6,7 +6,7 @@ from typing_extensions import NamedTuple
 
 from PIL import Image
 
-from .errors import APIException, APIExceptionDetail
+from .errors import APIException, APIExceptionDetail, FileBadCharacter
 from .enums import APIErrorType
 from .types import DateOptionsType, TimeOptionsType
 
@@ -21,6 +21,8 @@ VALID_HOURS_FORMATS = ("HH", "(H)H")
 VALID_MINUTES_FORMATS = ("MM", "(M)M")
 VALID_SECONDS_FORMATS = ("SS", "(S)S")
 VALID_TIME_SEPARATORS = ("", "-", ".", " ")
+
+BAD_CHARS = (":", "/")
 
 
 class FileRenameStatus(NamedTuple):
@@ -95,6 +97,10 @@ def _rename_filename(
     format_str = f"{dt_format}{custom_text}"
     dt_str = dt.strftime(format_str)
     new_name = f"{dt_str}_{img_path.name}"
+
+    if any(char in new_name for char in BAD_CHARS):
+        raise FileBadCharacter
+
     new_path = img_path.parent / new_name
 
     if os.path.isfile(new_path):
@@ -207,6 +213,9 @@ def rename_images(
             result.append(
                 FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_permission)
             )
+            continue
+        except FileBadCharacter:
+            result.append(FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.bad_char))
             continue
 
     return result

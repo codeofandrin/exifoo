@@ -11,8 +11,8 @@ import SVGImage from "../../../assets/icons/Image.svg?react"
 import SVGAlertTriangle from "../../../assets/icons/AlertTriangle.svg?react"
 import SVGArrowsUpDown from "../../../assets/icons/ArrowsUpDown.svg?react"
 
-function getFileErrorMsg(errorType: APIErrorType): string {
-  let statusMsg = ""
+function getFileErrorMsg(errorType: APIErrorType): string | React.ReactElement {
+  let statusMsg: string | React.ReactElement = ""
   switch (errorType) {
     case APIErrorType.invalidFileType:
       statusMsg = "Invalid file type"
@@ -32,6 +32,18 @@ function getFileErrorMsg(errorType: APIErrorType): string {
 
     case APIErrorType.noPermission:
       statusMsg = "No permission"
+      break
+
+    case APIErrorType.badChar:
+      const codeClasses = "bg-neutral-200 px-0.5 text-code text-red-600"
+      const slash = <code className={codeClasses}>/</code>
+      const colon = <code className={codeClasses}>:</code>
+
+      statusMsg = (
+        <span>
+          Bad character ({slash}, {colon})
+        </span>
+      )
       break
   }
 
@@ -54,7 +66,7 @@ function getFileNames(renameResult: FileRenameResultType[]) {
 const modalTheme = {
   root: {
     sizes: {
-      md: "max-w-[700px] max-h-[500px]"
+      md: "max-w-[750px] max-h-[500px]"
     },
     show: {
       on: "flex bg-gray-900 bg-opacity-40"
@@ -103,7 +115,7 @@ export default function RenameErrorFileListModal({
           </div>
         </div>
         <div className="ml-5 flex items-center text-xs font-bold text-red-500">
-          <p className="">{errorMsg}</p>
+          <p>{errorMsg}</p>
           <SVGAlertTriangle className="ml-2 w-4 text-red-500" />
         </div>
       </div>

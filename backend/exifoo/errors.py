@@ -53,6 +53,10 @@ class HTTPNotFound(HTTPException):
     pass
 
 
+class FileBadCharacter(Exception):
+    pass
+
+
 async def catch_exceptions_middleware(request, call_next):
     try:
         return await call_next(request)

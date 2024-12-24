@@ -12,6 +12,7 @@ class APIErrorType(Enum):
     not_found = 5
     already_exists = 6
     no_permission = 7
+    bad_char = 8
     # license
     license_used = 100
     license_invalid = 101

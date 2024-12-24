@@ -166,7 +166,7 @@ function TimeOptions() {
 }
 
 function isValidCustomText(value: string): boolean {
-  const macOSFileNameRegex = new RegExp(String.raw`^[^/]{0,${CUSTOM_TEXT_MAX_LEN}}$`, "g")
+  const macOSFileNameRegex = new RegExp(String.raw`^[^:/]{0,${CUSTOM_TEXT_MAX_LEN}}$`, "g")
   return macOSFileNameRegex.test(value)
 }
 
@@ -212,7 +212,7 @@ function OtherOptions() {
               title="Custom Text"
               first
               infoText={`The text that is placed after date and time, before the actual filename. 
-                         Cannot contain slashes ('/') and is limited to ${CUSTOM_TEXT_MAX_LEN} characters.`}>
+                         Cannot contain colons (:) and slashes (/) and is limited to ${CUSTOM_TEXT_MAX_LEN} characters.`}>
               <TextInput
                 placeholder="Enter Text"
                 setValue={setCustomText}

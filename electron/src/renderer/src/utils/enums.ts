@@ -9,6 +9,7 @@ export enum APIErrorType {
     notFound = 5,
     alreadyExists = 6,
     noPermission = 7,
+    badChar = 8,
     // license
     licenseUsed = 100,
     licenseInvalid = 101,
