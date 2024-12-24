@@ -59,7 +59,6 @@ function DateOptions() {
             options={[
               { id: "", value: "None" },
               { id: "-", value: "Dash (-)" },
-              { id: "/", value: "Slash (/)" },
               { id: ".", value: "Period (.)" },
               { id: " ", value: "Space ( )" }
             ]}
@@ -152,7 +151,6 @@ function TimeOptions() {
                   options={[
                     { id: "", value: "None" },
                     { id: "-", value: "Dash (-)" },
-                    { id: "/", value: "Slash (/)" },
                     { id: ".", value: "Period (.)" },
                     { id: " ", value: "Space ( )" }
                   ]}
