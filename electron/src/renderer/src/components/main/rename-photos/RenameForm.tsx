@@ -14,10 +14,10 @@ import RenameGeneralErrorModal from "./RenameGeneralErrorModal"
 import RenameErrorFileListModal from "./RenameErrorFileListModal"
 import ExternalLink from "../../common/ExternalLink"
 import { renameImages } from "../../../lib/api"
-import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
-import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
-import useCustomTextContext from "../../../contexts/main/CustomTextContext"
 import { useAppStore } from "../../../store/useAppStore"
+import { useCustomTextStore } from "../../../store/main/useCustomTextStore"
+import { useDateOptionsStore } from "../../../store/main/useDateOptionsStore"
+import { useTimeOptionsStore } from "../../../store/main/useTimeOptionsStore"
 import { APIErrorType, LicenseType } from "../../../utils/enums"
 import { WebsiteLinks } from "../../../utils/constants"
 import SVGUpload from "../../../assets/icons/Upload.svg?react"
@@ -37,9 +37,9 @@ export default function RenameForm() {
   const [isFailedListModalOpen, setIsFailedListModalOpen] = useState(false)
   const [generalError, setGeneralError] = useState<APIErrorType | null>(null)
   const [isLastFileRemoved, setIsLastFileRemoved] = useState<boolean>(false)
-  const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsContext()
-  const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
-  const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextContext()
+  const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsStore()
+  const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsStore()
+  const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextStore()
   const [isLoading, setIsLoading] = useState(false)
   const { licenseType, freeTrialRemaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
 

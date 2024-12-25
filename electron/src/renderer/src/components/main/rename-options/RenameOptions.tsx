@@ -4,14 +4,14 @@ import { OptionsContainer, OptionSection, OptionsHeader, Option } from "./Option
 import Dropdown from "../../common/Dropdown"
 import ToggleSwitch from "../../common/ToggleSwitch"
 import TextInput from "../../common/TextInput"
-import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
-import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
-import useCustomTextContext from "../../../contexts/main/CustomTextContext"
+import { useCustomTextStore } from "../../../store/main/useCustomTextStore"
+import { useDateOptionsStore } from "../../../store/main/useDateOptionsStore"
+import { useTimeOptionsStore } from "../../../store/main/useTimeOptionsStore"
 
 const CUSTOM_TEXT_MAX_LEN = 30
 
 function DateOptions() {
-  const { setYearFormat, setMonthFormat, setDayFormat, setDateSeparator } = useDateOptionsContext()
+  const { setYearFormat, setMonthFormat, setDayFormat, setDateSeparator } = useDateOptionsStore()
 
   return (
     <OptionsContainer first>
@@ -79,21 +79,15 @@ function TimeOptions() {
     setMinutesFormat,
     setSecondsFormat,
     setTimeSeparator,
-    resetHoursFormat,
-    resetMinutesFormat,
-    resetSecondsFormat,
-    resetTimeSeparator
-  } = useTimeOptionsContext()
+    reset: resetTimeOptionsStore,
+  } = useTimeOptionsStore()
 
   function handleAddTimeToggle(e) {
     const isChecked = e.target.checked
     setIsAddTime(isChecked)
 
     if (!isChecked) {
-      resetHoursFormat()
-      resetMinutesFormat()
-      resetSecondsFormat()
-      resetTimeSeparator()
+      resetTimeOptionsStore()
     }
   }
 
@@ -174,13 +168,13 @@ function OtherOptions() {
   // prettier-ignore
   const {
     isAddCustomText,
-    setIsAddCustomText,
     customText,
-    setCustomText,
     isValid,
+    setIsAddCustomText,
+    setCustomText,
     setIsValid,
-    resetCustomText
-  } = useCustomTextContext()
+    reset: resetCustomTextStore
+  } = useCustomTextStore()
 
   useEffect(() => {
     setIsValid(isValidCustomText(customText))
@@ -191,7 +185,7 @@ function OtherOptions() {
     setIsAddCustomText(isChecked)
 
     if (!isChecked) {
-      resetCustomText()
+      resetCustomTextStore()
     }
   }
 

@@ -1,6 +1,6 @@
-import useDateOptionsContext from "../../../contexts/main/DateOptionsContext"
-import useTimeOptionsContext from "../../../contexts/main/TimeOptionsContext"
-import useCustomTextContext from "../../../contexts/main/CustomTextContext"
+import { useCustomTextStore } from "../../../store/main/useCustomTextStore"
+import { useDateOptionsStore } from "../../../store/main/useDateOptionsStore"
+import { useTimeOptionsStore } from "../../../store/main/useTimeOptionsStore"
 import {
   getYearStr,
   getMonthStr,
@@ -11,9 +11,9 @@ import {
 } from "../../../utils/helpers"
 
 export default function ExampleOutput() {
-  const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsContext()
-  const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsContext()
-  const { isAddCustomText, customText } = useCustomTextContext()
+  const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsStore()
+  const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsStore()
+  const { isAddCustomText, customText } = useCustomTextStore()
 
   const DUMMY_YEAR = 2024
   const DUMMY_MONTH = 2
