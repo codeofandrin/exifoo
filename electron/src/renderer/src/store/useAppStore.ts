@@ -9,7 +9,7 @@ interface AppStoreStatesType {
     freeTrialRemaining: number
 }
 
-interface AppStoreActions {
+interface AppStoreActionsType {
     setStatus: (status: AppStatusType) => void
     setLicenseType: (type: LicenseType | null) => void
     setLicenseKeyShort: (key: string | null) => void
@@ -24,7 +24,7 @@ const initialStates: AppStoreStatesType = {
     freeTrialRemaining: 0
 }
 
-export const useAppStore = create<AppStoreStatesType & AppStoreActions>()((set) => ({
+export const useAppStore = create<AppStoreStatesType & AppStoreActionsType>()((set) => ({
     ...initialStates,
     setStatus: (status) => set({ status: status }),
     setLicenseType: (type) => set({ licenseType: type }),
