@@ -6,6 +6,8 @@ import log from "electron-log"
 import { mainWindow } from "./main"
 import * as ipc from "./ipc"
 
+autoUpdater.allowPrerelease = false
+
 let userInitiated = true
 export function checkForUpdates(inBackground: boolean = false) {
     userInitiated = !inBackground
