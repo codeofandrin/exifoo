@@ -47,9 +47,19 @@ jobs:
           echo 'os.environ["SUPABASE_URL"] = "${{ secrets.SUPABASE_URL }}"' >> env.py
           echo 'os.environ["SUPABASE_KEY"] = "${{ secrets.SUPABASE_KEY }}"' >> env.py
 
-      - name: Build backend executable
-        id: build-backend
-        run: pyinstaller build_mac_arm64.spec
+      - name: Build backend executable arm64
+        id: build-backend-arm64
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd backend
+          pyinstaller build_mac_arm64.spec
+
+      - name: Build backend executable x64
+        id: build-backend-x64
+        if: matrix.os == 'macos-13'
+        run: |
+          cd backend
+          pyinstaller build_mac_x64.spec
 
       - name: Prepare for app notarization
         if: startsWith(matrix.os, 'macos')
