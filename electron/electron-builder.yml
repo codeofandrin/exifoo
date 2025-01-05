@@ -34,7 +34,7 @@ mac:
       owner: codeofandrin
       repo: exifoo-releases
 dmg:
-  artifactName: ${name}-${version}.${ext}
+  artifactName: ${name}-${version}-${arch}.${ext}
   sign: false
 linux:
   target:

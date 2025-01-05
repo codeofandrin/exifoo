@@ -16,7 +16,7 @@ a = Analysis(
 )
 pyz = PYZ(a.pure)
 
-exe = EXE(
+exe_arm64 = EXE(
     pyz,
     a.scripts,
     [],
@@ -26,10 +26,11 @@ exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=False
+    console=False,
+    target_arch="arm64"
 )
-coll = COLLECT(
-    exe,
+coll_arm64 = COLLECT(
+    exe_arm64,
     a.binaries,
     a.zipfiles,
     a.datas,

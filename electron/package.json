@@ -21,8 +21,10 @@
     "prebuild": "npm run format && npm run typecheck && electron-vite build",
     "postinstall": "electron-builder install-app-deps",
     "local-build:win": "npm run prebuild && electron-builder --win",
-    "local-build:mac": "npm run prebuild && dotenvx run -- electron-builder --mac",
-    "local-build-no-sign:mac": "npm run prebuild && dotenvx run -- electron-builder --mac -c.mac.identity=null",
+    "local-build:mac_x64": "npm run prebuild && dotenvx run -- electron-builder --mac --x64",
+    "local-build:mac_arm64": "npm run prebuild && dotenvx run -- electron-builder --mac --arm64",
+    "local-build-no-sign:mac_x64": "npm run prebuild && dotenvx run -- electron-builder --mac --x64 -c.mac.identity=null",
+    "local-build-no-sign:mac_arm64": "npm run prebuild && dotenvx run -- electron-builder --mac --arm64 -c.mac.identity=null",
     "local-build:linux": "npm run prebuild && electron-builder --linux"
   },
   "dependencies": {
