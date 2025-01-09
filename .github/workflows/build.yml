@@ -23,7 +23,7 @@ jobs:
       #   with:
       #     python-version: 3.9
 
-      - name: Set up Pytho
+      - name: Set up Python
         id: setup-python
         run: |
           curl https://pyenv.run | bash
