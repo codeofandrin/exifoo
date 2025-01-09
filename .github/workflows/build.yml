@@ -16,9 +16,7 @@ jobs:
 
       - name: Set up Python
         run: |
-          brew install 'openssl@1.1' \
-          SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.7.sdk\
-          MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
+          brew install pyenv; MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
 
       - name: Install backend dependencies
         id: install-backend-deps
