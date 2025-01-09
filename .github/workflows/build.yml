@@ -25,25 +25,25 @@ jobs:
       #   with:
       #     python-version: 3.9
 
-      - name: Install miniconda
-        uses: conda-incubator/setup-miniconda@v3
-        with:
-          python-version: 3.9
-
-      - name: Set up Python
-        run: |
-          conda create -qyf py39 python=3.9 wheel -c anaconda
-          conda activate py39
-          python setup.py sdist bdist_wheel
-          shell: bash -l {0}
+      # - name: Install miniconda
+      #   uses: conda-incubator/setup-miniconda@v3
+      #   with:
+      #     python-version: 3.9
 
       # - name: Set up Python
-      #   id: setup-python
       #   run: |
-      #     curl https://pyenv.run | bash
-      #     export PATH="$HOME/.pyenv/bin:$PATH"
-      #     MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
-      #     pyenv local 3.9.21
+      #     conda create -qyf py39 python=3.9 wheel -c anaconda
+      #     conda activate py39
+      #     python setup.py sdist bdist_wheel
+      #     shell: bash -l {0}
+
+      - name: Set up Python
+        id: setup-python
+        run: |
+          curl https://pyenv.run | bash
+          export PATH="$HOME/.pyenv/bin:$PATH"
+          MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
+          pyenv local 3.9.21
 
       - name: Install backend dependencies
         id: install-backend-deps
