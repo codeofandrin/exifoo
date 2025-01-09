@@ -4,7 +4,7 @@ on:
   # only on tags which follow semantic versioning
   push:
     tags:
-      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v*"
 
 jobs:
   build-release:
