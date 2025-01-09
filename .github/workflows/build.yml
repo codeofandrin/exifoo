@@ -1,12 +1,12 @@
 name: Build/Release
 
-on: push
+# on: push
 
-# on:
-#   # only on tags which follow semantic versioning
-#   push:
-#     tags:
-#       - "v*"
+on:
+  # only on tags which follow semantic versioning
+  push:
+    tags:
+      - "v*"
 
 jobs:
   build-release:
@@ -20,10 +20,10 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      # - name: Set up Python
-      #   uses: actions/setup-python@v5
-      #   with:
-      #     python-version: 3.9
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.10
 
       # - name: Install miniconda
       #   uses: conda-incubator/setup-miniconda@v3
@@ -37,33 +37,19 @@ jobs:
       #     python setup.py sdist bdist_wheel
       #     shell: bash -l {0}
 
-      - name: Install pyenv
-        id: install-pyenv
-        run: |
-          curl https://pyenv.run | bash
-          echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-          echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-          echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bashrc
+      # - name: Install pyenv
+      #   id: install-pyenv
+      #   run: |
+      #     curl https://pyenv.run | bash
+      #     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
+      #     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
+      #     echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bashrc
           
-      - name: Set up Python
-        id: setup-python
-        run: |
-          MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
-          pyenv global 3.9.21
-
-      - name: Build backend executable arm64
-        id: build-backend-arm64
-        if: matrix.os == 'macos-latest'
-        run: |
-          cd backend
-          python3.9 -m PyInstaller build_mac_arm64.spec
-
-      - name: Build backend executable x64
-        id: build-backend-x64
-        if: matrix.os == 'macos-13'
-        run: |
-          cd backend
-          pyinstaller build_mac_x64.spec
+      # - name: Set up Python
+      #   id: setup-python
+      #   run: |
+      #     MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
+      #     pyenv global 3.9.21
 
       - name: Install backend dependencies
         id: install-backend-deps
@@ -92,6 +78,20 @@ jobs:
           echo 'os.environ["STORAGE_KEY"] = "${{ secrets.STORAGE_KEY }}"' >> env.py
           echo 'os.environ["SUPABASE_URL"] = "${{ secrets.SUPABASE_URL }}"' >> env.py
           echo 'os.environ["SUPABASE_KEY"] = "${{ secrets.SUPABASE_KEY }}"' >> env.py
+
+      - name: Build backend executable arm64
+        id: build-backend-arm64
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd backend
+          pyinstaller build_mac_arm64.spec
+
+      - name: Build backend executable x64
+        id: build-backend-x64
+        if: matrix.os == 'macos-13'
+        run: |
+          cd backend
+          pyinstaller build_mac_x64.spec
 
       - name: Prepare for app notarization
         if: startsWith(matrix.os, 'macos')
