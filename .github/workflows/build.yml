@@ -43,8 +43,7 @@ jobs:
           curl https://pyenv.run | bash
           export PATH="$HOME/.pyenv/bin:$PATH"
           MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
-          pyenv local 3.9.21
-          eval "$(pyenv init -)"
+          pyenv global 3.9.21
 
       - name: Install backend dependencies
         id: install-backend-deps
