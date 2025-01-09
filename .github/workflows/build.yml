@@ -14,14 +14,18 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - name: Prepare Python setup
-        id: prepare-python-setup
-        run: echo "MACOSX_DEPLOYMENT_TARGET=10.9" >> $GITHUB_ENV
+      # - name: Set up Python
+      #   uses: actions/setup-python@v5
+      #   with:
+      #     python-version: 3.9
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: 3.9
+      - name: Set up Pytho
+        id: setup-python
+        run: |
+          curl https://pyenv.run | bash
+          export PATH="$HOME/.pyenv/bin:$PATH"
+          MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
+          pyenv global 3.9.21
 
       - name: Install backend dependencies
         id: install-backend-deps
