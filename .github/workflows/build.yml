@@ -14,15 +14,11 @@ jobs:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-
-      - name: Build Python from source
+      - name: Set up Python
         run: |
-          curl -O https://www.python.org/ftp/python/3.9.21/Python-3.9.21.tgz
-          tar xzf Python-3.9.21.tgz
-          cd Python-3.9.21
-          ./configure MACOSX_DEPLOYMENT_TARGET=10.9
-          make
-          make install
+          brew install 'openssl@1.1' \
+          SDKROOT=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX13.7.sdk\
+          MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
 
       - name: Install backend dependencies
         id: install-backend-deps
