@@ -37,11 +37,13 @@ jobs:
       #     python setup.py sdist bdist_wheel
       #     shell: bash -l {0}
 
+      - name: Install pyenv
+        id: install-pyenv
+        run: curl https://pyenv.run | bash
+          
       - name: Set up Python
         id: setup-python
         run: |
-          curl https://pyenv.run | bash
-          export PATH="$HOME/.pyenv/bin:$PATH"
           MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
           pyenv global 3.9.21
 
