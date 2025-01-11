@@ -35,6 +35,7 @@ mac:
       owner: codeofandrin
       repo: exifoo-releases
       channel: latest-${arch}
+  minimumSystemVersion: 10.15
 dmg:
   artifactName: ${name}-${version}-${arch}.${ext}
   sign: false
