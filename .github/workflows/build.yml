@@ -34,7 +34,16 @@ jobs:
           sudo installer -pkg python-3.9.13-macosx10.9.pkg -target /
           cd ..
 
-      - name: Install backend dependencies
+      - name: Install backend dependencies arm64
+        if: matrix.os == 'macos-latest'
+        id: install-backend-deps
+        run: |
+          cd backend
+          pip install build
+          pip install -U -r requirements.txt
+
+      - name: Install backend dependencies x64
+        if: matrix.os == 'macos-13'
         id: install-backend-deps
         run: |
           cd backend
