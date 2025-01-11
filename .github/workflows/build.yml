@@ -10,25 +10,26 @@ on:
 
 jobs:
   build-release:
-    runs-on: ${{ matrix.os }}
+    runs-on: macos-latest
 
     strategy:
       matrix:
-        os: [macos-latest, macos-13]
+        os: [macos-latest]
+        arch: [x64, arm64]
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
-
-      - name: Set up Python arm64
-        if: matrix.os == 'macos-latest'
+      - name: Set Up Python arm64
+        if: matrix.arch == 'arm64'
         id: setup-python-arm64
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.9.13"
+        run: | 
+          curl -O -L https://www.python.org/ftp/python/3.9.13/python-3.9.13-macos11.pkg
+          sudo installer -pkg python-3.9.13-macos11.pkg -target /
+          cd ..
 
       - name: Set Up Python x64
-        if: matrix.os == 'macos-13'
+        if: matrix.arch == 'x64'
         id: setup-python-x64
         run: | 
           curl -O -L https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg
@@ -65,14 +66,14 @@ jobs:
 
       - name: Build backend executable arm64
         id: build-backend-arm64
-        if: matrix.os == 'macos-latest'
+        if: matrix.arch == 'arm64'
         run: |
           cd backend
           pyinstaller build_mac_arm64.spec
 
       - name: Build backend executable x64
         id: build-backend-x64
-        if: matrix.os == 'macos-13'
+        if: matrix.arch == 'x64'
         run: |
           cd backend
           pyinstaller build_mac_x64.spec
@@ -89,7 +90,7 @@ jobs:
         with:
           package_root: ./electron
           build_script_name: prebuild
-          args: ${{ matrix.os == 'macos-13' && '--x64' || '--arm64' }}
+          args: ${{ matrix.arch == 'x64' && '--x64' || '--arm64' }}
           skip_sign: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
           # GitHub tokens
           github_token: ${{ secrets.GH_TOKEN }}
