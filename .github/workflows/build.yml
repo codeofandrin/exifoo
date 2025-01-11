@@ -22,13 +22,14 @@ jobs:
 
       - name: Set up Python arm64
         if: matrix.os == 'macos-latest'
+        id: setup-python-arm64
         uses: actions/setup-python@v5
         with:
           python-version: "3.9.13"
 
       - name: Set Up Python x64
         if: matrix.os == 'macos-13'
-        id: setup-python
+        id: setup-python-x64
         run: | 
           curl -O -L https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg
           sudo installer -pkg python-3.9.13-macosx10.9.pkg -target /
@@ -36,7 +37,7 @@ jobs:
 
       - name: Install backend dependencies arm64
         if: matrix.os == 'macos-latest'
-        id: install-backend-deps
+        id: install-backend-deps-arm64
         run: |
           cd backend
           pip install build
@@ -44,7 +45,7 @@ jobs:
 
       - name: Install backend dependencies x64
         if: matrix.os == 'macos-13'
-        id: install-backend-deps
+        id: install-backend-deps-x64
         run: |
           cd backend
           python3.9 pip install build
