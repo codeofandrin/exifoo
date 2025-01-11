@@ -38,8 +38,8 @@ jobs:
         id: install-backend-deps
         run: |
           cd backend
-          pip install build
-          pip install -U -r requirements.txt
+          python3.9 pip install build
+          python3.9 pip install -U -r requirements.txt
 
       - name: Install Node.js, NPM and Yarn
         uses: actions/setup-node@v4
