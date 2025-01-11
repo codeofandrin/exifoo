@@ -14,42 +14,25 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-13]
+        os: [macos-latest, macos-13]
 
     steps:
       - name: Check out Git repository
         uses: actions/checkout@v1
 
-      - name: Set up Python
+      - name: Set up Python arm64
+        if: matrix.os == 'macos-latest'
         uses: actions/setup-python@v5
         with:
-          python-version: "3.13.1"
+          python-version: "3.9.13"
 
-      # - name: Install miniconda
-      #   uses: conda-incubator/setup-miniconda@v3
-      #   with:
-      #     python-version: 3.9
-
-      # - name: Set up Python
-      #   run: |
-      #     conda create -qyf py39 python=3.9 wheel -c anaconda
-      #     conda activate py39
-      #     python setup.py sdist bdist_wheel
-      #     shell: bash -l {0}
-
-      # - name: Install pyenv
-      #   id: install-pyenv
-      #   run: |
-      #     curl https://pyenv.run | bash
-      #     echo 'export PYENV_ROOT="$HOME/.pyenv"' >> ~/.bashrc
-      #     echo 'export PATH="$PYENV_ROOT/bin:$PATH"' >> ~/.bashrc
-      #     echo -e 'if command -v pyenv 1>/dev/null 2>&1; then\n eval "$(pyenv init -)"\nfi' >> ~/.bashrc
-          
-      # - name: Set up Python
-      #   id: setup-python
-      #   run: |
-      #     MACOSX_DEPLOYMENT_TARGET=10.9 pyenv install 3.9.21
-      #     pyenv global 3.9.21
+      - name: Set Up Python x64
+        if: matrix.os == 'macos-13'
+        id: setup-python
+        run: | 
+          curl -O -L https://www.python.org/ftp/python/3.9.13/python-3.9.13-macosx10.9.pkg
+          sudo installer -pkg python-3.9.13-macosx10.9.pkg -target /
+          cd ..
 
       - name: Install backend dependencies
         id: install-backend-deps
