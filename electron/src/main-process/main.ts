@@ -4,7 +4,7 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 
 import log from "electron-log/main"
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer"
-import * as Sentry from "@sentry/electron"
+import * as Sentry from "@sentry/electron/main"
 
 import { getMenu } from "./menu"
 import { runBackend, killBackend } from "./backend-handler"
