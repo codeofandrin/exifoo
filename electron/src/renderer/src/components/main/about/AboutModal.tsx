@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { Modal } from "flowbite-react"
 
-import { getAppVersion, getReleaseLink } from "../../../utils/app-info"
+import { getAppVersion } from "../../../utils/app-info"
 import ExternalLink from "../../common/ExternalLink"
 import Button from "../../common/Button"
 import DeactivateLicenseModal from "./DeactivateLicenseModal"
@@ -181,7 +181,7 @@ function LicenseInfo({ setIsDeactivateModalOpen, setIsActivateLicenseOpen }: Lic
         </div>
         <p className="mt-1 pb-1 text-xxs text-neutral-500">
           No license yet? Get one{" "}
-          <ExternalLink href={WebsiteLinks.license} color="underline">
+          <ExternalLink href={WebsiteLinks.checkout} color="underline">
             here
           </ExternalLink>
           .
@@ -231,11 +231,11 @@ export default function AboutModal({ isOpen, close }: AboutModalPropsType) {
             </h1>
             <p className="mt-1 text-xxs text-neutral-500">Version {appVersion}</p>
             <div className="flex flex-col items-center">
-              <ExternalLink href={getReleaseLink(`v${appVersion}`)} className="text-xxs" displayIcon>
+              <ExternalLink href={WebsiteLinks.releaseNotes} className="text-xxs" displayIcon>
                 Release Notes
               </ExternalLink>
-              <ExternalLink href={WebsiteLinks.terms} className="text-xxs" displayIcon>
-                Terms and Conditions
+              <ExternalLink href={WebsiteLinks.eula} className="text-xxs" displayIcon>
+                License Agreement
               </ExternalLink>
             </div>
           </div>

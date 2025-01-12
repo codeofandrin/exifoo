@@ -22,7 +22,7 @@ export default function GetStarted() {
               {isActivatePrompt ? (
                 <p>
                   Enter your license key below. No license key yet? Get one{" "}
-                  <ExternalLink href={WebsiteLinks.license} color="underline">
+                  <ExternalLink href={WebsiteLinks.checkout} color="underline">
                     here
                   </ExternalLink>
                   .

@@ -1,8 +1,6 @@
 import { app, Menu, shell, WebContents } from "electron"
 import { is } from "@electron-toolkit/utils"
 
-import { getReleaseLink } from "./utils/app-info"
-
 export function getMenu(mainWebContents: WebContents) {
     const isMac = process.platform === "darwin"
     const template = [
@@ -21,7 +19,7 @@ export function getMenu(mainWebContents: WebContents) {
                     {
                         id: "release-notes",
                         label: `Release Notes`,
-                        click: () => shell.openExternal(getReleaseLink(`v${app.getVersion()}`))
+                        click: () => shell.openExternal("https://exifoo.com/release-notes")
                     },
                     { type: "separator" },
                     { role: "services" },

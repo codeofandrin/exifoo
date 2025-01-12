@@ -302,7 +302,7 @@ export default function RenameForm() {
               <p className="mx-1">•</p>
               <ExternalLink
                 className="flex items-center font-medium text-amber-500 hover:text-amber-400"
-                href={WebsiteLinks.license}
+                href={WebsiteLinks.checkout}
                 color="silent">
                 <p className="">Unlock unlimited files</p>
                 <SVGStar className="ml-1 w-3" />

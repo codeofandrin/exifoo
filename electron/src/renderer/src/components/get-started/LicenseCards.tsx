@@ -202,7 +202,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
           footer={
             <>
               No license yet? Get one{" "}
-              <ExternalLink href={WebsiteLinks.license} color="underline">
+              <ExternalLink href={WebsiteLinks.checkout} color="underline">
                 here
               </ExternalLink>
               .

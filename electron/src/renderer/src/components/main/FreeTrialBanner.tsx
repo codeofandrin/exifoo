@@ -23,7 +23,7 @@ export function FreeTrialBanner() {
           Activate
         </button>
         {bulletPoint}
-        <ExternalLink href={WebsiteLinks.license} color="silent" displayIcon>
+        <ExternalLink href={WebsiteLinks.checkout} color="silent" displayIcon>
           Buy
         </ExternalLink>
       </div>
