@@ -1,6 +1,7 @@
 from typing import List, Optional
 from contextlib import asynccontextmanager
 
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -20,6 +21,20 @@ from .lemsqzy import LemSqzyClient
 from .license import LicenseStorage, FreeTrialStorage, AppAccess
 from .enums import AppAccessType
 from .supabase import MachineIDs
+
+
+sentry_sdk.init(
+    dsn="https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for tracing.
+    traces_sample_rate=1.0,
+    _experiments={
+        # Set continuous_profiling_auto_start to True
+        # to automatically start the profiler on when
+        # possible.
+        "continuous_profiling_auto_start": True,
+    },
+)
 
 
 MACHINE_ID = get_machine_id()

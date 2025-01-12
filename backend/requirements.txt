@@ -7,3 +7,4 @@ py-machineid
 keyring
 cryptography
 supabase
+sentry-sdk[fastapi]
