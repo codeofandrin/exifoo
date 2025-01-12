@@ -83,6 +83,20 @@ class LemSqzyClient:
             else:
                 raise HTTPException(err.response, err.data)
 
+        meta = data["meta"]
+        store_id = meta["store_id"]
+        product_id = meta["product_id"]
+        if store_id != 141711 or product_id != 415417:
+            raise APIException(
+                status_code=400,
+                error_code=APIErrorType.license_invalid,
+                msg="License key not valid",
+                detail=APIExceptionDetail(
+                    msg=f"License key does not belong to the product and therefore invalid",
+                    item=key,
+                ),
+            )
+
         activated: bool = data["activated"]
         if not activated:
             raise ValueError("license key could not be activated unexpectedly")
