@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from "@sentry/vite-plugin"
 import { defineConfig, externalizeDepsPlugin } from "electron-vite"
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr"
@@ -11,30 +12,53 @@ export default defineConfig({
             lib: {
                 entry: "src/main-process/main.ts"
             },
-            outDir: "out/main-process"
+            outDir: "out/main-process",
+            sourcemap: true
         },
-        plugins: [externalizeDepsPlugin()],
+        plugins: [
+            externalizeDepsPlugin(),
+            sentryVitePlugin({
+                org: "puncher1",
+                project: "exifoo-electron"
+            })
+        ],
         define: {
             __RELEASE_REPO__: s("https://github.com/codeofandrin/exifoo-releases")
         }
     },
+
     preload: {
         build: {
             lib: {
                 entry: "src/main-process/preload.ts"
             },
             outDir: "out/main-process",
-            emptyOutDir: false
+            emptyOutDir: false,
+            sourcemap: true
         },
-        plugins: [externalizeDepsPlugin()]
+        plugins: [
+            externalizeDepsPlugin(),
+            sentryVitePlugin({
+                org: "puncher1",
+                project: "exifoo-electron"
+            })
+        ]
     },
+
     renderer: {
+        build: {
+            sourcemap: true
+        },
         plugins: [
             react(),
             svgr({
                 svgrOptions: {
                     // svgr options
                 }
+            }),
+            sentryVitePlugin({
+                org: "puncher1",
+                project: "exifoo-electron"
             })
         ],
         define: {
