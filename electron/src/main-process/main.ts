@@ -4,11 +4,17 @@ import { electronApp, optimizer, is } from "@electron-toolkit/utils"
 
 import log from "electron-log/main"
 import installExtension, { REACT_DEVELOPER_TOOLS } from "electron-devtools-installer"
+import * as Sentry from "@sentry/electron"
 
 import { getMenu } from "./menu"
 import { runBackend, killBackend } from "./backend-handler"
 import { checkForUpdates } from "./auto-updater"
 import { registerIpcEvents } from "./ipc"
+
+// @ts-ignore
+Sentry.init({
+    dsn: "https://28906d568b4e2ece1282720a92ae48d1@o4508083247382528.ingest.de.sentry.io/4508632446795856"
+})
 
 log.errorHandler.startCatching()
 log.transports.file.level = "info"
