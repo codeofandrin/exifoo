@@ -1,9 +1,12 @@
+import * as Sentry from "@sentry/electron/renderer"
+
 import Button from "./common/Button"
 import { EMail } from "../utils/constants"
 import ImgErrorIllus from "../assets/images/error_illus.png"
 
 export function logError(error: Error, info: React.ErrorInfo) {
   window.electronAPI.logError(error, info)
+  Sentry.captureException(error)
 }
 
 export default function GlobalError() {
