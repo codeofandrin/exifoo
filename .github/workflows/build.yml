@@ -107,7 +107,7 @@ jobs:
           SENTRY_DSN: https://28906d568b4e2ece1282720a92ae48d1@o4508083247382528.ingest.de.sentry.io/4508632446795856
       
       - name: Install sentry-cli
-      - run: curl -sL https://sentry.io/get-cli/ | sh
+        run: curl -sL https://sentry.io/get-cli/ | sh
 
       - name: Create Sentry release
         env:
