@@ -3,6 +3,7 @@ from typing import List, Optional
 from contextlib import asynccontextmanager
 
 import sentry_sdk
+import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -25,6 +26,7 @@ from .supabase import MachineIDs
 
 
 sentry_sdk.init(
+    ignore_errors=[httpx.ConnectError, ConnectionError],
     dsn=os.getenv("SENTRY_DSN"),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for tracing.
