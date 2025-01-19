@@ -115,6 +115,5 @@ jobs:
           SENTRY_ORG: puncher1
         run: |
           VERSION=$(sentry-cli releases propose-version)
-          exifoo-electron
           sentry-cli releases new -p exifoo-electron $VERSION
           sentry-cli releases set-commits --auto $VERSION
