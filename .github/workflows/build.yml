@@ -60,6 +60,7 @@ jobs:
           echo 'os.environ["STORAGE_KEY"] = "${{ secrets.STORAGE_KEY }}"' >> env.py
           echo 'os.environ["SUPABASE_URL"] = "${{ secrets.SUPABASE_URL }}"' >> env.py
           echo 'os.environ["SUPABASE_KEY"] = "${{ secrets.SUPABASE_KEY }}"' >> env.py
+          echo 'os.environ["SENTRY_DSN"] = "https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552"' >> env.py
 
       - name: Build backend executable arm64
         id: build-backend-arm64
@@ -103,13 +104,14 @@ jobs:
           MAC_API_KEY_ID: ${{ secrets.MAC_API_KEY_ID }}
           MAC_API_KEY_ISSUER_ID: ${{ secrets.MAC_API_KEY_ISSUER_ID }}
           SKIP_NOTARIZE: ${{ !(startsWith(github.ref, 'refs/tags/v')) }}
+          SENTRY_DSN: https://28906d568b4e2ece1282720a92ae48d1@o4508083247382528.ingest.de.sentry.io/4508632446795856
       
       - name: Create Sentry release
-        uses: getsentry/action-release@v1
         env:
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
           SENTRY_ORG: puncher1
-          SENTRY_PROJECT: exifoo-electron
-          # SENTRY_URL: https://sentry.io/
-        with:
-          environment: production
+        run: |
+          VERSION=$(sentry-cli releases propose-version)
+          exifoo-electron
+          sentry-cli releases new -p exifoo-electron $VERSION
+          sentry-cli releases set-commits --auto $VERSION

@@ -13,7 +13,7 @@ import { registerIpcEvents } from "./ipc"
 
 // @ts-ignore
 Sentry.init({
-    dsn: "https://28906d568b4e2ece1282720a92ae48d1@o4508083247382528.ingest.de.sentry.io/4508632446795856"
+    dsn: process.env.SENTRY_DSN
 })
 
 log.errorHandler.startCatching()

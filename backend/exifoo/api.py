@@ -1,3 +1,4 @@
+import os
 from typing import List, Optional
 from contextlib import asynccontextmanager
 
@@ -24,7 +25,7 @@ from .supabase import MachineIDs
 
 
 sentry_sdk.init(
-    dsn="https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552",
+    dsn=os.getenv("SENTRY_DSN"),
     # Set traces_sample_rate to 1.0 to capture 100%
     # of transactions for tracing.
     traces_sample_rate=1.0,
