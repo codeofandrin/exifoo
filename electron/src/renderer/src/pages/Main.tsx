@@ -17,8 +17,6 @@ export default function Main() {
 
   const isDemo = licenseType === LicenseType.demo
 
-  throw new Error()
-
   return (
     <>
       {isActivateLicenseOpen ? (
