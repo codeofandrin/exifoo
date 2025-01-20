@@ -21,9 +21,6 @@ client: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 class MachineIDs:
 
-    def __init__(self):
-        self.table = client.table("machine-ids")
-
     def exists(self, machine_id: str) -> bool:
         response = client.rpc("exists_machine_id", {"mid_input": machine_id}).execute()
         exists: bool = response.data
