@@ -13,6 +13,9 @@ if TYPE_CHECKING:
 
 API_VERSION = 1
 
+STORE_ID = 141711
+PRODUCT_ID = 433774
+
 
 class Route:
     BASE: str = f"https://api.lemonsqueezy.com/v{API_VERSION}"
@@ -86,7 +89,7 @@ class LemSqzyClient:
         meta = data["meta"]
         store_id = meta["store_id"]
         product_id = meta["product_id"]
-        if store_id != 141711 or product_id != 415417:
+        if store_id != STORE_ID or product_id != PRODUCT_ID:
             raise APIException(
                 status_code=400,
                 error_code=APIErrorType.license_invalid,
