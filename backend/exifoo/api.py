@@ -3,7 +3,6 @@ from typing import List, Optional
 from contextlib import asynccontextmanager
 
 import sentry_sdk
-import httpx
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -24,20 +23,21 @@ from .license import LicenseStorage, FreeTrialStorage, AppAccess
 from .enums import AppAccessType
 from .supabase import MachineIDs
 
+IS_DEV = bool(os.getenv("IS_DEV", False))
 
-sentry_sdk.init(
-    ignore_errors=[httpx.ConnectError, ConnectionError],
-    dsn=os.getenv("SENTRY_DSN"),
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for tracing.
-    traces_sample_rate=1.0,
-    _experiments={
-        # Set continuous_profiling_auto_start to True
-        # to automatically start the profiler on when
-        # possible.
-        "continuous_profiling_auto_start": True,
-    },
-)
+if not IS_DEV:
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN"),
+        # Set traces_sample_rate to 1.0 to capture 100%
+        # of transactions for tracing.
+        traces_sample_rate=1.0,
+        _experiments={
+            # Set continuous_profiling_auto_start to True
+            # to automatically start the profiler on when
+            # possible.
+            "continuous_profiling_auto_start": True,
+        },
+    )
 
 
 MACHINE_ID = get_machine_id()
