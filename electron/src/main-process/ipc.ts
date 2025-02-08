@@ -19,7 +19,9 @@ export function sendUpdateAvailable() {
 }
 
 export function sendUpdateDownloadProgress(percentage: number) {
-    mainWindow.webContents.send("update-download-progress", percentage)
+    if (!mainWindow.isDestroyed()) {
+        mainWindow.webContents.send("update-download-progress", percentage)
+    }
 }
 
 export function sendUpdateReady() {
