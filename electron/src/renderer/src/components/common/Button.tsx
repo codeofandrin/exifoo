@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) codeofandrin 
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import type { CustomFlowbiteTheme, ButtonProps as FlowbiteButtonPropsType } from "flowbite-react"
 import { Button as FlowbiteButton } from "flowbite-react"
 import SVGSpinner from "../../assets/icons/Spinner.svg?react"

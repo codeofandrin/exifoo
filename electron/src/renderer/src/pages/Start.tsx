@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) codeofandrin 
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import StartBackground from "../components/StartBackground"
 import Logo from "../components/start/Logo"
 import Slogan from "../components/start/Slogan"

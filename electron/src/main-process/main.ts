@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) codeofandrin 
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { app, shell, BrowserWindow, Menu } from "electron"
 import { join } from "path"
 import { electronApp, optimizer, is } from "@electron-toolkit/utils"

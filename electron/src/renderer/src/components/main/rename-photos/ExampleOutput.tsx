@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) codeofandrin 
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import { useCustomTextStore } from "../../../store/main/useCustomTextStore"
 import { useDateOptionsStore } from "../../../store/main/useDateOptionsStore"
 import { useTimeOptionsStore } from "../../../store/main/useTimeOptionsStore"

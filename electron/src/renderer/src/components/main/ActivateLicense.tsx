@@ -1,3 +1,10 @@
+/**
+ * Copyright (c) codeofandrin 
+ * 
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 import ActivateCard from "../ActivateCard"
 import ExternalLink from "../common/ExternalLink"
 import StartBackground from "../StartBackground"
