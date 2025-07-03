@@ -63,7 +63,7 @@ export default function RenameGeneralErrorModal({
       errorMsg = (
         <>
           <p>
-            It looks like you just used up your free trial. Please consider purchasing and activating a
+            It looks like you just used up your free trial. Please consider activating a
             license.
           </p>
           <p className="mt-2">

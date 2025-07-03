@@ -31,7 +31,7 @@ export function FreeTrialBanner() {
         </button>
         {bulletPoint}
         <ExternalLink href={WebsiteLinks.checkout} color="silent" displayIcon>
-          Buy
+          Get one
         </ExternalLink>
       </div>
     </div>
