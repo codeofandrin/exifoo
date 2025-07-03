@@ -18,6 +18,6 @@ export class WebsiteLinks {
 }
 
 export class EMail {
-    static feedback = "feedback@exifoo.com"
-    static help = "support@exifoo.com"
+    static feedback = "mail@andrin.software"
+    static help = "mail@andrin.software"
 }
