@@ -53,14 +53,23 @@ jobs:
 
       - name: Create backend env.py
         id: create-backend-env
+        # NOTE: 
+        # Since July 03, 2025 exifoo is free to use and open source.
+        # Therefore, there is no need anymore for the Supabase database
         run: |
           cd backend
           touch env.py
           echo "import os" >> env.py
           echo 'os.environ["STORAGE_KEY"] = "${{ secrets.STORAGE_KEY }}"' >> env.py
-          echo 'os.environ["SUPABASE_URL"] = "${{ secrets.SUPABASE_URL }}"' >> env.py
-          echo 'os.environ["SUPABASE_KEY"] = "${{ secrets.SUPABASE_KEY }}"' >> env.py
           echo 'os.environ["SENTRY_DSN"] = "https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552"' >> env.py
+        # run: |
+        #   cd backend
+        #   touch env.py
+        #   echo "import os" >> env.py
+        #   echo 'os.environ["STORAGE_KEY"] = "${{ secrets.STORAGE_KEY }}"' >> env.py
+        #   echo 'os.environ["SUPABASE_URL"] = "${{ secrets.SUPABASE_URL }}"' >> env.py
+        #   echo 'os.environ["SUPABASE_KEY"] = "${{ secrets.SUPABASE_KEY }}"' >> env.py
+        #   echo 'os.environ["SENTRY_DSN"] = "https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552"' >> env.py
 
       - name: Build backend executable arm64
         id: build-backend-arm64

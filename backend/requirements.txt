@@ -1,3 +1,7 @@
+# NOTE: 
+# Since July 03, 2025 exifoo is free to use and open source.
+# Therefore, there is no need anymore for the Supabase database
+
 fastapi
 uvicorn
 pillow
@@ -6,5 +10,5 @@ requests
 py-machineid
 keyring
 cryptography
-supabase
+# supabase
 sentry-sdk[fastapi]
