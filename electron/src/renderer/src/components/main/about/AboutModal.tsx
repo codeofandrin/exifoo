@@ -189,7 +189,7 @@ function LicenseInfo({ setIsDeactivateModalOpen, setIsActivateLicenseOpen }: Lic
         <p className="mt-1 pb-1 text-xxs text-neutral-500">
           No license yet? Get one{" "}
           <ExternalLink href={WebsiteLinks.checkout} color="underline">
-            here
+            here for free
           </ExternalLink>
           .
         </p>

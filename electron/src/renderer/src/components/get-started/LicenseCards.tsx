@@ -210,7 +210,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
             <>
               No license yet? Get one{" "}
               <ExternalLink href={WebsiteLinks.checkout} color="underline">
-                here
+                here for free
               </ExternalLink>
               .
             </>

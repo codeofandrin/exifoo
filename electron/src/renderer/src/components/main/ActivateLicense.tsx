@@ -34,7 +34,7 @@ export default function ActivateLicense({ handleCloseActivateLicense }: Activate
               <p>
                 Enter your license key below. No license key yet? Get one{" "}
                 <ExternalLink href={WebsiteLinks.checkout} color="underline">
-                  here
+                  here for free
                 </ExternalLink>
                 .
               </p>
