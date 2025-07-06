@@ -1,6 +1,6 @@
 {
   "name": "exifoo",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Organize your photos by adding the date and time to the filenames.",
   "main": "./out/main-process/main.js",
   "author": {
