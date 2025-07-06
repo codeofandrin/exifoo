@@ -1,6 +1,6 @@
-# NOTE: 
+# NOTE:
 # Since July 03, 2025 exifoo is free to use and open source.
-# Therefore, there is no need anymore to make sure the user can only use the free trial once 
+# Therefore, there is no need anymore to make sure the user can only use the free trial once
 # with a machine ID validation, so parts of the code are commented out.
 
 """
@@ -33,6 +33,7 @@ from .types import DateOptionsType, TimeOptionsType
 from .lemsqzy import LemSqzyClient
 from .license import LicenseStorage, FreeTrialStorage, AppAccess
 from .enums import AppAccessType
+
 # from .supabase import MachineIDs
 
 IS_DEV = bool(os.getenv("IS_DEV", False))
@@ -213,15 +214,15 @@ async def license_deactivate():
 
 @app.post("/free-trial/activate")
 async def free_trial_activate():
-#     if machine_ids.exists(MACHINE_ID):
-#         raise APIException(
-#             status_code=400,
-#             error_code=APIErrorType.free_trial_expired,
-#             msg="Free Trial expired",
-#             detail=APIExceptionDetail(msg="Free Trial already used once.", item=""),
-#         )
-# 
-#     machine_ids.add(MACHINE_ID)
+    #     if machine_ids.exists(MACHINE_ID):
+    #         raise APIException(
+    #             status_code=400,
+    #             error_code=APIErrorType.free_trial_expired,
+    #             msg="Free Trial expired",
+    #             detail=APIExceptionDetail(msg="Free Trial already used once.", item=""),
+    #         )
+    #
+    #     machine_ids.add(MACHINE_ID)
     free_trial_storage.store(files_remaining=FREE_TRIAL_FILES_AMOUNT)
     app_access.set_access(AppAccessType.demo)
     return JSONResponse(

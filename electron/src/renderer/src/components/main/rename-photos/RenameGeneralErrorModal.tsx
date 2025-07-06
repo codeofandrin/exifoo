@@ -1,6 +1,6 @@
 /**
- * Copyright (c) codeofandrin 
- * 
+ * Copyright (c) codeofandrin
+ *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -62,10 +62,7 @@ export default function RenameGeneralErrorModal({
       errorTitle = "Free Trial used up"
       errorMsg = (
         <>
-          <p>
-            It looks like you just used up your free trial. Please consider activating a
-            license.
-          </p>
+          <p>It looks like you just used up your free trial. Please consider activating a license.</p>
           <p className="mt-2">
             Clicking the button will take you back to the start, where you can activate your license.
           </p>

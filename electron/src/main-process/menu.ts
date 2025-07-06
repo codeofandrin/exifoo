@@ -1,6 +1,6 @@
 /**
- * Copyright (c) codeofandrin 
- * 
+ * Copyright (c) codeofandrin
+ *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
  */
@@ -26,7 +26,7 @@ export function getMenu(mainWebContents: WebContents) {
                     {
                         id: "release-notes",
                         label: `Release Notes`,
-                        click: () => shell.openExternal("https://exifoo.com/release-notes")
+                        click: () => shell.openExternal("https://exifoo.vercel.app/release-notes")
                     },
                     { type: "separator" },
                     { role: "services" },
