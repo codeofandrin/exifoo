@@ -8,7 +8,7 @@
 
 exifoo helps you keep your photos organized by adding the date and time of capture to the filename.
 
-Visit: [exifoo.vercel.app](https://exifoo.vercel.app)
+<p>Visit: <a href="https://exifoo.vercel.app" target="_blank">exifoo.vercel.app</a></p>
 
 <br>
 
