@@ -36,9 +36,8 @@ electron/     # Electron frontend (Vite, React, TailwindCSS)
 exifoo uses a license management system to enable free trials and full access. 
 When starting the app, the license flow checks for a free trial or a valid license key.
 
+###### Check it out on miro: https://miro.com/app/board/uXjVL9ViQRc=/
 <a href="https://miro.com/app/board/uXjVL9ViQRc=/" target="_blank" ><img src="License_Management_FlowDiagram.jpg" width="500px"></a>
-
-<p style="font-size:8px">Check it out on miro: https://miro.com/app/board/uXjVL9ViQRc=/</p>
 
 - 🟩 - Start
 - 🟦 - Getting Started
