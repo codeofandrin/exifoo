@@ -31,6 +31,17 @@ backend/      # Python backend (EXIF processing and file renaming, License Manag
 electron/     # Electron frontend (Vite, React, TailwindCSS)
 ```
 
+### License Management
+
+exifoo uses a license management system to enable free trials and full access. 
+When starting the app, the license flow checks for a free trial or a valid license key.
+
+<img src="License_Management_FlowDiagram.jpg" width="500px">
+
+- 🟩 - Start
+- 🟦 - Getting Started
+- 🟧 - Main
+
 <br>
 
 ## Getting Started
