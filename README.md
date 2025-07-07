@@ -1,4 +1,3 @@
-<!-- filepath: /Users/andrin/Documents/GitHub/exifoo/README.md -->
 <p align="center">
     <a href="https://exifoo.vercel.app" target="_blank"><img src="electron/src/renderer/src/assets/images/exifoo_logo_large.png" width="300px"></a>
     <h3 align="center">Shoot more. Organize less.</h3>
