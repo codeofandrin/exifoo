@@ -12,14 +12,18 @@ from typing import List, Optional
 from typing_extensions import NamedTuple
 
 from PIL import Image
+from pillow_heif import register_heif_opener
 
 from .errors import APIException, APIExceptionDetail, FileBadCharacter
 from .enums import APIErrorType
 from .types import DateOptionsType, TimeOptionsType
 
-EXIF_DATETIME_TAG = 36867
+register_heif_opener()
 
-VALID_FILE_TYPES = (".png", ".jpeg", ".jpg")
+EXIF_DATETIME_TAG = 36867
+EXIF_DATETIME_TAG_HEIC = 306
+
+VALID_FILE_TYPES = (".png", ".jpeg", ".jpg", ".heic", ".heif")
 VALID_YEAR_FORMATS = ("YYYY", "YY")
 VALID_MONTH_FORMATS = ("MM", "(M)M")
 VALID_DAY_FORMATS = ("DD", "(D)D")
@@ -38,13 +42,20 @@ class FileRenameStatus(NamedTuple):
     error_type: Optional[APIErrorType]
 
 
-def _get_img_datetime(img_path: Path) -> Optional[datetime.datetime]:
+def _get_img_datetime(img_path: Path, *, file_type: str) -> Optional[datetime.datetime]:
     img = Image.open(img_path)
-    exif_data = img._getexif()  # type: ignore
+
+    if file_type in [".heic", ".heif"]:
+        exif_data = img.getexif()
+        dt_tag = EXIF_DATETIME_TAG_HEIC
+    else:
+        exif_data = img._getexif()  # type: ignore
+        dt_tag = EXIF_DATETIME_TAG
+
     if exif_data is None:
         return None
 
-    dt_str = exif_data[EXIF_DATETIME_TAG]
+    dt_str = exif_data[dt_tag]
     return datetime.datetime.strptime(dt_str, "%Y:%m:%d %H:%M:%S")
 
 
@@ -189,15 +200,16 @@ def rename_images(
     result: List[FileRenameStatus] = []
     for path_str in paths:
         img_path = Path(path_str)
+        file_type = img_path.suffix.lower()
 
-        if img_path.suffix.lower() not in VALID_FILE_TYPES:
+        if file_type not in VALID_FILE_TYPES:
             result.append(
                 FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.invalid_file_type)
             )
             continue
 
         try:
-            img_dt = _get_img_datetime(img_path)
+            img_dt = _get_img_datetime(img_path, file_type=file_type)
             if img_dt is None:
                 result.append(
                     FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_exif_data)

@@ -59,7 +59,7 @@ export default function RenameForm() {
   }, [isLastFileRemoved])
 
   // Variables
-  const FILE_TYPES = ["image/png", "image/jpeg"]
+  const FILE_TYPES = ["image/png", "image/jpeg", "image/heic", "image/heif"]
   const isFileInputEmpty = !Boolean(fileInput.imageFiles)
   const renameBtnDisabled = !fileInput.imageFiles || !isCustomTextValid || isLoading
   const renameText = isLoading ? "Renaming..." : "Rename"
@@ -299,7 +299,7 @@ export default function RenameForm() {
         {/* Heading */}
         <div>
           <h1 className="text-xl font-semibold text-neutral-800">Rename Photos</h1>
-          <p className="mt-1 text-sm text-neutral-700">You can add photos in png, jpeg, and jpg format</p>
+          <p className="mt-1 text-sm text-neutral-700">You can add photos in common formats</p>
           {licenseType === LicenseType.demo && (
             <div className={`mt-[0.75rem] flex items-center text-xs font-medium text-neutral-400`}>
               <p>

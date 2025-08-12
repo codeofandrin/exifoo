@@ -5,6 +5,7 @@
 fastapi
 uvicorn
 pillow
+pillow-heif
 pyinstaller
 requests
 py-machineid

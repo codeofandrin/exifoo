@@ -21,7 +21,7 @@ export function EmptyDropZone({ isDisabled }: EmptyDropZonePropsType) {
     <div className={`${isDisabled && "cursor-not-allowed"} flex flex-col items-center pb-6 pt-5`}>
       <SVGImage className="w-10 text-primary-600" />
       <p className="font-md mb-2 mt-2 text-sm text-neutral-700">Drop file or browse</p>
-      <p className="text-xs font-normal text-neutral-500">Format: PNG, JPEG, JPG</p>
+      <p className="text-xs font-normal text-neutral-500">Format: PNG, JPEG, JPG, HEIC, HEIF</p>
     </div>
   )
 }
