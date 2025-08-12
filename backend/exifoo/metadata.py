@@ -6,6 +6,7 @@ LICENSE file in the root directory of this source tree.
 """
 
 import datetime
+import json
 import os
 from pathlib import Path
 from typing import List, Optional
@@ -34,6 +35,9 @@ VALID_SECONDS_FORMATS = ("SS", "(S)S")
 VALID_TIME_SEPARATORS = ("", "-", ".", " ")
 
 BAD_CHARS = (":", "/")
+
+DATA_BASE_PATH = "~/Library/Application Support/com.exifoo.app"
+RENAME_LOG_PATH = f"{DATA_BASE_PATH}/renames.json"
 
 
 class FileRenameStatus(NamedTuple):
@@ -73,7 +77,7 @@ def _rename_filename(
     seconds_format: Optional[str] = None,
     time_separator: Optional[str] = None,
     custom_text: str,
-) -> None:
+) -> str:
     if year_format == "YYYY":
         year = "%Y"
     else:
@@ -125,6 +129,8 @@ def _rename_filename(
         raise FileExistsError
 
     os.rename(img_path, new_path)
+
+    return str(new_path)
 
 
 def rename_images(
@@ -198,6 +204,7 @@ def rename_images(
         items["is_add_time"] = True
 
     result: List[FileRenameStatus] = []
+    file_paths = []
     for path_str in paths:
         img_path = Path(path_str)
         file_type = img_path.suffix.lower()
@@ -216,7 +223,7 @@ def rename_images(
                 )
                 continue
 
-            _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
+            new_path = _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
             result.append(FileRenameStatus(path=path_str, is_success=True, error_type=None))
         except FileNotFoundError:
             result.append(
@@ -236,5 +243,27 @@ def rename_images(
         except FileBadCharacter:
             result.append(FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.bad_char))
             continue
+
+        file_paths.append({"before": path_str, "after": new_path})
+
+    files = file_paths
+    if files:
+        log_data = {"date": str(datetime.datetime.now()), "files": files}
+        expanded_path = os.path.expanduser(RENAME_LOG_PATH)
+        if not os.path.exists(expanded_path):
+            os.makedirs(os.path.dirname(expanded_path), exist_ok=True)
+            data = [log_data]
+
+            with open(expanded_path, "w") as f_renames:
+                json.dump(data, f_renames, indent=4)
+
+        else:
+            with open(expanded_path, "r+") as f_renames:
+                data = json.load(f_renames)
+                data.append(log_data)
+
+                f_renames.seek(0)
+                f_renames.truncate(0)
+                json.dump(data, f_renames, indent=4)
 
     return result
