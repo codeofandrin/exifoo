@@ -11,6 +11,8 @@ LICENSE file in the root directory of this source tree.
 """
 
 import os
+import json
+import pathlib
 from typing import List, Optional
 from contextlib import asynccontextmanager
 
@@ -28,11 +30,12 @@ from .errors import (
     APIExceptionDetail,
     APIErrorType,
 )
-from .utils import setup_logging, get_machine_id, get_short_key
+from .utils import setup_logging, get_machine_id, get_short_key, log_rename
 from .types import DateOptionsType, TimeOptionsType
 from .lemsqzy import LemSqzyClient
 from .license import LicenseStorage, FreeTrialStorage, AppAccess
 from .enums import AppAccessType
+from .constants import Path
 
 # from .supabase import MachineIDs
 
@@ -247,3 +250,62 @@ async def free_trial_validate():
         content={"msg": "Successful", "files_remaining": free_trial.files_remaining},
         status_code=200,
     )
+
+
+@app.get("/rename-history")
+async def get_rename_history():
+    expanded_path = os.path.expanduser(Path.rename_history)
+    if os.path.exists(expanded_path):
+        with open(expanded_path, "r") as f_renames:
+            data = json.load(f_renames)
+    else:
+        data = []
+
+    return JSONResponse(content={"msg": "Successful", "rename_history": data})
+
+
+class RevertRenamePayload(BaseModel):
+    file_path: str
+    before_filename: str
+
+
+@app.post("/rename-history/revert")
+async def revert_rename(payload: RevertRenamePayload):
+    file_path = pathlib.Path(payload.file_path)
+    before_filename = payload.before_filename
+
+    new_path = file_path.parent / before_filename
+
+    try:
+        if os.path.isfile(new_path):
+            raise FileExistsError
+
+        os.rename(file_path, new_path)
+
+    except FileNotFoundError:
+        raise APIException(
+            status_code=400,
+            error_code=APIErrorType.not_found,
+            msg="File not found",
+            detail=APIExceptionDetail(msg="The requested file could not be found", item=""),
+        )
+
+    except FileExistsError:
+        raise APIException(
+            status_code=400,
+            error_code=APIErrorType.already_exists,
+            msg="File already exists",
+            detail=APIExceptionDetail(msg="The requested file already exists", item=""),
+        )
+
+    except PermissionError:
+        raise APIException(
+            status_code=400,
+            error_code=APIErrorType.no_permission,
+            msg="No permission",
+            detail=APIExceptionDetail(msg="No permission to rename requested file", item=""),
+        )
+
+    log_rename([{"before": str(file_path), "after": str(new_path)}])
+
+    return JSONResponse(content={"msg": "Successful"})

@@ -19,6 +19,7 @@ import Button from "../../common/Button"
 import ExampleOutput from "./ExampleOutput"
 import RenameGeneralErrorModal from "./RenameGeneralErrorModal"
 import RenameErrorFileListModal from "./RenameErrorFileListModal"
+import RenameHistoryModal from "./RenameHistoryModal"
 import ExternalLink from "../../common/ExternalLink"
 import { renameImages } from "../../../lib/api"
 import { useAppStore } from "../../../store/useAppStore"
@@ -42,6 +43,7 @@ export default function RenameForm() {
     result: FileRenameResultType[]
   }>({ successAll: false, failedAll: false, result: [] })
   const [isFailedListModalOpen, setIsFailedListModalOpen] = useState(false)
+  const [isRenameHistoryModalOpen, setIsRenameHistoryModalOpen] = useState(false)
   const [generalError, setGeneralError] = useState<APIErrorType | null>(null)
   const [isLastFileRemoved, setIsLastFileRemoved] = useState<boolean>(false)
   const { yearFormat, monthFormat, dayFormat, dateSeparator } = useDateOptionsStore()
@@ -295,6 +297,10 @@ export default function RenameForm() {
         close={() => setIsFailedListModalOpen(false)}
         renameResult={renameResult.result}
       />
+      <RenameHistoryModal
+        isOpen={isRenameHistoryModalOpen}
+        close={() => setIsRenameHistoryModalOpen(false)}
+      />
       <div>
         {/* Heading */}
         <div>
@@ -316,9 +322,19 @@ export default function RenameForm() {
               </ExternalLink>
             </div>
           )}
+          {licenseType === LicenseType.full && (
+            <div
+              className={`mt-[0.75rem] flex w-full items-center justify-end text-xs font-medium text-neutral-400`}>
+              <button
+                className="w-fit hover:cursor-pointer hover:underline"
+                onClick={() => setIsRenameHistoryModalOpen(true)}>
+                History
+              </button>
+            </div>
+          )}
         </div>
         {/* Form */}
-        <div className={`${licenseType === LicenseType.demo ? "mt-1" : "mt-8"} w-[35rem]`}>
+        <div className="mt-1 w-[35rem]">
           {/* File Drop Zone */}
           <div className="flex w-full items-center justify-center">
             <Label
