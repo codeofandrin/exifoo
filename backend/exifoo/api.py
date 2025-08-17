@@ -295,7 +295,7 @@ async def revert_rename(payload: RevertRenamePayload):
             status_code=400,
             error_code=APIErrorType.already_exists,
             msg="File already exists",
-            detail=APIExceptionDetail(msg="The renamed file already exists", item=""),
+            detail=APIExceptionDetail(msg="The requested file already exists", item=""),
         )
 
     except PermissionError:
