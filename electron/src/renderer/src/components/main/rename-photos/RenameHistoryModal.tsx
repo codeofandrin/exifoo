@@ -19,7 +19,8 @@ import {
   getMinutesStr,
   getSecondsStr,
   getFileName,
-  getParentFolderStr
+  getParentFolderStr,
+  getTruncatedText
 } from "../../../utils/helpers"
 import Button from "../../common/Button"
 import ExternalLink from "../../common/ExternalLink"
@@ -100,13 +101,13 @@ function RenamdFileElement({ renameFile, getAndSetRenames }: RenamdFileElementPr
           <div className="ml-2 flex w-full items-center">
             <div className="flex w-full justify-between text-xs font-medium">
               <div>
-                <p>{beforeFilename}</p>
-                <p className="text-xxs text-neutral-500">{beforeFileParentPath}</p>
+                <p>{getTruncatedText(beforeFilename, 30)}</p>
+                <p className="text-xxs text-neutral-500">{getTruncatedText(beforeFileParentPath, 30)}</p>
               </div>
               <SVGArrowRight className="mx-1 w-4" />
               <div>
-                <p>{afterFilename}</p>
-                <p className="text-xxs text-neutral-500">{afterFileParentPath}</p>
+                <p>{getTruncatedText(afterFilename, 30)}</p>
+                <p className="text-xxs text-neutral-500">{getTruncatedText(afterFileParentPath, 30)}</p>
               </div>
             </div>
             <div className="ml-10">
