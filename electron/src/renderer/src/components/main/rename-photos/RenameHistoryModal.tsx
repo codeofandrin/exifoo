@@ -38,7 +38,7 @@ import SVGX from "../../../assets/icons/X.svg?react"
 const modalTheme = {
   root: {
     sizes: {
-      md: "max-w-[750px] max-h-[500px]"
+      md: "max-w-[750px]"
     },
     show: {
       on: "flex bg-gray-900 bg-opacity-40"
@@ -231,7 +231,13 @@ export default function RenameHistoryModal({ isOpen, close }: RenameHistoryModal
   }
 
   return (
-    <Modal show={isOpen} onClose={handleClose} theme={modalTheme} size="md" dismissible>
+    <Modal
+      className="!overflow-hidden"
+      show={isOpen}
+      onClose={handleClose}
+      theme={modalTheme}
+      size="md"
+      dismissible>
       <Modal.Body>
         <div>
           {/* Title */}
