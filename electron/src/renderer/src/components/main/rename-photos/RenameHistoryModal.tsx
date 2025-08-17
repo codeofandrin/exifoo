@@ -256,7 +256,11 @@ export default function RenameHistoryModal({ isOpen, close }: RenameHistoryModal
               </p>
             </div>
             <div className="mt-1 max-h-72 overflow-y-scroll rounded-lg border border-dashed border-primary-600 p-4">
-              {renameProcesses}
+              {renameProcesses.length > 0 ? (
+                renameProcesses
+              ) : (
+                <p className="text-sm text-neutral-500">No rename processes found.</p>
+              )}
             </div>
           </div>
         </div>
