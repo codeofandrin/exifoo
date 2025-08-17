@@ -56,44 +56,49 @@ autoUpdater.on("download-progress", (progress: ProgressInfo) => {
     ipc.sendUpdateDownloadProgress(percentage)
 })
 
+function openUpdateMessageBox(versionTag: string) {
+    dialog
+        .showMessageBox(mainWindow, {
+            title: "Update available",
+            message: "Update available!",
+            detail: `A new version (${versionTag}) has been downloaded and is ready to install.
+                    Restart the application now to install the updates.`,
+            type: "info",
+            buttons: ["What's New?", "Install and Restart", "Later"],
+            defaultId: 1,
+            cancelId: 0,
+            textWidth: 300
+        })
+        .then((result) => {
+            switch (result.response) {
+                case 0:
+                    shell.openExternal("https://exifoo.vercel.app/release-notes")
+                    // open dialog again because it's closed on button click
+                    openUpdateMessageBox(versionTag)
+                    break
+
+                // Install and Restart
+                case 1:
+                    quitAndInstall()
+                    break
+
+                // Later
+                case 2:
+                    // do nothing -> closes automatically
+                    break
+
+                default:
+                    break
+            }
+        })
+}
+
 autoUpdater.on("update-downloaded", (info: UpdateInfo) => {
     log.info(`update downloaded`)
     ipc.sendUpdateReady()
 
     if (!userInitiated) {
         const versionTag = `v${info.version}`
-
-        dialog
-            .showMessageBox(mainWindow, {
-                title: "Update available",
-                message: "Update available!",
-                detail: `A new version (${versionTag}) has been downloaded and is ready to install.
-                    Restart the application now to install the updates.`,
-                type: "info",
-                buttons: ["What's New?", "Install and Restart", "Later"],
-                defaultId: 1,
-                cancelId: 0,
-                textWidth: 300
-            })
-            .then((result) => {
-                switch (result.response) {
-                    case 0:
-                        shell.openExternal("https://exifoo.vercel.app/release-notes")
-                        break
-
-                    // Install and Restart
-                    case 1:
-                        quitAndInstall()
-                        break
-
-                    // Later
-                    case 2:
-                        // do nothing -> closes automatically
-                        break
-
-                    default:
-                        break
-                }
-            })
+        openUpdateMessageBox(versionTag)
     }
 })
