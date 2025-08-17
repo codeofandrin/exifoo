@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { dialog } from "electron"
+import { dialog, shell } from "electron"
 import { autoUpdater } from "electron-updater"
 import type { ProgressInfo, UpdateInfo } from "electron-updater"
 import log from "electron-log"
@@ -70,21 +70,25 @@ autoUpdater.on("update-downloaded", (info: UpdateInfo) => {
                 detail: `A new version (${versionTag}) has been downloaded and is ready to install.
                     Restart the application now to install the updates.`,
                 type: "info",
-                buttons: ["Later", "Install and Restart"],
+                buttons: ["What's New?", "Install and Restart", "Later"],
                 defaultId: 1,
                 cancelId: 0,
                 textWidth: 300
             })
             .then((result) => {
                 switch (result.response) {
-                    // Later
                     case 0:
-                        // do nothing -> closes automatically
+                        shell.openExternal("https://exifoo.vercel.app/release-notes")
                         break
 
                     // Install and Restart
                     case 1:
                         quitAndInstall()
+                        break
+
+                    // Later
+                    case 2:
+                        // do nothing -> closes automatically
                         break
 
                     default:
