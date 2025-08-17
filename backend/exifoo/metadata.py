@@ -6,9 +6,8 @@ LICENSE file in the root directory of this source tree.
 """
 
 import datetime
-import json
 import os
-from pathlib import Path
+import pathlib
 from typing import List, Optional
 from typing_extensions import NamedTuple
 
@@ -18,6 +17,7 @@ from pillow_heif import register_heif_opener
 from .errors import APIException, APIExceptionDetail, FileBadCharacter
 from .enums import APIErrorType
 from .types import DateOptionsType, TimeOptionsType
+from .utils import log_rename
 
 register_heif_opener()
 
@@ -36,9 +36,6 @@ VALID_TIME_SEPARATORS = ("", "-", ".", " ")
 
 BAD_CHARS = (":", "/")
 
-DATA_BASE_PATH = "~/Library/Application Support/com.exifoo.app"
-RENAME_LOG_PATH = f"{DATA_BASE_PATH}/renames.json"
-
 
 class FileRenameStatus(NamedTuple):
     path: str
@@ -46,7 +43,7 @@ class FileRenameStatus(NamedTuple):
     error_type: Optional[APIErrorType]
 
 
-def _get_img_datetime(img_path: Path, *, file_type: str) -> Optional[datetime.datetime]:
+def _get_img_datetime(img_path: pathlib.Path, *, file_type: str) -> Optional[datetime.datetime]:
     img = Image.open(img_path)
 
     if file_type in [".heic", ".heif"]:
@@ -65,7 +62,7 @@ def _get_img_datetime(img_path: Path, *, file_type: str) -> Optional[datetime.da
 
 def _rename_filename(
     *,
-    img_path: Path,
+    img_path: pathlib.Path,
     dt: datetime.datetime,
     year_format: str,
     month_format: str,
@@ -206,7 +203,7 @@ def rename_images(
     result: List[FileRenameStatus] = []
     file_paths = []
     for path_str in paths:
-        img_path = Path(path_str)
+        img_path = pathlib.Path(path_str)
         file_type = img_path.suffix.lower()
 
         if file_type not in VALID_FILE_TYPES:
@@ -248,22 +245,6 @@ def rename_images(
 
     files = file_paths
     if files:
-        log_data = {"date": str(datetime.datetime.now()), "files": files}
-        expanded_path = os.path.expanduser(RENAME_LOG_PATH)
-        if not os.path.exists(expanded_path):
-            os.makedirs(os.path.dirname(expanded_path), exist_ok=True)
-            data = [log_data]
-
-            with open(expanded_path, "w") as f_renames:
-                json.dump(data, f_renames, indent=4)
-
-        else:
-            with open(expanded_path, "r+") as f_renames:
-                data = json.load(f_renames)
-                data.append(log_data)
-
-                f_renames.seek(0)
-                f_renames.truncate(0)
-                json.dump(data, f_renames, indent=4)
+        log_rename(files)
 
     return result

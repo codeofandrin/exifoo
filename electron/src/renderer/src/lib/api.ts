@@ -97,3 +97,16 @@ export async function activateFreeTrial(): Promise<APIRequestResponseType> {
 export async function validateFreeTrial(): Promise<APIRequestResponseType> {
     return await request("POST", "/free-trial/validate")
 }
+
+export async function getRenameHistory(): Promise<APIRequestResponseType> {
+    return await request("GET", "/rename-history")
+}
+
+export async function revertRename(
+    filePath: string,
+    beforeFilename: string
+): Promise<APIRequestResponseType> {
+    const payload = { file_path: filePath, before_filename: beforeFilename }
+    const headers = { "Content-Type": "application/json" }
+    return await request("POST", "/rename-history/revert", payload, headers)
+}
