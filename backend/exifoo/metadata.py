@@ -56,7 +56,11 @@ def _get_img_datetime(img_path: pathlib.Path, *, file_type: str) -> Optional[dat
     if exif_data is None:
         return None
 
-    dt_str = exif_data[dt_tag]
+    try:
+        dt_str = exif_data[dt_tag]
+    except KeyError:
+        return None
+
     return datetime.datetime.strptime(dt_str, "%Y:%m:%d %H:%M:%S")
 
 
