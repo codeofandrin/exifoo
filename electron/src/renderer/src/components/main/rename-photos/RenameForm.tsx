@@ -30,6 +30,7 @@ import { APIErrorType, LicenseType } from "../../../utils/enums"
 import { WebsiteLinks } from "../../../utils/constants"
 import SVGUpload from "../../../assets/icons/Upload.svg?react"
 import SVGStar from "../../../assets/icons/Star.svg?react"
+import SVGArrowClock from "../../../assets/icons/ArrowClock.svg?react"
 
 export default function RenameForm() {
   // Hooks
@@ -326,9 +327,10 @@ export default function RenameForm() {
             <div
               className={`mt-[0.75rem] flex w-full items-center justify-end text-xs font-medium text-neutral-400`}>
               <button
-                className="w-fit hover:cursor-pointer hover:underline"
+                className="flex w-fit items-center hover:cursor-pointer hover:underline"
                 onClick={() => setIsRenameHistoryModalOpen(true)}>
-                History
+                <p className="">History</p>
+                <SVGArrowClock className="ml-1 w-3.5" />
               </button>
             </div>
           )}
