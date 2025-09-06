@@ -23,7 +23,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
-from .metadata import rename_images
+from .metadata import rename_files
 from .errors import (
     catch_exceptions_middleware,
     APIException,
@@ -112,7 +112,7 @@ async def rename(payload: RenamePayload):
                 ),
             )
         else:
-            result = rename_images(
+            result = rename_files(
                 paths=payload.paths,
                 date_options=payload.date_options,
                 time_options=payload.time_options,
@@ -147,7 +147,7 @@ async def rename(payload: RenamePayload):
             )
 
     elif app_access.is_full():
-        result = rename_images(
+        result = rename_files(
             paths=payload.paths,
             date_options=payload.date_options,
             time_options=payload.time_options,
