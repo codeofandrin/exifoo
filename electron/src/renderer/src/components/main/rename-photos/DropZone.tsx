@@ -21,7 +21,7 @@ export function EmptyDropZone({ isDisabled }: EmptyDropZonePropsType) {
     <div className={`${isDisabled && "cursor-not-allowed"} flex flex-col items-center pb-6 pt-5`}>
       <SVGImage className="w-10 text-primary-600" />
       <p className="font-md mb-2 mt-2 text-sm text-neutral-700">Drop file or browse</p>
-      <p className="text-xs font-normal text-neutral-500">Format: PNG, JPEG, JPG, HEIC, HEIF</p>
+      <p className="text-xs font-normal text-neutral-500">Format: PNG, JPEG, JPG, HEIC, HEIF, MP4, MOV</p>
     </div>
   )
 }
@@ -58,12 +58,12 @@ export function PartialFailedDropZone({
       <div className="font-md mb-2 mt-2 text-sm text-neutral-700">
         <p>
           <span className="font-bold text-green-500">{successAmount}</span>{" "}
-          {successAmount === 1 ? "photo" : "photos"} successfully renamed.
+          {successAmount === 1 ? "file" : "files"} successfully renamed.
         </p>
         <div className="mt-1 flex">
           <p>
             <span className="font-bold text-red-600">{failedAmount}</span>{" "}
-            {failedAmount === 1 ? "photo" : "photos"} failed.
+            {failedAmount === 1 ? "file" : "files"} failed.
           </p>
           <button className="ml-2 text-xs text-neutral-500 hover:underline" onClick={handleSeeFailedList}>
             See why
@@ -95,7 +95,7 @@ export function SuccessOrFailedAllDropZone({
   let text = (
     <div className="font-md mb-2 mt-2 text-sm text-neutral-700">
       <p>
-        Successfully renamed {amount} {amount === 1 ? "photo" : "photos"}.
+        Successfully renamed {amount} {amount === 1 ? "file" : "files"}.
       </p>
     </div>
   )
@@ -114,7 +114,7 @@ export function SuccessOrFailedAllDropZone({
     )
     text = (
       <div className="font-md mb-2 mt-2 flex text-sm text-neutral-700">
-        <p>All photos ({amount}) failed.</p>
+        <p>All files ({amount}) failed.</p>
         <button
           className="ml-2 text-xs text-neutral-500 underline decoration-transparent transition-colors duration-200 hover:text-neutral-600 hover:decoration-neutral-600"
           onClick={handleSeeFailedList}>

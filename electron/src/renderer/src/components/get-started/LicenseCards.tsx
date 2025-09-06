@@ -185,7 +185,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
           desc="Try it out for free with the demo version."
           features={[
             { text: "All features included", active: true },
-            { text: "Unlimited photos", active: false }
+            { text: "Unlimited files", active: false }
           ]}
           img={ImgFreeTrialIllus}
           btnColor="silent"
@@ -200,7 +200,7 @@ export default function LicenseCards({ setIsActivatePrompt }: LicenseCardsPropsT
           desc="Activate your license. Enjoy full access."
           features={[
             { text: "All features included", active: true },
-            { text: "Unlimited photos", active: true }
+            { text: "Unlimited files", active: true }
           ]}
           img={ImgLicenseIllus}
           btnColor="primary"
