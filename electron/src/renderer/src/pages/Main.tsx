@@ -6,7 +6,7 @@
  */
 
 import Header from "../components/main/Header"
-import RenameForm from "../components/main/rename-photos/RenameForm"
+import RenameForm from "../components/main/rename-files/RenameForm"
 import Options from "../components/main/rename-options/RenameOptions"
 import Footer from "../components/main/Footer"
 import { FreeTrialBanner } from "../components/main/FreeTrialBanner"

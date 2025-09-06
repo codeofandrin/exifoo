@@ -25,7 +25,7 @@ EXIF_DATETIME = 306
 EXIF_DATETIME_ORIGINAL = 36867
 EXIF_DATETIME_DIGITIZED = 36868
 
-VALID_FILE_TYPES = (".png", ".jpeg", ".jpg", ".heic", ".heif")
+VALID_FILE_TYPES = (".png", ".jpeg", ".jpg", ".heic", ".heif", ".mp4", ".mov")
 VALID_YEAR_FORMATS = ("YYYY", "YY")
 VALID_MONTH_FORMATS = ("MM", "(M)M")
 VALID_DAY_FORMATS = ("DD", "(D)D")
@@ -44,40 +44,49 @@ class FileRenameStatus(NamedTuple):
     error_type: Optional[APIErrorType]
 
 
-def _get_img_datetime(img_path: pathlib.Path, *, file_type: str) -> Optional[datetime.datetime]:
-    img = Image.open(img_path)
-
-    if file_type in [".heic", ".heif"]:
-        exif_data = img.getexif()
-    else:
-        exif_data = img._getexif()  # type: ignore
-
-    if exif_data is None:
-        return None
-
-    if EXIF_DATETIME_ORIGINAL in exif_data.keys():
-        dt_tag = EXIF_DATETIME_ORIGINAL
-
-    elif EXIF_DATETIME in exif_data.keys():
-        dt_tag = EXIF_DATETIME
-
-    elif EXIF_DATETIME_DIGITIZED in exif_data.keys():
-        dt_tag = EXIF_DATETIME_DIGITIZED
+def _get_file_datetime(file_path: pathlib.Path, *, file_type: str) -> Optional[datetime.datetime]:
+    if file_type in [".mp4", ".mov"]:
+        # videos
+        timestamp = os.stat(file_path).st_birthtime
+        dt = datetime.datetime.fromtimestamp(timestamp)
 
     else:
-        return None
+        # images
+        img = Image.open(file_path)
 
-    try:
-        dt_str = exif_data[dt_tag]
-    except KeyError:
-        return None
+        if file_type in [".heic", ".heif"]:
+            exif_data = img.getexif()
+        else:
+            exif_data = img._getexif()  # type: ignore
 
-    return datetime.datetime.strptime(dt_str, "%Y:%m:%d %H:%M:%S")
+        if exif_data is None:
+            return None
+
+        if EXIF_DATETIME_ORIGINAL in exif_data.keys():
+            dt_tag = EXIF_DATETIME_ORIGINAL
+
+        elif EXIF_DATETIME in exif_data.keys():
+            dt_tag = EXIF_DATETIME
+
+        elif EXIF_DATETIME_DIGITIZED in exif_data.keys():
+            dt_tag = EXIF_DATETIME_DIGITIZED
+
+        else:
+            return None
+
+        try:
+            dt_str = exif_data[dt_tag]
+        except KeyError:
+            return None
+
+        dt = datetime.datetime.strptime(dt_str, "%Y:%m:%d %H:%M:%S")
+
+    return dt
 
 
 def _rename_filename(
     *,
-    img_path: pathlib.Path,
+    file_path: pathlib.Path,
     dt: datetime.datetime,
     year_format: str,
     month_format: str,
@@ -130,22 +139,22 @@ def _rename_filename(
 
     format_str = f"{dt_format}{custom_text}"
     dt_str = dt.strftime(format_str)
-    new_name = f"{dt_str}_{img_path.name}"
+    new_name = f"{dt_str}_{file_path.name}"
 
     if any(char in new_name for char in BAD_CHARS):
         raise FileBadCharacter
 
-    new_path = img_path.parent / new_name
+    new_path = file_path.parent / new_name
 
     if os.path.isfile(new_path):
         raise FileExistsError
 
-    os.rename(img_path, new_path)
+    os.rename(file_path, new_path)
 
     return str(new_path)
 
 
-def rename_images(
+def rename_files(
     *,
     paths: List[str],
     date_options: DateOptionsType,
@@ -218,8 +227,8 @@ def rename_images(
     result: List[FileRenameStatus] = []
     file_paths = []
     for path_str in paths:
-        img_path = pathlib.Path(path_str)
-        file_type = img_path.suffix.lower()
+        file_path = pathlib.Path(path_str)
+        file_type = file_path.suffix.lower()
 
         if file_type not in VALID_FILE_TYPES:
             result.append(
@@ -228,14 +237,14 @@ def rename_images(
             continue
 
         try:
-            img_dt = _get_img_datetime(img_path, file_type=file_type)
-            if img_dt is None:
+            file_dt = _get_file_datetime(file_path, file_type=file_type)
+            if file_dt is None:
                 result.append(
                     FileRenameStatus(path=path_str, is_success=False, error_type=APIErrorType.no_exif_data)
                 )
                 continue
 
-            new_path = _rename_filename(img_path=img_path, dt=img_dt, custom_text=custom_text, **items)
+            new_path = _rename_filename(file_path=file_path, dt=file_dt, custom_text=custom_text, **items)
             result.append(FileRenameStatus(path=path_str, is_success=True, error_type=None))
         except FileNotFoundError:
             result.append(

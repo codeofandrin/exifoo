@@ -42,7 +42,7 @@ export default function RenameGeneralErrorModal({
   let errorTitle = "Something went wrong"
   let errorMsg = (
     <>
-      <p>Renaming photos failed.</p>
+      <p>Renaming files failed.</p>
       <p>Something went wrong unexpectedly. Please try again.</p>
     </>
   )

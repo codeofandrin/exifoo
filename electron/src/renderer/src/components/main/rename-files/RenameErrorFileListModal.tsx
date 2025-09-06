@@ -143,16 +143,16 @@ export default function RenameErrorFileListModal({
       <Modal.Body>
         <div>
           {/* Title */}
-          <h1 className="neutral-800 mt-3 text-lg font-semibold">Failed photos</h1>
+          <h1 className="neutral-800 mt-3 text-lg font-semibold">Failed files</h1>
           {/* Description */}
           <p className="mt-2 text-sm text-neutral-500">
-            See a list of the failed photos below and why they failed.
+            See a list of the failed files below and why they failed.
           </p>
           {/* File List */}
           <div className="mt-3">
             <div className="flex items-center justify-end text-red-500">
               <p className="text-xs font-medium">
-                {failedAmount} {failedAmount === 1 ? "photo" : "photos"} failed
+                {failedAmount} {failedAmount === 1 ? "file" : "files"} failed
               </p>
               {showScrollIcon && <SVGArrowsUpDown className="ml-2 w-4 stroke-2 text-neutral-400" />}
             </div>
