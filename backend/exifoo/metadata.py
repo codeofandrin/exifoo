@@ -21,8 +21,9 @@ from .utils import log_rename
 
 register_heif_opener()
 
-EXIF_DATETIME_TAG = 36867
-EXIF_DATETIME_TAG_HEIC = 306
+EXIF_DATETIME = 306
+EXIF_DATETIME_ORIGINAL = 36867
+EXIF_DATETIME_DIGITIZED = 36868
 
 VALID_FILE_TYPES = (".png", ".jpeg", ".jpg", ".heic", ".heif")
 VALID_YEAR_FORMATS = ("YYYY", "YY")
@@ -48,12 +49,22 @@ def _get_img_datetime(img_path: pathlib.Path, *, file_type: str) -> Optional[dat
 
     if file_type in [".heic", ".heif"]:
         exif_data = img.getexif()
-        dt_tag = EXIF_DATETIME_TAG_HEIC
     else:
         exif_data = img._getexif()  # type: ignore
-        dt_tag = EXIF_DATETIME_TAG
 
     if exif_data is None:
+        return None
+
+    if EXIF_DATETIME_ORIGINAL in exif_data.keys():
+        dt_tag = EXIF_DATETIME_ORIGINAL
+
+    elif EXIF_DATETIME in exif_data.keys():
+        dt_tag = EXIF_DATETIME
+
+    elif EXIF_DATETIME_DIGITIZED in exif_data.keys():
+        dt_tag = EXIF_DATETIME_DIGITIZED
+
+    else:
         return None
 
     try:
