@@ -5,7 +5,7 @@
 
 ---
 
-exifoo helps you keep your photos organized by adding the date and time of capture to the filename.
+exifoo helps you keep your photos and videos organized by adding the date and time of capture to the filename.
 
 <p>Visit: <a href="https://exifoo.vercel.app" target="_blank">exifoo.vercel.app</a></p>
 
@@ -13,11 +13,11 @@ exifoo helps you keep your photos organized by adding the date and time of captu
 
 ## Features
 
-- **Select unlimited files:** Rename multiple files at once with no limits. Easily organize your entire photo collection in just a few clicks.
-- **Flexible file naming:** Customize filenames to your needs. Choose the year and time format and add custom text to recognize photos even better.
-- **Live Preview:** See your customization in action with a real-time example. Instantly preview how your filenames will look before renaming your photos.
+- **Select unlimited files:** Rename multiple files at once with no limits. Easily organize your entire photo and video collection in just a few clicks.
+- **Flexible file naming:** Customize filenames to your needs. Choose the year and time format and add custom text to recognize files even better.
+- **Live Preview:** See your customization in action with a real-time example. Instantly preview how your filenames will look before renaming your photos and videos.
 - **Status Report:** Get a detailed status report after every renaming process, showing the number of successful and failed renames.
-- **Privacy first:** All photos are processed offline, directly on your device. Your images never leave your computer.
+- **Privacy first:** All files are processed offline, directly on your device. Your images never leave your computer.
 - **No registration:** Start using exifoo right away. No sign up for an account, newsletter or anything else.
 - **Simple and modern:** Clean, modern and easy-to-use interface. No technical knowledge required.
 
