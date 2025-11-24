@@ -28,6 +28,7 @@ exifoo helps you keep your photos and videos organized by adding the date and ti
 **Frontend**
 - Electron
 - React + TypeScript
+- Flowbite
 - TailwindCSS + motion
 - zustand
 - Vite
