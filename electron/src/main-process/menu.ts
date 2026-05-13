@@ -26,7 +26,7 @@ export function getMenu(mainWebContents: WebContents) {
                     {
                         id: "release-notes",
                         label: `Release Notes`,
-                        click: () => shell.openExternal("https://exifoo.vercel.app/release-notes")
+                        click: () => shell.openExternal("https://exifoo.andrin.software/release-notes")
                     },
                     { type: "separator" },
                     { role: "services" },

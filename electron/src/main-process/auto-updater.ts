@@ -72,7 +72,7 @@ function openUpdateMessageBox(versionTag: string) {
         .then((result) => {
             switch (result.response) {
                 case 0:
-                    shell.openExternal("https://exifoo.vercel.app/release-notes")
+                    shell.openExternal("https://exifoo.andrin.software/release-notes")
                     // open dialog again because it's closed on button click
                     openUpdateMessageBox(versionTag)
                     break

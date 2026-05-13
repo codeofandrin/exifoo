@@ -10,7 +10,7 @@ export class Server {
 }
 
 export class WebsiteLinks {
-    static home = "https://exifoo.vercel.app"
+    static home = "https://exifoo.andrin.software"
     static store = "https://exifoo.lemonsqueezy.com"
     static eula = `${this.home}/eula`
     static checkout = `${this.store}/buy/43f8a4fc-780d-41c5-a7bb-5eba8bf24fda`
