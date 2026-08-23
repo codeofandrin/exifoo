@@ -21,6 +21,7 @@
         "start-electron": "cd electron && npm run start",
         "format": "cd backend && black . && cd ../electron && npm run format",
         "typecheck": "cd backend && pyright && cd ../electron && npm run typecheck",
+        "check:fix": "npm run format && npm run typecheck",
         "bump": "cd electron && npm version $npm_config_vers"
     },
     "dependencies": {
