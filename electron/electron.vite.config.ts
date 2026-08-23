@@ -1,5 +1,5 @@
 import { sentryVitePlugin } from "@sentry/vite-plugin"
-import { defineConfig, externalizeDepsPlugin } from "electron-vite"
+import { defineConfig } from "electron-vite"
 import react from "@vitejs/plugin-react"
 import svgr from "vite-plugin-svgr"
 import packageJson from "./package.json"
@@ -9,14 +9,14 @@ const s = JSON.stringify
 export default defineConfig({
     main: {
         build: {
-            lib: {
-                entry: "src/main-process/main.ts"
+            rollupOptions: {
+                input: "src/main-process/main.ts"
             },
             outDir: "out/main-process",
-            sourcemap: true
+            sourcemap: true,
+            externalizeDeps: true
         },
         plugins: [
-            externalizeDepsPlugin(),
             sentryVitePlugin({
                 org: "puncher1",
                 project: "exifoo-electron"
@@ -29,15 +29,15 @@ export default defineConfig({
 
     preload: {
         build: {
-            lib: {
-                entry: "src/main-process/preload.ts"
+            rollupOptions: {
+                input: "src/main-process/preload.ts"
             },
             outDir: "out/main-process",
             emptyOutDir: false,
-            sourcemap: true
+            sourcemap: true,
+            externalizeDeps: true
         },
         plugins: [
-            externalizeDepsPlugin(),
             sentryVitePlugin({
                 org: "puncher1",
                 project: "exifoo-electron"
