@@ -192,8 +192,7 @@ export function FilesListDropZone({
   let fileElements: React.ReactElement[] = []
   for (let i = 0; i < files.length; i++) {
     const file = files[i] as File
-    // @ts-ignore: 'path' exists here
-    const filePath = file.path
+    const filePath = window.electronAPI.getPathForFile(file)
     const isNameDuplicate = isFileNameDuplicate(files, file)
     const fileNameMaxLen = isNameDuplicate ? 38 : 45
 

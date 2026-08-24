@@ -37,6 +37,8 @@ Sentry.init({
 declare global {
   interface Window {
     electronAPI: {
+      // Utilities
+      getPathForFile: (file: File) => string
       // Sender
       menuAbout: Function
       checkForUpdates: Function

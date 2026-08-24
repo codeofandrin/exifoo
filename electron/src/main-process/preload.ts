@@ -5,7 +5,7 @@
  * LICENSE file in the root directory of this source tree.
  */
 
-import { contextBridge, ipcRenderer } from "electron/renderer"
+import { contextBridge, ipcRenderer, webUtils } from "electron/renderer"
 import type { IpcRendererEvent } from "electron/renderer"
 
 function listen(event: string, listener: (_event: IpcRendererEvent, ...args: any[]) => void) {
@@ -21,6 +21,8 @@ function send(command: string, ...args: any[]) {
 }
 
 const electronAPI = {
+    // Utilities
+    getPathForFile: (file: File) => webUtils.getPathForFile(file),
     // Sender
     menuAbout: (isOpen: boolean) => send("menu-about", isOpen),
     checkForUpdates: () => send("check-for-updates"),

@@ -144,17 +144,15 @@ export default function RenameForm() {
       // to prevent replacing old with new file list
       const dataTransfer = new DataTransfer()
 
-      let storedImageFilePaths: File[] = []
+      let storedImageFilePaths: string[] = []
       for (let i = 0; i < storedImageFiles.length; i++) {
         const file = storedImageFiles[i]
         dataTransfer.items.add(file)
-        // @ts-ignore: 'path' exists here
-        storedImageFilePaths.push(file.path)
+        storedImageFilePaths.push(window.electronAPI.getPathForFile(file))
       }
       for (let i = 0; i < newImageFiles.length; i++) {
         const file = newImageFiles[i]
-        // @ts-ignore: 'path' exists here
-        if (!storedImageFilePaths.includes(file.path)) {
+        if (!storedImageFilePaths.includes(window.electronAPI.getPathForFile(file))) {
           dataTransfer.items.add(newImageFiles[i])
         }
       }
@@ -213,8 +211,7 @@ export default function RenameForm() {
     const imageFiles = fileInput.imageFiles
     if (imageFiles) {
       for (let i = 0; i < imageFiles.length; i++) {
-        // @ts-ignore: 'path' exists here
-        filePaths.push(imageFiles[i].path)
+        filePaths.push(window.electronAPI.getPathForFile(imageFiles[i]))
       }
     }
 
