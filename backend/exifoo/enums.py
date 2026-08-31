@@ -1,5 +1,5 @@
 """
-Copyright (c) codeofandrin 
+Copyright (c) codeofandrin
 
 This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
@@ -10,6 +10,7 @@ from enum import Enum
 
 class APIErrorType(Enum):
     # unexpected is on 0 (client side)
+    unexpected = 0
 
     # rename
     invalid_file_type = 1

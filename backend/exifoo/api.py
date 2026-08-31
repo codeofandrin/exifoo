@@ -4,7 +4,7 @@
 # with a machine ID validation, so parts of the code are commented out.
 
 """
-Copyright (c) codeofandrin 
+Copyright (c) codeofandrin
 
 This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
@@ -13,6 +13,7 @@ LICENSE file in the root directory of this source tree.
 import os
 import json
 import pathlib
+import requests
 from typing import List, Optional
 from contextlib import asynccontextmanager
 
@@ -184,12 +185,12 @@ class LicenseActivatePayload(BaseModel):
 @app.post("/license/activate")
 async def license_activate(payload: LicenseActivatePayload):
     license_key = payload.key
-    instance_id = lemsqzy.activate(key=license_key, machine_id=MACHINE_ID)
+    instance_id, license_key_id = lemsqzy.activate(key=license_key, machine_id=MACHINE_ID)
 
     if free_trial_storage.is_stored():
         free_trial_storage.delete()
 
-    license_storage.store(key=license_key, instance_id=instance_id)
+    license_storage.store(key=license_key, instance_id=instance_id, license_key_id=license_key_id)
     app_access.set_access(AppAccessType.full)
 
     key_short = get_short_key(license_key)
@@ -199,11 +200,15 @@ async def license_activate(payload: LicenseActivatePayload):
 @app.post("/license/validate")
 async def license_validate():
     license = license_storage.get()
-    lemsqzy.validate(key=license.key, instance_id=license.instance_id, machine_id=MACHINE_ID)
+    created_at = lemsqzy.validate(key=license.key, instance_id=license.instance_id, machine_id=MACHINE_ID)
+
     app_access.set_access(AppAccessType.full)
 
     key_short = get_short_key(license.key)
-    return JSONResponse(content={"msg": "Successful", "key_short": key_short}, status_code=200)
+    return JSONResponse(
+        content={"msg": "Successful", "key_short": key_short, "created_at": created_at},
+        status_code=200,
+    )
 
 
 @app.post("/license/deactivate")
@@ -250,6 +255,53 @@ async def free_trial_validate():
         content={"msg": "Successful", "files_remaining": free_trial.files_remaining},
         status_code=200,
     )
+
+
+class FeedbackPayload(BaseModel):
+    usage_frequency: str
+    missing_or_inconvenient: Optional[str]
+    pro_features: List[str]
+    pro_features_more_formats: Optional[str]
+    pro_features_other: Optional[str]
+    fair_price: str
+
+
+@app.post("/feedback")
+async def submit_feedback(payload: FeedbackPayload):
+    license = license_storage.get()
+
+    license_key_id = license.license_key_id
+    if license_key_id is None:
+        # backward compat: licenses activated before this field was stored
+        license_key_id = lemsqzy.get_license_key_id(key=license.key, instance_id=license.instance_id)
+        license_storage.store(key=license.key, instance_id=license.instance_id, license_key_id=license_key_id)
+
+    feedback_api_url = os.getenv("FEEDBACK_API_URL")
+    feedback_api_key = os.getenv("FEEDBACK_API_KEY")
+
+    response = requests.post(
+        f"{feedback_api_url}/api/feedback",
+        json={
+            "license_key_id": license_key_id,
+            "usage_frequency": payload.usage_frequency,
+            "missing_or_inconvenient": payload.missing_or_inconvenient,
+            "pro_features": payload.pro_features,
+            "pro_features_more_formats": payload.pro_features_more_formats,
+            "pro_features_other": payload.pro_features_other,
+            "fair_price": payload.fair_price,
+        },
+        headers={"X-API-Key": feedback_api_key},
+    )
+
+    if not (200 <= response.status_code < 300):
+        raise APIException(
+            status_code=500,
+            error_code=APIErrorType.unexpected,
+            msg="Feedback submission failed",
+            detail=APIExceptionDetail(msg="Could not submit feedback to server", item=""),
+        )
+
+    return JSONResponse(content={"msg": "Successful"}, status_code=200)
 
 
 @app.get("/rename-history")

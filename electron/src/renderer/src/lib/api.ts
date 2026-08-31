@@ -98,6 +98,20 @@ export async function validateFreeTrial(): Promise<APIRequestResponseType> {
     return await request("POST", "/free-trial/validate")
 }
 
+interface FeedbackPayloadType {
+    usage_frequency: string
+    missing_or_inconvenient: string | null
+    pro_features: string[]
+    pro_features_more_formats: string | null
+    pro_features_other: string | null
+    fair_price: string
+}
+
+export async function submitFeedback(payload: FeedbackPayloadType): Promise<APIRequestResponseType> {
+    const headers = { "Content-Type": "application/json" }
+    return await request("POST", "/feedback", payload, headers)
+}
+
 export async function getRenameHistory(): Promise<APIRequestResponseType> {
     return await request("GET", "/rename-history")
 }

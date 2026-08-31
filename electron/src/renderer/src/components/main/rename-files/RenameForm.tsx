@@ -26,11 +26,19 @@ import { useAppStore } from "../../../store/useAppStore"
 import { useCustomTextStore } from "../../../store/main/useCustomTextStore"
 import { useDateOptionsStore } from "../../../store/main/useDateOptionsStore"
 import { useTimeOptionsStore } from "../../../store/main/useTimeOptionsStore"
+import { FeedbackState, useFeedbackStore } from "../../../store/main/useFeedbackStore"
 import { APIErrorType, LicenseType } from "../../../utils/enums"
 import { WebsiteLinks } from "../../../utils/constants"
 import SVGUpload from "../../../assets/icons/Upload.svg?react"
 import SVGStar from "../../../assets/icons/Star.svg?react"
 import SVGArrowClock from "../../../assets/icons/ArrowClock.svg?react"
+
+function isLicenseOlderThan30Days(createdAt: string | null): boolean {
+  if (!createdAt) return false
+  const diffMs = Date.now() - new Date(createdAt).getTime()
+  console.log(new Date(createdAt), diffMs, 30 * 24 * 60 * 60 * 1000)
+  return diffMs > 30 * 24 * 60 * 60 * 1000
+}
 
 export default function RenameForm() {
   // Hooks
@@ -51,7 +59,14 @@ export default function RenameForm() {
   const { isAddTime, hoursFormat, minutesFormat, secondsFormat, timeSeparator } = useTimeOptionsStore()
   const { isAddCustomText, customText, isValid: isCustomTextValid } = useCustomTextStore()
   const [isLoading, setIsLoading] = useState(false)
-  const { licenseType, freeTrialRemaining, setFreeTrialRemaining, reset: resetAppStore } = useAppStore()
+  const {
+    licenseType,
+    licenseCreatedAt,
+    freeTrialRemaining,
+    setFreeTrialRemaining,
+    reset: resetAppStore
+  } = useAppStore()
+  const { hasShownThisSession, markShownThisSession, openPopup, feedbackState } = useFeedbackStore()
 
   useEffect(() => {
     if (isLastFileRemoved) {
@@ -267,6 +282,17 @@ export default function RenameForm() {
           setRenameResult({ successAll, failedAll, result: resultAdjusted })
           if (successAll) {
             setTimeout(() => resetRenameResult(), 5000)
+          }
+
+          if (
+            licenseType === LicenseType.full &&
+            isLicenseOlderThan30Days(licenseCreatedAt) &&
+            !hasShownThisSession &&
+            feedbackState !== FeedbackState.submitted &&
+            feedbackState !== FeedbackState.doNotShow
+          ) {
+            markShownThisSession()
+            setTimeout(() => openPopup(), 1000)
           }
         }
 

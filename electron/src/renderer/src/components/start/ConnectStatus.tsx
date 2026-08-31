@@ -52,7 +52,8 @@ async function validateLicense(
   setIsError: Function,
   setStatus: Function,
   setLicenseType: Function,
-  setLicenseKeyShort: Function
+  setLicenseKeyShort: Function,
+  setLicenseCreatedAt: Function
 ) {
   await api
     .validateLicense()
@@ -75,6 +76,7 @@ async function validateLicense(
         setStatus(AppStatusType.main)
         setLicenseType(LicenseType.full)
         setLicenseKeyShort(successData.key_short)
+        setLicenseCreatedAt(successData.created_at)
       }
     })
 }
@@ -124,7 +126,8 @@ function Loading() {
 
 export default function ConnectStatus() {
   const [isError, setIsError] = useState(false)
-  const { setStatus, setLicenseType, setLicenseKeyShort, setFreeTrialRemaining } = useAppStore()
+  const { setStatus, setLicenseType, setLicenseKeyShort, setLicenseCreatedAt, setFreeTrialRemaining } =
+    useAppStore()
   const [isReadyForValidateLicense, setIsReadyForValidateLicense] = useState(false)
 
   // on mount
@@ -149,7 +152,7 @@ export default function ConnectStatus() {
   useEffect(() => {
     async function inner() {
       if (isReadyForValidateLicense) {
-        await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort)
+        await validateLicense(setIsError, setStatus, setLicenseType, setLicenseKeyShort, setLicenseCreatedAt)
       }
     }
     inner()

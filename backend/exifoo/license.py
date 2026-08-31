@@ -1,5 +1,5 @@
 """
-Copyright (c) codeofandrin 
+Copyright (c) codeofandrin
 
 This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
@@ -71,6 +71,7 @@ class _SafeStorageEntry:
 class LicenseData(NamedTuple):
     key: str
     instance_id: str
+    license_key_id: Optional[str] = None
 
 
 class LicenseStorage:
@@ -78,8 +79,8 @@ class LicenseStorage:
     def __init__(self):
         self.storage: _SafeStorageEntry = _SafeStorageEntry("exifoo License")
 
-    def store(self, *, key: str, instance_id: str) -> None:
-        license_info = {"key": key, "instance_id": instance_id}
+    def store(self, *, key: str, instance_id: str, license_key_id: str) -> None:
+        license_info = {"key": key, "instance_id": instance_id, "license_key_id": license_key_id}
         self.storage.set(license_info)
 
     def get(self) -> LicenseData:
@@ -95,7 +96,11 @@ class LicenseStorage:
                 ),
             )
 
-        return LicenseData(key=license_info["key"], instance_id=license_info["instance_id"])
+        return LicenseData(
+            key=license_info["key"],
+            instance_id=license_info["instance_id"],
+            license_key_id=license_info.get("license_key_id"),
+        )
 
     def delete(self) -> None:
         self.storage.delete()

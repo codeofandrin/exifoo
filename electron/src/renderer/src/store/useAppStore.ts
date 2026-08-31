@@ -13,6 +13,7 @@ interface AppStoreStatesType {
     status: AppStatusType
     licenseType: LicenseType | null
     licenseKeyShort: string | null
+    licenseCreatedAt: string | null
     freeTrialRemaining: number
 }
 
@@ -20,6 +21,7 @@ interface AppStoreActionsType {
     setStatus: (status: AppStatusType) => void
     setLicenseType: (type: LicenseType | null) => void
     setLicenseKeyShort: (key: string | null) => void
+    setLicenseCreatedAt: (createdAt: string | null) => void
     setFreeTrialRemaining: (remaining: number) => void
     reset: () => void
 }
@@ -28,6 +30,7 @@ const initialStates: AppStoreStatesType = {
     status: AppStatusType.start,
     licenseType: null,
     licenseKeyShort: null,
+    licenseCreatedAt: null,
     freeTrialRemaining: 0
 }
 
@@ -36,6 +39,7 @@ export const useAppStore = create<AppStoreStatesType & AppStoreActionsType>()((s
     setStatus: (status) => set({ status: status }),
     setLicenseType: (type) => set({ licenseType: type }),
     setLicenseKeyShort: (key) => set({ licenseKeyShort: key }),
+    setLicenseCreatedAt: (createdAt) => set({ licenseCreatedAt: createdAt }),
     setFreeTrialRemaining: (remaining) => set({ freeTrialRemaining: remaining }),
     reset: () => {
         set(initialStates)

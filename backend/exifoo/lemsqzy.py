@@ -1,5 +1,5 @@
 """
-Copyright (c) codeofandrin 
+Copyright (c) codeofandrin
 
 This source code is licensed under the MIT license found in the
 LICENSE file in the root directory of this source tree.
@@ -7,7 +7,7 @@ LICENSE file in the root directory of this source tree.
 
 from __future__ import annotations
 
-from typing import Any, Optional, Dict, TYPE_CHECKING
+from typing import Any, Optional, Dict, Tuple, TYPE_CHECKING
 
 import requests
 
@@ -56,7 +56,7 @@ class LemSqzyClient:
         if method == "POST":
             headers["Content-Type"] = "application/x-www-form-urlencoded"
 
-        response = requests.request(method=method, url=url, params=params, data=payload)
+        response = requests.request(method=method, url=url, params=params, data=payload, headers=headers)
         http_status = response.status_code
         data = response.json()
 
@@ -68,7 +68,7 @@ class LemSqzyClient:
             else:
                 raise HTTPException(response, data)
 
-    def activate(self, *, key: str, machine_id: str) -> str:
+    def activate(self, *, key: str, machine_id: str) -> Tuple[str, str]:
         params = {"license_key": key, "instance_name": machine_id}
         try:
             data = self._request(Route("POST", "/licenses/activate"), params=params)
@@ -112,9 +112,15 @@ class LemSqzyClient:
             raise ValueError("license key could not be activated unexpectedly")
 
         instance_id = data["instance"]["id"]
-        return instance_id
+        license_key_id = str(data["license_key"]["id"])
+        return instance_id, license_key_id
 
-    def validate(self, *, key: str, instance_id: str, machine_id: str) -> None:
+    def get_license_key_id(self, *, key: str, instance_id: str) -> str:
+        params = {"license_key": key, "instance_id": instance_id}
+        data = self._request(Route("POST", "/licenses/validate"), params=params)
+        return str(data["license_key"]["id"])
+
+    def validate(self, *, key: str, instance_id: str, machine_id: str) -> str:
         params = {"license_key": key, "instance_id": instance_id}
         try:
             data = self._request(Route("POST", "/licenses/validate"), params=params)
@@ -150,6 +156,8 @@ class LemSqzyClient:
                     msg="License key instance not valid or not active", item=instance_id
                 ),
             )
+
+        return instance["created_at"]
 
     def deactivate(self, *, key: str, instance_id: str) -> None:
         params = {"license_key": key, "instance_id": instance_id}

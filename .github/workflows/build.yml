@@ -62,6 +62,8 @@ jobs:
           touch env.py
           echo "import os" >> env.py
           echo 'os.environ["STORAGE_KEY"] = "${{ secrets.STORAGE_KEY }}"' >> env.py
+          echo 'os.environ["FEEDBACK_API_URL"] = "${{ secrets.FEEDBACK_API_URL }}"' >> env.py
+          echo 'os.environ["FEEDBACK_API_KEY"] = "${{ secrets.FEEDBACK_API_KEY }}"' >> env.py
           echo 'os.environ["SENTRY_DSN"] = "https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552"' >> env.py
         # run: |
         #   cd backend
@@ -70,7 +72,6 @@ jobs:
         #   echo 'os.environ["STORAGE_KEY"] = "${{ secrets.STORAGE_KEY }}"' >> env.py
         #   echo 'os.environ["SUPABASE_URL"] = "${{ secrets.SUPABASE_URL }}"' >> env.py
         #   echo 'os.environ["SUPABASE_KEY"] = "${{ secrets.SUPABASE_KEY }}"' >> env.py
-        #   echo 'os.environ["SENTRY_DSN"] = "https://0c8ff8b575885439f0ea71f2353ddb31@o4508083247382528.ingest.de.sentry.io/4508632426217552"' >> env.py
 
       - name: Build backend executable arm64
         id: build-backend-arm64
